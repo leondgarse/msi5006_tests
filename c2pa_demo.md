@@ -241,7 +241,7 @@ print("assertions      :", [a["label"] for a in active["assertions"]])
     cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/invoice_signed.jpg
 
 
-    active manifest : urn:c2pa:35475f21-0ac3-46b7-85e3-4e095ff285cf
+    active manifest : urn:c2pa:9ed8a62a-6c5b-41e5-83ee-d1633889ebfc
     title           : Invoice INV-8842 extraction
     generator       : [{"name": "StapleAI-demo", "version": "0.1.0", "org.contentauth.c2pa_rs": "0.90.15"}]
     signature       : {"alg": "Es256", "issuer": "C2PA Test Signing Cert", "common_name": "C2PA Signer", "cert_serial_number": "640229841392226413189608867977836244731148734950"}
@@ -343,6 +343,8 @@ print("tamper detected:", "assertion.dataHash.mismatch" in new_codes)
 ```
 
     cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/invoice_signed.jpg
+
+
     cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/invoice_tampered.jpg
     original : ['signingCredential.untrusted']
     tampered : ['signingCredential.untrusted', 'assertion.dataHash.mismatch']
@@ -640,8 +642,6 @@ for k, v in probe.items():
 
 
     cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/probe.jpg
-
-
     key          sent                         received                     ok
     ------------------------------------------------------------------------------
     small_ints   [1, 2, 3, 255]               "AQID/w=="                   XX
@@ -721,6 +721,8 @@ print("LOSSLESS round-trip:", restored == probe)
 
 
     cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/wrapped.jpg
+
+
     bbox      : [420, 164, 35, 24]
     floats    : [1.5, 2.5]
     over_255  : [1, 2, 3, 256]
@@ -782,16 +784,16 @@ for kb in SIZES_KB:
     ----------------------------------------------------
 
 
-          10KB    0.18s     185,346        122  OK
+          10KB    0.20s     185,346        122  OK
 
 
-         100KB    0.22s     278,559      1,200  OK
+         100KB    0.20s     278,559      1,200  OK
 
 
-        1000KB    0.26s   1,211,138     11,864  OK
+        1000KB    0.30s   1,211,138     11,864  OK
 
 
-        5000KB    0.58s   5,355,392     58,769  OK
+        5000KB    0.55s   5,355,392     58,769  OK
 
 
 Scales linearly and round-trips exactly. Measured separately, outside this notebook:
@@ -917,8 +919,6 @@ else:
 ```
 
     cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/adobe-pdf.pdf
-
-
     file            : adobe-pdf.pdf (626,615 bytes)
     format          : application/pdf
     claim_generator : Adobe_Express/1.0.0 adobe_c2pa/0.7.11 c2pa-rs/0.28.1
@@ -945,8 +945,6 @@ if ADOBE_PDF.exists():
 ```
 
     cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/adobe-pdf.pdf -m /home/leondgarse/workspace/msi5006_tests/demo_out/manifest.json -o /home/leondgarse/workspace/msi5006_tests/demo_out/adobe_resigned.pdf -f
-
-
     re-sign the same PDF we just read:     type is unsupported
 
 
@@ -978,4 +976,4 @@ will not close on its own — which is precisely why the hybrid with MSD exists.
    auditability, and C2PA cannot write a single document format today, that gap — not
    the standard's design — is what the adoption decision turns on.
 
-Artifacts are in `demo_out/`. Full written analysis: `WEEK3_FINDINGS.md`.
+Artifacts are in `demo_out/`. Full written analysis: `WEEK2_FINDINGS.md`.

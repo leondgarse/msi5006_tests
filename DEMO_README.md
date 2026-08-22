@@ -61,4 +61,4 @@ exported `c2pa_demo.md` after changes:
 jupyter nbconvert --to markdown c2pa_demo.ipynb
 ```
 
-Full written analysis: `WEEK3_FINDINGS.md`.
+Full written analysis: `WEEK2_FINDINGS.md`.

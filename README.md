@@ -12,7 +12,7 @@ Tested with `c2patool 0.27.15` on Linux.
 |---|---|
 | **[`c2pa_demo.ipynb`](c2pa_demo.ipynb)** | Runnable demo — embed custom data, extract it, tamper-test, verify real vendor signatures |
 | [`c2pa_demo.md`](c2pa_demo.md) | Rendered export of the notebook, readable without Jupyter |
-| [`WEEK3_FINDINGS.md`](WEEK3_FINDINGS.md) | Full written analysis and recommendations |
+| [`WEEK2_FINDINGS.md`](WEEK2_FINDINGS.md) | Full written analysis and recommendations |
 | [`DEMO_README.md`](DEMO_README.md) | How to run the notebook |
 | [`CONTEXT.md`](CONTEXT.md) | Background and established facts |
 | [`WEEK2_08.20.md`](WEEK2_08.20.md) | Meeting notes that set the action items |

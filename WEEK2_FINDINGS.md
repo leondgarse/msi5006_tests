@@ -1,4 +1,4 @@
-# C2PA Capability Test Results — Week 3
+# C2PA Capability Test Results — Week 2
 Tested 2026-08-22 · `c2patool 0.27.15` · sample assets from c2pa-rs release
 
 Answers the two `[leon.D. Garse]` action items from Week 2 08.20.
@@ -232,7 +232,7 @@ No need for you to fetch anything. From the official C2PA conformance repo
 I previously reported that nobody signs PDFs with C2PA. That was wrong, and the
 correction strengthens our position rather than weakening it.
 
-`week3/adobe-pdf.pdf` reads cleanly with our own `c2patool`:
+`sample/adobe-pdf.pdf` reads cleanly with our own `c2patool`:
 
 ```
 claim_generator: Adobe_Express/1.0.0 adobe_c2pa/0.7.11 c2pa-rs/0.28.1
@@ -362,8 +362,8 @@ not a standards gap, and the strategic question is whether we wait, build it, or
 with MSD.* That reframes the decision from "which standard" to "how do we cover the
 tooling gap", which is a much better position to be in.
 
-Artifacts: `week3/adobe-pdf.pdf` (Adobe production-signed), `week3/adobe-CAI.jpg`,
-`week3/msd_signed.pdf` (same PDF after MSD signing).
+Artifacts: `sample/adobe-pdf.pdf` (Adobe production-signed), `sample/adobe-CAI.jpg`,
+`sample/msd_signed.pdf` (same PDF after MSD signing).
 
 ---
 
@@ -448,7 +448,7 @@ a coding tool, which is not the consumer image-generation path that Anthropic's 
 2026 C2PA rollout covers. So they are **not** evidence of vendor C2PA adoption, and they
 do not demonstrate the text watermark either. We should not cite them as vendor-signed
 samples — the only genuine production-signed vendor artifact we hold is
-`week3/adobe-pdf.pdf` (issuer "Adobe Inc.", `cai-prod`).
+`sample/adobe-pdf.pdf` (issuer "Adobe Inc.", `cai-prod`).
 
 It is also a useful practical data point in its own right: provenance metadata is only
 present when a tool deliberately adds it. Files produced by ordinary automation carry
