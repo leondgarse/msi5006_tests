@@ -239,7 +239,7 @@ print("assertions      :", [a["label"] for a in active["assertions"]])
 ```
 
     cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/invoice_signed.jpg
-    active manifest : urn:c2pa:c4809978-4d27-4efc-957d-ef48e53e1eec
+    active manifest : urn:c2pa:22b17664-67be-4966-af82-94f42030cff7
     title           : Invoice INV-8842 extraction
     generator       : [{"name": "StapleAI-demo", "version": "0.1.0", "org.contentauth.c2pa_rs": "0.90.15"}]
     signature       : {"alg": "Es256", "issuer": "C2PA Test Signing Cert", "common_name": "C2PA Signer", "cert_serial_number": "640229841392226413189608867977836244731148734950"}
@@ -427,6 +427,8 @@ else:
 ```
 
     cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/gemini_generated_image.jpeg
+
+
     generator     : Google C2PA Core Generator Library
     signature     : {
                     "alg": "Es256",
@@ -463,6 +465,8 @@ if GEMINI_IMG.exists():
 ```
 
     cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/gemini_generated_image.jpeg
+
+
     success       : ['timeStamp.validated', 'claimSignature.insideValidity', 'claimSignature.validated', 'assertion.hashedURI.match', 'assertion.hashedURI.match', 'assertion.dataHash.match']
     failure       : ['signingCredential.untrusted']
     informational : ['timeStamp.untrusted']
@@ -577,8 +581,6 @@ if GEMINI_IMG.exists():
 ```
 
     cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/gemini_resaved.jpg
-
-
     after PIL re-save: Error: No claim found
 
 
@@ -780,16 +782,16 @@ for kb in SIZES_KB:
     ----------------------------------------------------
 
 
-          10KB    0.18s     185,346        122  OK
+          10KB    0.19s     185,346        122  OK
 
 
          100KB    0.19s     278,559      1,200  OK
 
 
-        1000KB    0.27s   1,211,138     11,864  OK
+        1000KB    0.30s   1,211,138     11,864  OK
 
 
-        5000KB    0.52s   5,355,392     58,769  OK
+        5000KB    0.59s   5,355,392     58,769  OK
 
 
 Scales linearly and round-trips exactly. Measured separately, outside this notebook:
@@ -941,6 +943,8 @@ if ADOBE_PDF.exists():
 ```
 
     cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/adobe-pdf.pdf -m /home/leondgarse/workspace/msi5006_tests/demo_out/manifest.json -o /home/leondgarse/workspace/msi5006_tests/demo_out/adobe_resigned.pdf -f
+
+
     re-sign the same PDF we just read:     type is unsupported
 
 

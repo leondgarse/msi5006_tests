@@ -21,7 +21,6 @@ demonstrate it, say so rather than asserting it.
 | `c2pa_demo.md` | Export of the above; regenerate after every notebook change |
 | `WEEK2_FINDINGS.md` | Full written analysis, organised as a base report + 4 addenda |
 | `CONTEXT.md` | Background; includes claims already retired — do not re-derive |
-| `WEEK2_MEETING_08.20.md` | Meeting notes that assigned the action items |
 | `sample/` | Test fixtures + vendor-signed evidence; the notebook depends on these |
 | `demo_out/` | Regenerated on every notebook run; gitignored, safe to delete |
 
