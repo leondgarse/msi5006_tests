@@ -15,7 +15,8 @@ Tested with `c2patool 0.27.15` on Linux.
 | [`WEEK2_FINDINGS.md`](WEEK2_FINDINGS.md) | Full written analysis and recommendations |
 | [`DEMO_README.md`](DEMO_README.md) | How to run the notebook |
 | [`CONTEXT.md`](CONTEXT.md) | Background and established facts |
-| [`WEEK2_08.20.md`](WEEK2_08.20.md) | Meeting notes that set the action items |
+| [`CLAUDE.md`](CLAUDE.md) | Repo conventions and established findings, for AI assistants |
+| [`WEEK2_MEETING_08.20.md`](WEEK2_MEETING_08.20.md) | Meeting notes that set the action items |
 
 ## Headline findings
 
