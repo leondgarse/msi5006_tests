@@ -26,8 +26,9 @@ Tested with `c2patool 0.27.15` on Linux.
    into 0; `[1.5,2.5]` vanishes entirely; OCR bounding boxes are destroyed. The file
    still reports `validation_state: Valid` — the signature attests to corrupted data.
    **Serialize payloads to a JSON string first.**
-3. **Write support is media-only.** PDF, CSV, and Office formats all refuse to sign, and
-   `--sidecar` does not help. PDF is read-only.
+3. **Write support is media-only** — but broad within media: 14 of 15 formats tested
+   sign fine (images, audio, video; BMP is the exception). PDF, CSV, and Office all
+   refuse, and `--sidecar` does not help. PDF is read-only.
 4. **But C2PA-in-PDF is real** — `sample/adobe-pdf.pdf` is signed by Adobe in production
    (issuer "Adobe Inc.", `cai-prod`). This is a tooling gap in the open-source library,
    not a limitation of the standard. Upstream closed PDF write as `not_planned` (#527).

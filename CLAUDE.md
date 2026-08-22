@@ -45,6 +45,13 @@ Verified with `c2patool 0.27.15`; re-test only if the tool version changes.
   **Always `json.dumps` a payload before putting it in an assertion.**
 - **Write support is media-only.** PDF, CSV, JSON, TXT, HTML, DOCX, XLSX, PPTX all fail
   with `type is unsupported`. `--sidecar` does not help. PDF is read-only.
+- **Within media, coverage is broad**: JPEG, PNG, WebP, TIFF, GIF, SVG, AVIF, WAV, MP3,
+  M4A, FLAC, MP4, MOV, AVI all sign and round-trip losslessly. BMP is unsupported;
+  HEIC untested (no local encoder).
+- **BMFF (MP4/MOV) excludes `/ftyp`, `/free`, `/skip`, `/mfra` from hashing by design.**
+  A byte flip in that padding is legitimately not detected. To demo tamper detection on
+  video, flip a byte inside the `mdat` box; it reports `assertion.bmffHash.mismatch`
+  (not `dataHash`).
 - **No practical size cap** — 150 MB embedded successfully; memory-bound (~40× payload
   in RSS), not spec-bound.
 - **Adobe ships C2PA-signed PDFs in production** (`sample/adobe-pdf.pdf`, issuer

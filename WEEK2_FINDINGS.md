@@ -545,3 +545,65 @@ survives transformations that strip file-level metadata, because it *is* the dat
 than metadata attached to it.
 
 Verified live in the notebook, §4b.
+
+---
+
+# Addendum 5 — Media format coverage
+
+Earlier testing only signed JPEG; every other format probed was a document type. This
+fills that gap by testing the full media list.
+
+## All media formats except BMP work
+
+| Category | Formats | Sign | Custom data round-trip |
+|---|---|---|---|
+| Images | JPEG, PNG, WebP, TIFF, GIF, SVG, AVIF | ✅ | lossless |
+| Audio | WAV, MP3, M4A, FLAC | ✅ | lossless |
+| Video | MP4, MOV, AVI | ✅ | lossless |
+| Images | **BMP** | ❌ | `type is unsupported` |
+
+BMP is simply absent from the supported-formats list, so this is expected rather than a
+defect. HEIC/HEIF could not be tested — no local encoder is available, and ImageMagick
+silently produced a PNG with a `.heic` extension rather than failing.
+
+**SVG is worth noting**: it signs successfully despite being XML text, because C2PA
+treats it as an image format. It is the one text-based format that works today.
+
+Fixed manifest overhead runs ~14–60 KB depending on whether a thumbnail is generated, so
+small source files grow disproportionately — a 216-byte WebP became 15.8 KB. Irrelevant
+for real assets, but worth knowing before anyone reports it as bloat.
+
+## Tamper detection holds across all of them — with one subtlety
+
+Every format that signed also detected a flipped byte. The hash assertion differs by
+container:
+
+- **Standard media** → `c2pa.hash.data`, reports `assertion.dataHash.mismatch`
+- **BMFF containers** (MP4, MOV) → `c2pa.hash.bmff`, reports `assertion.bmffHash.mismatch`
+
+⚠️ **On MP4/MOV, some byte flips are not detected.** Flipping at 25%, 40% and 60% through
+an MP4 produced no error at all. That looks alarming, but it is **by design**: the BMFF
+hash assertion declares explicit exclusions —
+
+```json
+"exclusions": [{"xpath": "/uuid", ...}, {"xpath": "/ftyp"},
+               {"xpath": "/mfra"}, {"xpath": "/free"}, {"xpath": "/skip"}]
+```
+
+The undetected offsets were all-zero padding inside excluded `free`/`skip` boxes. Those
+regions are deliberately outside the hash so that legitimate container rewrites do not
+invalidate the signature.
+
+Confirming the protection is genuine: flipping one byte inside the `mdat` box — the
+actual video payload — was caught immediately with `assertion.bmffHash.mismatch`.
+
+**Practical note:** when demonstrating tamper detection on video, target the `mdat` box
+rather than an arbitrary offset. A random flip may land in excluded padding and give the
+false impression that detection failed.
+
+## What this changes
+
+Nothing about the project decision — the blocker was never media coverage. But it does
+sharpen the claim we can make: C2PA's media support is **broad and solid across images,
+audio and video**, which strengthens rather than weakens the case for adopting it where
+it applies. The gap remains exactly where it was: documents.
