@@ -51,7 +51,7 @@ No network access needed.
   signature, verified offline from the chain inside the file. It also shows a plain
   image re-save silently stripping the manifest.
 
-§4b needs `Gemini_Generated_Image_cdcj9jcdcj9jcdcj.jpeg` in the project root and Pillow
+§4b needs `sample/gemini_generated_image.jpeg` and Pillow
 for the strip test; it skips cleanly if either is missing.
 
 `c2pa_demo.ipynb` is the source of truth — edit it directly in Jupyter. To refresh the

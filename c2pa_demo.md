@@ -77,7 +77,7 @@ Stop here if anything above is missing. `c2patool` must be on `PATH` (or at
 `~/local_bin/c2patool`), and `sample/` must hold the dev key, cert and test image.
 
 Two sections use real vendor-signed files and skip cleanly if absent:
-§4b needs `Gemini_Generated_Image_cdcj9jcdcj9jcdcj.jpeg` in the project root (plus
+§4b needs `sample/gemini_generated_image.jpeg` (plus
 Pillow, for the strip test); §7b needs `sample/adobe-pdf.pdf`.
 
 ## 2. The core experiment — embed custom data, then extract it
@@ -239,9 +239,7 @@ print("assertions      :", [a["label"] for a in active["assertions"]])
 ```
 
     cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/invoice_signed.jpg
-
-
-    active manifest : urn:c2pa:9ed8a62a-6c5b-41e5-83ee-d1633889ebfc
+    active manifest : urn:c2pa:c4809978-4d27-4efc-957d-ef48e53e1eec
     title           : Invoice INV-8842 extraction
     generator       : [{"name": "StapleAI-demo", "version": "0.1.0", "org.contentauth.c2pa_rs": "0.90.15"}]
     signature       : {"alg": "Es256", "issuer": "C2PA Test Signing Cert", "common_name": "C2PA Signer", "cert_serial_number": "640229841392226413189608867977836244731148734950"}
@@ -346,6 +344,8 @@ print("tamper detected:", "assertion.dataHash.mismatch" in new_codes)
 
 
     cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/invoice_tampered.jpg
+
+
     original : ['signingCredential.untrusted']
     tampered : ['signingCredential.untrusted', 'assertion.dataHash.mismatch']
     
@@ -409,7 +409,7 @@ Set `GEMINI_IMG` to the file if you have one; the section skips cleanly if not.
 
 
 ```python
-GEMINI_IMG = ROOT / "Gemini_Generated_Image_cdcj9jcdcj9jcdcj.jpeg"
+GEMINI_IMG = SAMPLE / "gemini_generated_image.jpeg"
 
 if not GEMINI_IMG.exists():
     print("no vendor image present — skipping section 4b")
@@ -426,7 +426,7 @@ else:
         print(f"  {'':14} digitalSourceType={act.get('digitalSourceType','').split('/')[-1]}")
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/Gemini_Generated_Image_cdcj9jcdcj9jcdcj.jpeg
+    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/gemini_generated_image.jpeg
     generator     : Google C2PA Core Generator Library
     signature     : {
                     "alg": "Es256",
@@ -462,9 +462,7 @@ if GEMINI_IMG.exists():
     print("informational :", [x["code"] for x in vr.get("informational", [])])
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/Gemini_Generated_Image_cdcj9jcdcj9jcdcj.jpeg
-
-
+    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/gemini_generated_image.jpeg
     success       : ['timeStamp.validated', 'claimSignature.insideValidity', 'claimSignature.validated', 'assertion.hashedURI.match', 'assertion.hashedURI.match', 'assertion.dataHash.match']
     failure       : ['signingCredential.untrusted']
     informational : ['timeStamp.untrusted']
@@ -494,7 +492,7 @@ if GEMINI_IMG.exists():
         print(); print(r.stdout.strip())
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/Gemini_Generated_Image_cdcj9jcdcj9jcdcj.jpeg --certs
+    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/gemini_generated_image.jpeg --certs
 
 
     certificates in chain: 2
@@ -543,11 +541,11 @@ if GEMINI_IMG.exists():
           "|", [x["code"] for x in vr3.get("failure", [])])
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/Gemini_Generated_Image_cdcj9jcdcj9jcdcj.jpeg
+    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/gemini_generated_image.jpeg
 
 
     1. default           : Valid | ['signingCredential.untrusted']
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/Gemini_Generated_Image_cdcj9jcdcj9jcdcj.jpeg trust --trust_anchors /home/leondgarse/workspace/msi5006_tests/demo_out/google_chain.pem
+    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/gemini_generated_image.jpeg trust --trust_anchors /home/leondgarse/workspace/msi5006_tests/demo_out/google_chain.pem
 
 
     2. with Google chain : Trusted | (clean)
@@ -721,8 +719,6 @@ print("LOSSLESS round-trip:", restored == probe)
 
 
     cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/wrapped.jpg
-
-
     bbox      : [420, 164, 35, 24]
     floats    : [1.5, 2.5]
     over_255  : [1, 2, 3, 256]
@@ -784,16 +780,16 @@ for kb in SIZES_KB:
     ----------------------------------------------------
 
 
-          10KB    0.20s     185,346        122  OK
+          10KB    0.18s     185,346        122  OK
 
 
-         100KB    0.20s     278,559      1,200  OK
+         100KB    0.19s     278,559      1,200  OK
 
 
-        1000KB    0.30s   1,211,138     11,864  OK
+        1000KB    0.27s   1,211,138     11,864  OK
 
 
-        5000KB    0.55s   5,355,392     58,769  OK
+        5000KB    0.52s   5,355,392     58,769  OK
 
 
 Scales linearly and round-trips exactly. Measured separately, outside this notebook:

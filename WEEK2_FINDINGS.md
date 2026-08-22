@@ -458,7 +458,7 @@ nothing, which is precisely the gap our project exists to close.
 
 # Addendum 4 — A real Google/Gemini signature verified
 
-Leon supplied `Gemini_Generated_Image_cdcj9jcdcj9jcdcj.jpeg`, a Gemini-generated image.
+Leon supplied `sample/gemini_generated_image.jpeg`, a Gemini-generated image.
 It is **genuinely C2PA-signed by Google in production** — the first real AI-vendor
 artifact we hold, closing the gap flagged in Addendum 2 where vendor adoption rested
 only on published announcements.
