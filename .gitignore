@@ -1,0 +1,22 @@
+# Regenerated on every notebook run
+demo_out/
+
+# Exploratory scratch from week-3 testing (large, regenerable)
+week3/
+out/
+
+# Jupyter
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+
+# Editor/OS
+.*.swp
+.DS_Store
+
+# Loose one-off artifacts from early manual testing
+signed.jpg
+my_image.jpg
+manifest.json
+nothumb.toml
+c2pa_test_document.pdf
