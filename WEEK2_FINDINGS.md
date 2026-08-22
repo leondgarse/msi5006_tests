@@ -1,7 +1,7 @@
 # C2PA Capability Test Results — Week 2
 Tested 2026-08-22 · `c2patool 0.27.15` · sample assets from c2pa-rs release
 
-Answers the two action items assigned to Leon at the 2026-08-20 sponsor meeting.
+Answers the two technical action items at the 2026-08-20 sponsor meeting.
 
 ## Tooling check
 
