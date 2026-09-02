@@ -84,7 +84,11 @@ PDF read-only, no Office/CSV. **So MSD's lead is implementation progress, not ar
 - ❌ "MSD handles human modification, C2PA is AI-only" — `c2pa.actions` was built for
   human editing (Adobe/BBC) before generative AI.
 - ❌ "MSD has better chain of custody" — C2PA has ingredients + X.509 + RFC 3161; MSD none.
-- ❌ "C2PA can't work in a pipeline" — `c2pa-python` supports stream ops.
+- ❌ "C2PA can't work in a pipeline" — `c2pa-python` supports stream ops. **But note the
+  scope** (tested 2026-09-02, c2pa-python 0.37.7): streaming means signing an in-memory
+  *media* buffer with no file on disk. `Builder.sign()` on `application/json`, `text/csv`
+  or `application/pdf` still fails with `type is unsupported`. Streaming removes the
+  filesystem, not the format restriction — do not cite it as C2PA supporting JSON data.
 - ❌ "MSD does field-level provenance" — no primitive exists today.
 - ❌ "C2PA can't express field provenance" — assertion labels are an open vocabulary; a
   custom `com.staple.field-derivation` assertion is hashed into the claim and signed.

@@ -19,3 +19,10 @@ my_image.jpg
 manifest.json
 nothumb.toml
 c2pa_test_document.pdf
+graph_out/
+
+# Vendor SDK checkout — has its own git history, clone separately
+msd-sdk-python/
+
+# Raw sponsor-call transcripts and notes (verbatim discussion, keep local)
+week_3_meetings/

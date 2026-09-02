@@ -11,6 +11,7 @@ Tested with `c2patool 0.27.15` on Linux.
 | File | What it is |
 |---|---|
 | **[`c2pa_demo.ipynb`](c2pa_demo.ipynb)** | Runnable demo — embed custom data, extract it, tamper-test, verify real vendor signatures |
+| **[`provenance_graph_demo.ipynb`](provenance_graph_demo.ipynb)** | Runnable demo — MSD dependency graph vs C2PA ingredients |
 | [`c2pa_demo.md`](c2pa_demo.md) | Rendered export of the notebook, readable without Jupyter |
 | [`WEEK2_FINDINGS.md`](WEEK2_FINDINGS.md) | Full written analysis and recommendations |
 | [`DEMO_README.md`](DEMO_README.md) | How to run the notebook |
