@@ -10,6 +10,7 @@ Tested with `c2patool 0.27.15` on Linux.
 
 | File | What it is |
 |---|---|
+| **[`aml_use_case_demo.ipynb`](aml_use_case_demo.ipynb)** | Runnable demo — Staple's real AML onboarding use case, reconstructed |
 | **[`c2pa_demo.ipynb`](c2pa_demo.ipynb)** | Runnable demo — embed custom data, extract it, tamper-test, verify real vendor signatures |
 | **[`provenance_graph_demo.ipynb`](provenance_graph_demo.ipynb)** | Runnable demo — MSD dependency graph vs C2PA ingredients |
 | **[`w3c_vc_comparison.ipynb`](w3c_vc_comparison.ipynb)** | Runnable demo — W3C Verifiable Credentials vs MSD vs C2PA |
