@@ -35,7 +35,8 @@ Both must be committed together — a stale `c2pa_demo.md` has caused confusion 
 
 ## Established findings — do not re-derive
 
-Verified with `c2patool 0.27.15`; re-test only if the tool version changes.
+Verified with `c2patool 0.27.15`; array corruption re-confirmed on **0.27.17**
+(2026-09-04) and reported upstream as contentauth/c2pa-rs#2570 (open, no response).
 
 - **Numeric arrays in custom assertions are silently corrupted.** JSON→CBOR coercion
   turns homogeneous numeric arrays into byte strings: `[1,2,3,256]` → 256 becomes 0,

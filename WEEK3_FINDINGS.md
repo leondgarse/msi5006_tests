@@ -338,3 +338,82 @@ jupyter nbconvert --to notebook --execute --inplace <notebook>.ipynb
 
 Needs `c2patool` on `PATH`, plus `pip install msd-sdk didkit c2pa-python`. No network
 required.
+
+---
+
+## Upstream update — checked 2026-09-04
+
+Re-surveyed `contentauth/c2pa-rs` and `contentauth/c2pa-python` for changes since the
+Week 2 survey, with attention to `feat` work.
+
+### 🟢 Our array-corruption finding is now confirmed upstream by a third party
+
+**Issue [#2570](https://github.com/contentauth/c2pa-rs/issues/2570)**, opened 2026-09-01
+by an unrelated reporter:
+
+> "Custom assertion: JSON integer array silently coerced to CBOR byte string, values >255
+> truncated mod 256"
+
+Their repro is `[96, 384]` → `"YIA="` = bytes `[96, 128]`. Same mechanism, same silent
+`validation_state: Valid`, found independently of us.
+
+**Status: open, zero comments, no maintainer response, no label.**
+
+**Still present in the newest release.** Two versions have shipped since we tested
+(0.27.16 on 08-27, **0.27.17** on 09-03). Retested on 0.27.17:
+
+```
+values [96,384]        -> "YIA="
+bbox [420,164,35,24]   -> "pKQjGA=="
+floats [1.5,2.5]       -> ""
+negs [-1,2,3]          -> "AgM="
+validation_state: Valid
+```
+
+Unchanged. **This is not a version issue to wait out** — the string-wrapping workaround
+should be treated as permanent, not temporary. Independent confirmation also strengthens
+the finding for the report: it is a reproducible upstream defect, not a local
+misconfiguration.
+
+### 🟡 PR #499 (ZIP / Office) is active again but still blocked
+
+Last touched **2026-09-03** — it has grown from 10 files / 1,139 lines at our Week 2
+survey to **14 files / 1,635 lines across 57 commits**. So work continues.
+
+But the blocking comment is unchanged: the C2PA spec requires the ZIP central-directory
+CRC32 be zero while the ZIP spec requires it for integrity, and no resolution has been
+posted since Adobe filed CAI-12644 in June. `mergeable_state: unstable`. **Office support
+remains speculative** — do not plan around it.
+
+### Notable merged `feat` work (since 2026-08-20)
+
+| PR | What |
+|---|---|
+| **#2545** | `feat!` **C2PA 2.3 spec support** — multiple named trust lists, `trust_list_uri`, per-list EKU config, unified trust model (manifest / CAWG / TSA), more detailed trust-source reporting |
+| #2544 | `Error::AssertionEncoding` now includes its source in the error message — "this error has bitten us a few times" |
+| #2446 | Related-assertions field and validation on `c2pa.actions` |
+| #2447 | Digital source type on ingredients |
+| #2513 | General box-hash exclusions |
+
+**#2545 is the one that matters for us.** It substantially reworks trust configuration —
+which is exactly the area of our open-question-1 answer. Our finding stands (leaf + ICA
+embedded, root from the trust list), but the *mechanism* for supplying trust anchors has
+changed, so any future re-test should use the new settings model rather than the flags we
+documented.
+
+Also merged: **#2578 `fix!: C2PA 2.4 validation`** (09-03) — validation behaviour is
+actively moving. Worth re-running `c2pa_demo.ipynb` against 0.27.17 before the next
+sponsor session, since it was executed against 0.27.15.
+
+### The text-format handlers have not moved
+
+The A.7 / A.8 / A.9 handler PRs (#2117, #2188, #2190, #2283, #2494) are all still open and
+feature-gated, last touched between 07-27 and 08-19. **Structured-text support is still
+not shippable**, so the conclusion from Week 2 holds unchanged.
+
+### c2pa-python
+
+Quiet and maintenance-only: 7 merges since 08-15, all `fix`/`chore` — thread-safety locks
+around native handles, crash hardening, and version bumps to c2pa-rs 0.90.16. **No `feat`
+work, and nothing that changes the format restriction** we documented. Latest is v0.37.8;
+two open PRs, neither a feature.
