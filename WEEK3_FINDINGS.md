@@ -1,7 +1,7 @@
 # Technical Report — Week 3
 
-Tested 2026-09-02 · `c2patool 0.27.15` · `msd-sdk 0.2.8` / `zef 0.1.56` · `didkit 0.3.3`
-Every result below is reproducible from the notebooks in this repo.
+Tested 2026-09-02 / 2026-09-04 · `c2patool 0.27.15` · `msd-sdk 0.2.8` / `zef 0.1.56` ·
+`didkit 0.3.3`. Every result below is reproducible from the notebooks in this repo.
 
 ---
 
@@ -94,9 +94,15 @@ MSD has two separable halves:
 - **(b) embedding** — putting bytes into a file, which is all C2PA does
 
 **All of Week 2 tested (b)** — format coverage, size limits, array corruption, layering.
-That is the half where MSD is behind. The Week 2 recommendation ("adopt C2PA, MSD as
-document stopgap") correctly answers the embedding question, but that is no longer the
-question. **Treat it as provisional.**
+On 08-28 that looked like the wrong axis, and the Week 2 recommendation ("adopt C2PA, MSD
+as document stopgap") was accordingly marked provisional.
+
+**Reviewing the Week 1 AML demo changes that reading.** The shipped product is (b): a PDF
+carrying its own audit package, with reconciliation modelled as a star around a CRM anchor
+rather than a multi-party DAG. So Week 2's testing was aimed at the half that actually
+ships — but its *conclusion* still needs revising, for a different reason than we thought.
+"Adopt C2PA for documents" is not available at all, because C2PA cannot write any format
+Staple delivers. See the AML section below.
 
 ---
 
@@ -158,6 +164,56 @@ bytes, new artifact); MSD needs only the **hash** and touches nothing.
 
 ---
 
+## What Staple actually sells — the Week 1 AML demo
+
+Reviewing Josh's `aml part 3` video changed how several findings above should be read, so
+it belongs before the comparison rather than after it. Reconstructed end to end in
+`aml_use_case_demo.ipynb`.
+
+**The use case:** a bank onboards a client (Declan Ó Ruairc, policy `94110552`). Five
+source documents — passport, Swiss residence permit, broadband bill, new business
+application, adviser declaration — are extracted and reconciled **against the CRM record
+as anchor**. Disagreements become exceptions: passport expired 2024-07-14, residence
+permit expired 2025-10-31, address proof not linked. Overall status `Not Reconciled`.
+
+**The deliverable**, in Josh's framing at 00:00:01 — *"how that data travels together once
+it leaves Staple"*: two visually identical PDFs, one of which went through Staple. Upload
+both to Audit Verification and one has no signature, while the other carries **the
+extracted fields, the audit trail and the full reconciliation result inside the PDF
+itself**. The recipient verifies offline with no Staple access, and does not need to
+re-OCR the document.
+
+Reconstruction confirms the mechanics: 4,573 bytes of JSON payload embedded into a 626 KB
+PDF for +4,646 bytes, still opening as an ordinary PDF, everything recovered
+byte-identically — including nested comparison rows and the non-ASCII `Ó` — and one
+flipped byte invalidating the signature.
+
+### Three consequences for this evaluation
+
+**C2PA is not a candidate for this use case at all.** Every artifact in the demo is PDF,
+JSON, CSV or Excel. Week 2 established C2PA writes none of them. This is not a
+close comparison to be argued on features — C2PA could not carry the demo.
+
+**The shipped product is the embedding half, not the graph half.** The reconciliation is a
+**star around a CRM anchor**, not the multi-party dependency DAG Ulf described on 08-28.
+Nothing in the commercial demo exercises the graph story. That makes open question #1
+sharper, not softer: the product Josh sells from is (b), while the differentiator Ulf
+named is (a), and **they are not the same product**.
+
+**The identity gap is visible in the demo itself.** `signature_is_trusted` is `False` in
+the reconstruction and would be in production too, since `msd-sdk` hardcodes it. The demo
+shows *"valid signature"* and stops there. For a regulated AML workflow the next question
+is immediate — *valid, but signed by whom, and do I trust them?* — and today there is no
+answer. This is the single most consequential gap found in three weeks of testing,
+because it sits directly on the commercial path.
+
+Also worth noting: Josh's single-file limiting case is exactly what this demo is. The
+recipient gets **one PDF**. Interlinkability buys nothing here; the value is the
+self-contained audit package. Any pitch built on the dependency graph is describing a
+different product from the one currently demonstrated.
+
+---
+
 ## W3C Verifiable Credentials — the challenge nobody had prepared for
 
 CONTEXT.md flagged this as the strongest expected challenge. Tested with `didkit` 0.3.3
@@ -204,21 +260,53 @@ currently have a strong answer, because VC does the graph better and did it firs
 provenance carried *inside* business documents.** VC has no embedding at all; C2PA cannot
 write PDF or Office. That is a real position — and it is the (b) half, not the (a) half.
 
+The AML demo makes this concrete rather than theoretical. A VC *can* reference a PDF by
+hash — tested, it issues fine — but the PDF is left unchanged, so the recipient must be
+handed **two files and keep them together**. The whole point of the Staple deliverable is
+that the client receives **one PDF that already carries its own audit package**. That is
+the requirement neither VC nor C2PA meets, and it is the one Staple is actually selling.
+
 ---
 
 ## Recommended position for the sponsor
 
-1. **Answer open question #1 first — graph or embedding?** Ulf asked for the two to be
-   distinguished and it has not been decided. Everything else depends on it, and the two
-   answers point at different products.
-2. **If the answer is the graph**, be ready to justify MSD against W3C VC. On today's
-   evidence that is a difficult case.
-3. **If the answer is embedding**, MSD has a defensible niche that neither C2PA nor VC
-   occupies — and Week 2's format testing becomes directly relevant again.
-4. **The tooling gap is the strongest shared finding.** No verification UX exists for
-   either standard. Ulf's "if it reduces productivity by 20%, nobody will use it" and
-   Huawei Shield Lab's independent observation point the same way. **That is a product
-   opportunity, not a comparison loss.**
+Three weeks of testing point to one recommendation, and the AML demo is what settles it.
+
+1. **Position MSD on embedding, not on the graph.** This is now an evidence-backed
+   recommendation rather than a coin flip. The graph story loses to W3C VC — a W3C
+   Recommendation with a real ecosystem, native `evidence` chains and working DIDs, where
+   MSD's equivalent is a convention we hand-rolled last week on top of `content_hash`. The
+   embedding story has **no competitor at all**: VC cannot embed, and C2PA cannot write a
+   single format Staple ships. Ulf asked for the two halves to be distinguished; the
+   commercial demo has effectively already chosen, and it chose (b).
+
+2. **Close the identity gap — it is the critical path.** `signature_is_trusted` is
+   hardcoded `False`, `is_endorsed()` raises `NotImplementedError`, and the shipped trust
+   network is not consulted by `verify()`. For AML this is not a rough edge: a bank cannot
+   accept *"valid signature, signer unknown."* Everything else in the product works;
+   this is what stands between the demo and a regulated deployment. **Recommend making it
+   the next engineering priority**, ahead of any graph work.
+
+3. **Treat the dependency DAG as future scope, not the current pitch.** Nothing in the
+   shipped product exercises it, Josh's single-file limiting case applies directly to the
+   demo, and the comparison against VC is unfavourable today. It is a good roadmap item
+   and a poor differentiator to lead with.
+
+4. **The tooling gap is the strongest shared finding, and the clearest opportunity.**
+   No verification UX exists for either standard — Ulf's *"if it reduces productivity by
+   20%, nobody will use it"* and Huawei Shield Lab's independent observation converge on
+   this. Whoever ships the button an ordinary compliance officer can press wins adoption
+   regardless of which format sits underneath. **That is a product opportunity, not a
+   comparison loss.**
+
+### The honest risk to state alongside it
+
+If the sponsor's goal is a standards play, MSD is competing with a W3C Recommendation and
+an ISO standard while being, in Josh's own words, *"not anywhere right now. It's in
+Staple."* The defensible framing is narrower and more durable: MSD is **the packaging
+format for Staple's audit output**, solving a problem the standards bodies have not
+addressed — structured provenance inside business documents — rather than a general-purpose
+provenance protocol competing head-on with C2PA and VC.
 
 ## Claims to correct before publishing anything
 
@@ -239,6 +327,7 @@ write PDF or Office. That is a real position — and it is the (b) half, not the
 
 | Notebook | Covers |
 |---|---|
+| `aml_use_case_demo.ipynb` | **Staple's real use case**, reconstructed from the Week 1 video |
 | `c2pa_demo.ipynb` | Embedding: custom data, extraction, tamper, trust, formats |
 | `provenance_graph_demo.ipynb` | The graph: MSD chain vs C2PA ingredients |
 | `w3c_vc_comparison.ipynb` | W3C VC head-to-head |
