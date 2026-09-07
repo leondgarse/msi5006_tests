@@ -10,6 +10,7 @@ Tested with `c2patool 0.27.15` on Linux.
 
 | File | What it is |
 |---|---|
+| **[`computational_operation_demo.ipynb`](computational_operation_demo.ipynb)** | Runnable demo — computational-operation provenance, C2PA vs MSD |
 | **[`aml_use_case_demo.ipynb`](aml_use_case_demo.ipynb)** | Runnable demo — Staple's real AML onboarding use case, reconstructed |
 | **[`c2pa_demo.ipynb`](c2pa_demo.ipynb)** | Runnable demo — embed custom data, extract it, tamper-test, verify real vendor signatures |
 | **[`provenance_graph_demo.ipynb`](provenance_graph_demo.ipynb)** | Runnable demo — MSD dependency graph vs C2PA ingredients |
@@ -17,6 +18,7 @@ Tested with `c2patool 0.27.15` on Linux.
 | [`c2pa_demo.md`](c2pa_demo.md) | Rendered export of the notebook, readable without Jupyter |
 | [`WEEK2_FINDINGS.md`](WEEK2_FINDINGS.md) | Week 2 — C2PA capability tests (embedding) |
 | [`WEEK3_FINDINGS.md`](WEEK3_FINDINGS.md) | Week 3 — the graph, MSD SDK audit, W3C VC comparison |
+| [`WEEK4_FINDINGS.md`](WEEK4_FINDINGS.md) | Week 4 — trust list numbers, computational operations, signed PDFs |
 | [`DEMO_README.md`](DEMO_README.md) | How to run the notebook |
 | [`CONTEXT.md`](CONTEXT.md) | Background and established facts |
 | [`CLAUDE.md`](CLAUDE.md) | Repo conventions and established findings, for AI assistants |

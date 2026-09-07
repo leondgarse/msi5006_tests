@@ -32,3 +32,10 @@ aml_out/
 week1_meeting/
 c2pa-rs/
 c2pa-python/
+op_out/
+
+# vendor artifacts kept in sample/ instead; originals stay local
+Why_Your_Camera_Still_Signs_Fake_Photos.m4a
+a_small_guide_to_curiosity.pdf
+a_small_guide_to_focus.docx
+content-provenance-handbook.pdf
