@@ -36,6 +36,10 @@ the end.
 7. **in-toto has a policy layer that neither MSD nor C2PA has**, and it catches an attack
    both of them sign happily. On the dependency-graph axis, MSD is not competitive today.
 
+8. 🔴 **Taken together, C2PA + W3C VC + in-toto cover every MSD capability except one** —
+   embedding inside a PDF. That single gap is the whole remaining differentiator, and it
+   rests on one unimplemented feature in someone else's project. See the synthesis section.
+
 ---
 
 ## Short answers
@@ -502,6 +506,69 @@ That is a sharper statement of the identity gap than "trust is unimplemented", a
 primitive — a DID or a CA binding — away from being closed.
 
 ---
+
+## The synthesis: what C2PA + VC + in-toto together can and cannot do
+
+Five weeks of testing have compared MSD against each standard separately. Putting them
+together answers the question the sponsor will eventually ask — *is there anything left that
+only MSD does?*
+
+| MSD capability (current or claimed) | Already covered by | Verdict |
+|---|---|---|
+| Sign structured JSON losslessly | W3C VC natively; C2PA with string-wrapping | matched |
+| Dependency graph / file linking | VC `evidence`; in-toto `link` | matched — and both are *in a specification*, where MSD's is a convention we invented |
+| Re-verify an ancestor by hash | VC, in-toto | matched |
+| Computational-operation record | all three carry it | matched |
+| **Identity you can actually check** | C2PA (X.509 + trust list), VC (DIDs) | **both exceed MSD**, whose `signature_is_trusted` is hardcoded `False` |
+| **Policy — was this the pipeline that should have run?** | in-toto `layout` + MATCH | **exceeds everything, MSD included** |
+| **Embed inside a PDF** | **nothing** | ⬅ **the one gap** |
+
+**The single uncovered requirement:**
+
+> A **single PDF** carrying its own signed audit package, verifiable offline with no
+> accompanying files.
+
+C2PA is the only one of the three that embeds at all, and it **cannot write PDF**
+(`type is unsupported`, #527 closed `not_planned`, no PR). W3C VC has no embedding by
+design — a credential is a separate document. in-toto's links are side files by design.
+
+That requirement is not hypothetical: it is exactly the AML demo, where the client receives
+one PDF and does not need to re-OCR it because the extraction rides inside.
+
+### Two qualifications that must travel with this table
+
+**MSD does not currently do the claimed jobs either.** Testing found no graph primitive, no
+operation primitive, trust hardcoded `False`, and dict `embed()` requiring a network service.
+So the honest framing is not "three tools replace MSD" — it is that **on every axis except
+in-document embedding, mature standards already do what MSD so far only describes.**
+
+**The combination carries a real cost.** Three standards, three toolchains, three verifier
+implementations — and C2PA and MSD cannot even be layered on one file without breaking a
+signature (`WEEK2_FINDINGS.md`). "Just use all three" is architecturally coherent and
+operationally miserable. That cost is a legitimate argument *for* a single integrated
+protocol; it is not an argument that the protocol must be MSD.
+
+### What follows from it
+
+1. **The defensible claim narrows to one sentence.** *MSD's unique ground is provenance
+   carried inside a business document that C2PA's tooling cannot write — which today means
+   PDF and nothing else.* Everything else it does, or says it will do, an existing standard
+   already does better.
+
+2. 🔴 **If PDF write lands in c2pa-rs, that ground disappears entirely.** There is no PR
+   today, so it is not imminent — but the entire remaining moat rests on one unimplemented
+   feature in someone else's project, and PR #499 just showed that a 26-month-old blocker
+   can clear in a single commit.
+
+3. **Which makes self-implementing PDF the strongest available move.** The mechanism is
+   known (`/AFRelationship /C2PA_Manifest`, verified against both Adobe's and OpenAI's signed
+   PDFs), `lopdf` is already a c2pa-rs dependency, and no competing PR exists. Contributing
+   PDF write upstream would close the gap *in the standard* rather than defending a position
+   that depends on the gap staying open — and it repositions Staple as a contributor to the
+   industry standard rather than a competitor to it.
+
+This is an uncomfortable conclusion and should be presented as an options paper, not a
+verdict — but it is where the evidence points.
 
 ## Where this leaves the position
 
