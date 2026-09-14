@@ -1,7 +1,17 @@
-# Technical Report — Week 4
+# Technical Report — Week 5
 
-Tested 2026-09-05 / 2026-09-07 · `c2patool 0.27.15` · `msd-sdk 0.2.8` · official C2PA
-conformance data. Reproducible from `computational_operation_demo.ipynb`.
+Covers 2026-09-05 → 09-14. No sponsor meeting last week (IR1 was due 11 Sep), so this
+report carries forward the Week 4 testing and adds the upstream changes found since.
+
+Tested on `c2patool 0.27.15` and **`0.27.22`** · `msd-sdk 0.2.8` / `zef 0.1.56` · official
+C2PA conformance data. Reproducible from `computational_operation_demo.ipynb` and
+`office_format_support_demo.ipynb`.
+
+> **🔴 Headline this week:** `c2pa-rs` PR #499 merged on 2026-09-04 after 26 months open.
+> C2PA is no longer architecturally media-only — DOCX/XLSX/PPTX/EPUB/ODT handlers shipped.
+> But they reject compressed archives, so no Office document produced by real software can
+> be signed *or reliably checked*. See the new section below; several claims elsewhere in
+> this report are superseded by it.
 
 ---
 
@@ -180,16 +190,25 @@ earlier "no signed PDFs in the wild" finding is **withdrawn**.
 | C2PA's own published PDFs | unsigned |
 
 Checked the `.docx` independently of `c2patool` (a DOCX is a ZIP): no `jumb`, no `c2pa`,
-**empty ZIP archive comment** — which is where spec Appendix A.6 places the manifest — and
-an unsigned embedded thumbnail. The absence is real, not a tooling artifact.
+no manifest entry, empty ZIP archive comment, and an unsigned embedded thumbnail. The
+absence is real, not a tooling artifact.
+
+⚠️ *Correction:* this section originally said Appendix A.6 places the manifest in the ZIP
+**comment**. The shipped implementation instead adds a ZIP **entry**,
+`META-INF/content_credential.c2pa` — confirmed in `office_format_support_demo.ipynb` §3.
+The conclusion is unaffected (both were absent), but the mechanism was stated wrongly.
 
 Note the asymmetry in what this proves. OpenAI's conformance record declares
 `application/pdf` **only**, and that is exactly what it signs — the list is accurate.
 Google's NotebookLM declares PDF, DOCX, PPTX and XLSX and signs none of them.
 
-**Conclusion:** PDF provenance is real and deployed. **Office-format provenance is declared
-but not deployed by anyone.** That gap is where Staple's use case sits, and it is now
-evidenced rather than assumed.
+**Conclusion (as of 09-07):** PDF provenance is real and deployed. **Office-format
+provenance is declared but not deployed by anyone.**
+
+⚠️ **Partly superseded on 09-14.** The *vendor* observation still holds — no vendor signs
+Office files. But the reason changed: this was written when the open-source tooling made
+Office signing structurally impossible. PR #499 removed that barrier. What blocks it now is
+narrower and more fixable. See the new section below.
 
 ⚠️ **Methodological note for the demo.** A byte flipped at the midpoint of the signed
 ChatGPT PDF was *not* detected — `c2pa.hash.data` declares
@@ -197,6 +216,106 @@ ChatGPT PDF was *not* detected — `c2pa.hash.data` declares
 a byte at offset 2000 correctly yields `Invalid` / `assertion.dataHash.mismatch`. Same class
 of trap as BMFF `/free` padding: **when demonstrating tamper detection, target a byte
 outside the exclusion range.**
+
+
+---
+
+## 🔴 New this week: C2PA Office support shipped — and cannot sign a real document
+
+[PR #499](https://github.com/contentauth/c2pa-rs/pull/499) merged **2026-09-04**, 26 months
+after it opened. Five c2patool releases shipped in the same window (0.27.18 → **0.27.22**).
+Full evidence in `office_format_support_demo.ipynb`.
+
+### What now works
+
+```
+min.docx  YES    min.epub  YES
+min.xlsx  YES    min.odt   YES
+min.pptx  YES
+```
+
+Round-trip verified — custom assertion reads back intact, `validation_state: Valid`, and
+tampering is caught. The manifest is embedded as a new ZIP **entry**,
+`META-INF/content_credential.c2pa`.
+
+**This falsifies "write support is media-only"**, which appeared in every previous report
+and in `CLAUDE.md`. Both are now corrected.
+
+### ⚠️ But: only uncompressed archives are accepted
+
+Signing the real ChatGPT `.docx` from Week 4:
+
+```
+compression method not supported: 8
+```
+
+Method 8 is **DEFLATE** — ordinary ZIP compression. Only **STORED** entries are accepted.
+The fixtures above passed only because a one-entry `zipfile` write defaults to STORED.
+
+Every real Office file is compressed:
+
+| Source | Entries | Compression |
+|---|---|---|
+| ChatGPT `.docx` export | 17 | DEFLATE |
+| `python-docx` | 17 | DEFLATE |
+| `openpyxl` | 9 | DEFLATE |
+
+So the accurate statement is: **C2PA Office support shipped, but cannot sign an Office
+document produced by real software** — not Word, not python-docx, not openpyxl, not
+ChatGPT's own export.
+
+The repack workaround (rewrite the archive with `ZIP_STORED`, then sign) works end to end
+and the result still opens in Word — but costs **36,635 → 828,294 bytes, 22.6×**. Not a
+production path.
+
+### 🔴 The read path is worse: silent false negatives
+
+The same limit affects *verification*, and it fails misleadingly:
+
+| File | `c2patool` says |
+|---|---|
+| Real ChatGPT `.docx` (DEFLATE, unsigned) | **`No claim found`** |
+| Signed STORED `.docx` | full manifest ✅ |
+| **Same signed file, re-zipped DEFLATE** | `compression method not supported: 8` |
+
+Row 3 is the decisive test: a genuinely signed document, re-zipped with compression, same
+manifest entry present — and the tool can no longer read it.
+
+Row 1 is the dangerous one. A real compressed `.docx` reports **`No claim found`**, which
+reads as *"this file has no Content Credentials"* when the truth is *"I cannot open this
+file to look."* A genuinely signed compressed document would produce the identical message.
+
+**For any real Office document, `c2patool 0.27.22` returns a false negative that cannot be
+distinguished from a true negative.** That is a correctness bug in a verification tool — a
+more serious class than a missing feature. Checking the compression method is currently the
+only way to know whether the tool's answer means anything:
+
+```bash
+python3 -c "import zipfile,sys; print({i.compress_type for i in zipfile.ZipFile(sys.argv[1]).infolist()})" file.docx
+```
+
+`{8}` = DEFLATE = the verdict is meaningless.
+
+### Still unsupported on 0.27.22
+
+`application/pdf` (`type is unsupported` — [#527](https://github.com/contentauth/c2pa-rs/issues/527)
+remains `not_planned`), CSV, JSON. The A.8 plain-text and A.9 structured-text handlers
+merged 09-10/11 but are **experimental behind non-default cargo flags**, so release binaries
+reject `.txt` / `.yaml` / `.md`.
+
+Numeric-array corruption ([#2570](https://github.com/contentauth/c2pa-rs/issues/2570)) is
+**unchanged** on 0.27.22: `[96,384]` → `"YIA="`. Still open, still silently `Valid`.
+
+### What this changes
+
+- The **structural** argument that C2PA is media-only is gone. The handler exists, and a
+  DEFLATE fix is a far smaller change than the 26-month PR that just landed.
+- The **practical** gap remains today, for Office (compression) and PDF (unimplemented).
+- **PDF is now the only document format with no PR behind it at all** — and it is the format
+  the AML demo actually delivers (`aml_use_case_demo.ipynb`).
+- **No upstream issue tracks the DEFLATE limitation** (searched 2026-09-14). Filing one —
+  especially the false-negative read behaviour — would be a genuine contribution to the
+  standard the team is evaluating, and a concrete artifact for the final deliverable.
 
 ---
 
@@ -207,8 +326,11 @@ outside the exclusion range.**
 2. **Drop "ease of adding context data".** Tested and equal.
 3. **Do not claim MSD supports verifiable computational operations.** Nothing in the SDK
    does. Claim the primitive (`content_hash` over non-file data) and the roadmap.
-4. **Lead with the Office-format gap.** It is the one place where testing shows an empty
-   field: nobody signs DOCX/XLSX/PPTX, and Staple's deliverables are exactly those formats.
+4. **Lead with PDF, not Office.** Office was the empty field until 09-04; the handler has
+   now shipped and only a compression limit stands in the way. **PDF is the durable gap** —
+   unimplemented, closed `not_planned`, no PR — and it is what the AML demo delivers. Do
+   **not** say "C2PA can't do Office documents": it is falsifiable in one command, and the
+   team has already retracted two claims of that kind.
 5. **State attestation, not proof**, before the third retraction becomes necessary.
 
 ## Still open
@@ -222,15 +344,20 @@ outside the exclusion range.**
   almost verbatim — and it is CNCF-graduated with a USENIX Security 2019 paper. If MSD's
   pitch is verifiable computational provenance and in-toto is unaddressed, that is the first
   question a reviewer asks.
+- **File an upstream issue for the DEFLATE limitation**, covering both the write failure
+  and the silent false negative on read. Nothing tracks it today.
 - `tokolosh` network dependency for dict `embed()` — ask Ulf whether it is intended
   architecture.
+- Whether a future c2pa-rs release accepts DEFLATE — this would close the Office gap
+  entirely and should be re-checked before the final report.
 - Access: no internal Jenkins, sandbox tenant or sample corpus.
 
 ## Reproducing this
 
 | Notebook | Covers |
 |---|---|
-| `computational_operation_demo.ipynb` | **This week** — operation assertions, forgery, schema, MSD probe |
+| `office_format_support_demo.ipynb` | **New** — Office support after PR #499, and the DEFLATE limit |
+| `computational_operation_demo.ipynb` | Operation assertions, forgery, schema, MSD probe |
 | `aml_use_case_demo.ipynb` | Staple's real AML use case |
 | `c2pa_demo.ipynb` | Embedding, extraction, tamper, trust, formats |
 | `provenance_graph_demo.ipynb` | Dependency graph: MSD vs C2PA ingredients |
