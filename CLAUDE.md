@@ -53,6 +53,10 @@ finishing work** — it is not a separate chore.
 One weekly findings report per cycle (`WEEKn_FINDINGS.md`), carried forward when there is no
 sponsor meeting. Each notebook is the reproducible evidence behind a report section.
 
+`weekly_report_chinese.md` is a detailed Chinese walkthrough of the current week's report.
+**Overwrite it each week** — it tracks the latest `WEEKn_FINDINGS.md` only, and is not
+versioned per week.
+
 ## Established findings — do not re-derive
 
 Verified with `c2patool 0.27.15`; array corruption re-confirmed on **0.27.17**

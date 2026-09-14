@@ -23,6 +23,7 @@ Tested with `c2patool 0.27.15` on Linux.
 | [`WEEK4_FINDINGS.md`](WEEK4_FINDINGS.md) | Week 4 — trust list numbers, computational operations, signed PDFs |
 | [`DEMO_README.md`](DEMO_README.md) | How to run the notebook |
 | [`CONTEXT.md`](CONTEXT.md) | Background and established facts |
+| [`weekly_report_chinese.md`](weekly_report_chinese.md) | 当周报告的中文详解（每周覆盖重写） |
 | [`TODO.md`](TODO.md) | Live progress tracker — open items, blockers, corrections |
 | [`CLAUDE.md`](CLAUDE.md) | Repo conventions and established findings, for AI assistants |
 
