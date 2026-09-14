@@ -317,6 +317,99 @@ Numeric-array corruption ([#2570](https://github.com/contentauth/c2pa-rs/issues/
   especially the false-negative read behaviour — would be a genuine contribution to the
   standard the team is evaluating, and a concrete artifact for the final deliverable.
 
+
+---
+
+## New this week: in-toto — the policy layer neither MSD nor C2PA has
+
+Week 4 Task 5, now done. Evidence in `in_toto_comparison.ipynb`.
+
+**in-toto** (Torres-Arias et al., USENIX Security 2019; CNCF-graduated) attests that *"this
+artifact was produced by **this step**, from **these materials**, by **this functionary**"* —
+almost verbatim Ulf's 09-04 description of MSD's intended differentiator, published seven
+years earlier.
+
+Built the AML pipeline in it: receipt → extract → reconcile → report, with **a different
+signer for each step** and the policy signed by a third party. Verification passes.
+
+### The capability that is genuinely absent elsewhere
+
+in-toto has a **layout** — a signed policy document declaring which steps must run, who may
+perform each, and what each may consume and produce:
+
+```
+s2.expected_materials = [["MATCH","extracted.json","WITH","PRODUCTS","FROM","extract"],
+                         ["DISALLOW","*"]]
+```
+
+*"`reconcile` may only consume what `extract` actually produced."*
+
+**The attack test.** Substitute the intermediate between the two steps —
+`total: 12340.50 → 999999.99` — then re-run and verify:
+
+```
+both steps signed successfully — the signatures themselves are valid
+>>> REJECTED: 'DISALLOW *' matched the following artifacts: ['extracted.json']
+```
+
+Note *why* it fails. Every signature is cryptographically valid. What breaks is the
+**policy**: the hash consumed does not match the hash produced. A signature-only system sees
+nothing wrong — which is exactly what we demonstrated for MSD and C2PA earlier in this
+report, where both sign a forged operation record without complaint.
+
+### Head-to-head
+
+| | in-toto | MSD | C2PA |
+|---|---|---|---|
+| derivation edge | yes (`link`) | hand-rolled | yes (ingredients) |
+| multi-party signing | yes (functionary) | yes | yes |
+| **detects a substituted intermediate** | **YES** (MATCH) | no | no |
+| **signed policy / expected pipeline** | **YES** (layout) | none | none |
+| verifier tooling | `in-toto-verify` | none | `c2patool` |
+| embeds into the artifact | **no** (side files) | yes | yes (media/Office) |
+| field-level granularity | no (file-level) | yes | no |
+| identity model | keyid + owner sig | self-asserted | X.509 + trust list |
+| standardisation | CNCF graduated | one vendor | ISO + C2PA |
+
+### What it means
+
+**On the graph axis (Ulf's option (a)), MSD is not competitive today.** in-toto has the
+policy layer, multi-party functionaries and working enforcement; MSD has **no graph or
+operation primitive at all**. Competing there is an unbuilt feature against a mature standard.
+
+**But in-toto does not take the embedding axis (option (b)).** Its links are separate files
+by design — the recipient must be handed the artifact *and* its metadata and keep them
+together, which is the same objection Josh raised against W3C VC. It is also file-level, so
+"which inputs produced *this field*" is out of scope.
+
+So the positioning is unchanged: MSD's distinct ground is provenance carried *inside* the
+business document, which neither in-toto nor VC attempts and which C2PA still cannot do for
+PDF.
+
+**The idea worth borrowing is the layout.** A signed statement of what the pipeline *should*
+be is cheap — hash-comparison policy, not new cryptography — and it is a concrete answer to
+Josh's own *"Staple saying trust me, bro"* description of the current implementation.
+
+---
+
+## Closed carryover: MSD's signer identity is self-asserted
+
+Open since Week 3. Tested 09-14:
+
+- The `signing_key` returned by `verify()` is **byte-identical to the `key` field inside the
+  envelope** — read out of the signed data, not looked up anywhere.
+- Swapping in a different key yields `signature_is_valid: False`, so an envelope cannot
+  simply be relabelled.
+
+So the guarantee is *"signed by whoever holds the private key declared inside."* What is
+absent is any binding from that key to a real-world identity — no CA, no directory, no
+attestation. Combined with `signature_is_trusted` being hardcoded `False`, an MSD verifier
+confirms internal consistency and nothing about **who** signed.
+
+**The precise formulation: MSD proves key-possession; it does not prove key-ownership.**
+That is a sharper statement of the identity gap than "trust is unimplemented", and it is one
+primitive — a DID or a CA binding — away from being closed.
+
 ---
 
 ## Where this leaves the position
@@ -332,18 +425,17 @@ Numeric-array corruption ([#2570](https://github.com/contentauth/c2pa-rs/issues/
    **not** say "C2PA can't do Office documents": it is falsifiable in one command, and the
    team has already retracted two claims of that kind.
 5. **State attestation, not proof**, before the third retraction becomes necessary.
+6. **Borrow in-toto's layout concept.** A signed statement of the expected pipeline turns
+   "Staple says this happened" into "this matches the process the bank approved". It is
+   hash-comparison policy, not new cryptography, and it is the one capability testing found
+   that neither MSD nor C2PA has.
 
 ## Still open
 
 - **Task 4 — KYC-shaped graph** (two documents, one operation each, then a comparison
   merging them). Deferred; the Week 4 notes suggest building it independently of Ulf's
   version so that divergence exposes underspecified semantics.
-- **Task 5 — in-toto head-to-head.** Not run. Recommended for the **literature review**
-  rather than as a capability test: in-toto link metadata attests "this artifact was
-  produced by this step, from these materials, by this functionary" — Ulf's description
-  almost verbatim — and it is CNCF-graduated with a USENIX Security 2019 paper. If MSD's
-  pitch is verifiable computational provenance and in-toto is unaddressed, that is the first
-  question a reviewer asks.
+- ~~Task 5 — in-toto head-to-head~~ **done**, see above and `in_toto_comparison.ipynb`.
 - **File an upstream issue for the DEFLATE limitation**, covering both the write failure
   and the silent false negative on read. Nothing tracks it today.
 - `tokolosh` network dependency for dict `embed()` — ask Ulf whether it is intended
@@ -357,6 +449,7 @@ Numeric-array corruption ([#2570](https://github.com/contentauth/c2pa-rs/issues/
 | Notebook | Covers |
 |---|---|
 | `office_format_support_demo.ipynb` | **New** — Office support after PR #499, and the DEFLATE limit |
+| `in_toto_comparison.ipynb` | **New** — in-toto's policy layer vs MSD and C2PA |
 | `computational_operation_demo.ipynb` | Operation assertions, forgery, schema, MSD probe |
 | `aml_use_case_demo.ipynb` | Staple's real AML use case |
 | `c2pa_demo.ipynb` | Embedding, extraction, tamper, trust, formats |
