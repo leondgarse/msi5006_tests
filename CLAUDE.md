@@ -43,8 +43,12 @@ Verified with `c2patool 0.27.15`; array corruption re-confirmed on **0.27.17**
   `[-1,2,3]` drops the negative, `[1.5,2.5]` vanishes. Happens at *write* time inside
   the signed CBOR, so the file still reports `validation_state: Valid`.
   **Always `json.dumps` a payload before putting it in an assertion.**
-- **Write support is media-only.** PDF, CSV, JSON, TXT, HTML, DOCX, XLSX, PPTX all fail
-  with `type is unsupported`. `--sidecar` does not help. PDF is read-only.
+- **Write support was media-only through 0.27.17.** ⚠️ **Changed 2026-09-04**: PR #499
+  merged and `c2patool 0.27.22` signs DOCX/XLSX/PPTX/EPUB/ODT. **But only STORED
+  (uncompressed) ZIPs** — any DEFLATE entry fails `compression method not supported: 8`,
+  and every real Office file (Word, python-docx, openpyxl, ChatGPT export) uses DEFLATE.
+  Repacking uncompressed works but costs ~23x size. See `office_format_support_demo.ipynb`.
+  PDF, CSV, JSON and TXT still fail with `type is unsupported`; PDF remains read-only.
 - **Within media, coverage is broad**: JPEG, PNG, WebP, TIFF, GIF, SVG, AVIF, WAV, MP3,
   M4A, FLAC, MP4, MOV, AVI all sign and round-trip losslessly. BMP is unsupported;
   HEIC untested (no local encoder).

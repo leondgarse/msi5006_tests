@@ -10,6 +10,7 @@ Tested with `c2patool 0.27.15` on Linux.
 
 | File | What it is |
 |---|---|
+| **[`office_format_support_demo.ipynb`](office_format_support_demo.ipynb)** | Runnable demo — C2PA Office support after PR #499, and its DEFLATE limit |
 | **[`computational_operation_demo.ipynb`](computational_operation_demo.ipynb)** | Runnable demo — computational-operation provenance, C2PA vs MSD |
 | **[`aml_use_case_demo.ipynb`](aml_use_case_demo.ipynb)** | Runnable demo — Staple's real AML onboarding use case, reconstructed |
 | **[`c2pa_demo.ipynb`](c2pa_demo.ipynb)** | Runnable demo — embed custom data, extract it, tamper-test, verify real vendor signatures |
@@ -31,9 +32,9 @@ Tested with `c2patool 0.27.15` on Linux.
    into 0; `[1.5,2.5]` vanishes entirely; OCR bounding boxes are destroyed. The file
    still reports `validation_state: Valid` — the signature attests to corrupted data.
    **Serialize payloads to a JSON string first.**
-3. **Write support is media-only** — but broad within media: 14 of 15 formats tested
-   sign fine (images, audio, video; BMP is the exception). PDF, CSV, and Office all
-   refuse, and `--sidecar` does not help. PDF is read-only.
+3. **Write support: media, plus Office as of 0.27.22** — PR #499 merged 2026-09-04, so
+   DOCX/XLSX/PPTX/EPUB/ODT now sign. ⚠️ But only *uncompressed* ZIPs: every real Office
+   file uses DEFLATE and is rejected. PDF, CSV and JSON still refuse; PDF is read-only.
 4. **But C2PA-in-PDF is real** — `sample/adobe-pdf.pdf` is signed by Adobe in production
    (issuer "Adobe Inc.", `cai-prod`). This is a tooling gap in the open-source library,
    not a limitation of the standard. Upstream closed PDF write as `not_planned` (#527).
