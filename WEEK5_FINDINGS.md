@@ -3,15 +3,38 @@
 Covers 2026-09-05 → 09-14. No sponsor meeting last week (IR1 was due 11 Sep), so this
 report carries forward the Week 4 testing and adds the upstream changes found since.
 
-Tested on `c2patool 0.27.15` and **`0.27.22`** · `msd-sdk 0.2.8` / `zef 0.1.56` · official
-C2PA conformance data. Reproducible from `computational_operation_demo.ipynb` and
-`office_format_support_demo.ipynb`.
+Tested on `c2patool 0.27.15` and **`0.27.22`** · `msd-sdk 0.2.8` / `zef 0.1.56` ·
+`in-toto 3.1.0` · official C2PA conformance data. Reproducible from the notebooks listed at
+the end.
 
-> **🔴 Headline this week:** `c2pa-rs` PR #499 merged on 2026-09-04 after 26 months open.
-> C2PA is no longer architecturally media-only — DOCX/XLSX/PPTX/EPUB/ODT handlers shipped.
-> But they reject compressed archives, so no Office document produced by real software can
-> be signed *or reliably checked*. See the new section below; several claims elsewhere in
-> this report are superseded by it.
+## Summary
+
+1. **Trust list numbers.** Real figures from the C2PA conformance explorer
+   (<https://spec.c2pa.org/conformance-explorer/>): **30 root CAs across 17 organisations**,
+   and **188 conformant products**.
+
+2. **Certification is centralised but open.** No fee, no membership required; applicants
+   include one-person companies. It is a real process though — security architecture review,
+   a commercial CA, and annual certificate renewal.
+   Guide: <https://opensource.contentauthenticity.org/docs/signing/get-cert>
+
+3. **ChatGPT signs its PDF exports.** Tested one; it validates as **Trusted** against the
+   official trust list, via a genuine SSL.com certificate chain.
+
+4. **Declared support is not deployed support.** The same Conforming Products List shows
+   Google NotebookLM claiming docx/xlsx/pptx, but those exports test unsigned — as does
+   ChatGPT's own `.docx`.
+
+5. 🔴 **C2PA Office support shipped on 09-04** (PR #499, open 26 months). DOCX/XLSX/PPTX/
+   EPUB/ODT handlers now exist — **but they reject compressed archives**, so no Office file
+   produced by real software can be signed *or reliably checked*. **"C2PA is media-only" is
+   no longer true**, and several claims in this report and in IR1 are superseded by it.
+
+6. **PDF is now the durable gap.** Unimplemented, closed `not_planned`, no PR behind it —
+   and it is the format the AML demo actually delivers.
+
+7. **in-toto has a policy layer that neither MSD nor C2PA has**, and it catches an attack
+   both of them sign happily. On the dependency-graph axis, MSD is not competitive today.
 
 ---
 
@@ -19,8 +42,8 @@ C2PA conformance data. Reproducible from `computational_operation_demo.ipynb` an
 
 ### 1. How closed is the C2PA trust list?
 
-**Less closed than we argued, and the numbers are now exact.** Josh built the "closed
-standard" differentiator on a live estimate of 20–30. The authoritative figures from
+**Less closed than we argued, and the numbers are now exact.** The "closed standard"
+differentiator rested on a live estimate of 20–30 from the call. The authoritative figures from
 `c2pa-org/conformance-public`:
 
 | | |
@@ -63,7 +86,7 @@ the published products list.
 
 ### 2. Can C2PA express a computational-operation assertion?
 
-**Yes — losslessly.** This is the decisive test for Ulf's new framing, and the answer is
+**Yes — losslessly.** This is the decisive test for the sponsor's new framing, and the answer is
 uncomfortable.
 
 Signed a full operation record (`operation`, `operation_version`, `deterministic`,
@@ -71,6 +94,27 @@ Signed a full operation record (`operation`, `operation_version`, `deterministic
 JPEG: round-trip byte-identical, `validation_state: Valid`.
 
 **So "C2PA cannot express computational provenance" is false and must not be claimed.**
+
+What the signature actually covers is the crux:
+
+```
+   the operation record we wrote                signed?   checked?
+   ┌───────────────────────────────────────┐
+   │ operation : aggregate_daily_expenses  │     ✅        ❌
+   │ inputs    : [hash(A), hash(B)]        │     ✅        ❌   ← nothing resolves these
+   │ output    : hash(C), value 12340.50   │     ✅        ❌
+   │ performer : staple-pipeline           │     ✅        ❌
+   └───────────────────────────────────────┘
+                    │
+                    │  hashed into the claim, then signed
+                    ▼
+   ┌───────────────────────────────────────┐
+   │ c2pa.hash.data → THIS FILE's bytes    │     ✅        ✅   ← the only real binding
+   └───────────────────────────────────────┘
+
+   So C2PA proves: "these bytes, and this text, have not changed since signing."
+   It does NOT prove: the inputs exist, the operation ran, or the output is right.
+```
 
 Three real limits, each tested:
 
@@ -85,9 +129,10 @@ claimed computation happened. A custom assertion label is a **namespace, not a s
 
 ---
 
-## 🔴 The finding that matters: MSD is not meaningfully ahead here
+## On computational operations, the two are closer than expected
 
-Task 3 ran the same probe against MSD, and the honest comparison is close to a tie.
+Task 3 ran the same probe against MSD. Both systems can carry the record; the difference is
+narrower than the pitch assumes, and it is worth stating precisely rather than broadly.
 
 | | C2PA | MSD |
 |---|---|---|
@@ -106,7 +151,7 @@ no `inputs_verified`, no operation awareness, no traversal.
 
 ⚠️ **A correction to our own earlier reasoning.** The Week 4 notes proposed that C2PA's
 numeric-array corruption defeats the Turing-complete objection, because bounding boxes and
-coordinate vectors are silently destroyed. **Gavin identified that this is wrong**:
+coordinate vectors are silently destroyed. **That reasoning is wrong**:
 serialise the payload to a JSON string first and it round-trips exactly (verified). The
 corruption is an **ergonomic trap, not a capability limit**, and it is not an answer to the
 objection.
@@ -116,13 +161,28 @@ objection.
 by **caller-written code, not the SDK**. A C2PA verifier could write identical logic. This
 must not be presented as an MSD feature.
 
-**What genuinely survives:** `content_hash()` is a structure-aware BLAKE3 Merkle hash over
-arbitrary in-memory data, so an input that was never a file — an extraction result, a
-reconciliation row — has stable identity. C2PA's binding is asset-bytes-oriented. **That is
-one primitive, not a feature**, and in Staple's pipeline the intermediates are exactly that
-shape, so it is the right primitive. Everything above it is unbuilt in both systems.
+**The one real difference, and it is in MSD's favour:** `content_hash()` is a
+structure-aware BLAKE3 Merkle hash over **arbitrary in-memory data**, so an input that was
+never a file — an extraction result, a reconciliation row — gets a stable identity. C2PA's
+binding is asset-bytes-oriented: it hashes a file. In Staple's pipeline the intermediates are
+dicts, not files, so this is the right primitive for the job and C2PA has no equivalent.
 
-### Responding to Josh's position
+**But it is a primitive, not a feature.** Everything that would have to be built on top —
+schema, verifier support, traversal — is unbuilt in both systems.
+
+### How to put this in a meeting
+
+If asked *"so can C2PA just do this too?"*, the defensible answer is three sentences:
+
+> Yes, C2PA can carry the same record, and it will sign a fabricated one just as readily —
+> so will MSD. Neither verifies the computation; both are attestations. The one thing C2PA
+> genuinely cannot do is give an identity to data that was never a file, which is what our
+> intermediates are.
+
+That concedes the container point (which is true and easily checked), keeps the distinction
+that survives testing, and avoids claiming a capability that neither side has built.
+
+### Responding to the position raised on the call
 
 > "the only differentiation in MSD is the file linking, and the ease of adding context data"
 
@@ -146,7 +206,8 @@ should be presented that way or it invites the obvious rebuttal.
 
 ## ⚠️ Attestation vs proof — flag before the team overclaims again
 
-Ulf says *"verify that that is the result"*; Josh says *"prove the linking"*. Both overshoot,
+The sponsor side describes this as *"verify that that is the result"* and *"prove the
+linking"*. Both overshoot,
 and §2 of the notebook demonstrates why: the forged record validates exactly as cleanly as
 the honest one.
 
@@ -155,7 +216,7 @@ signer *said* the computation happened, never that it was performed or that the 
 correct. Proving the operation requires verifiable computation (ZK), a trusted execution
 environment, or deterministic re-execution by the verifier.
 
-Ulf's own examples — OCR and LLM calls — are **non-deterministic**, so re-execution cannot
+The examples given on the call — OCR and LLM calls — are **non-deterministic**, so re-execution cannot
 work and that use case is permanently in attestation territory.
 
 **The honest claim:** MSD can make a derivation graph *verifiably tamper-evident and
@@ -326,11 +387,40 @@ Week 4 Task 5, now done. Evidence in `in_toto_comparison.ipynb`.
 
 **in-toto** (Torres-Arias et al., USENIX Security 2019; CNCF-graduated) attests that *"this
 artifact was produced by **this step**, from **these materials**, by **this functionary**"* —
-almost verbatim Ulf's 09-04 description of MSD's intended differentiator, published seven
+almost verbatim the 09-04 description of MSD's intended differentiator, published seven
 years earlier.
 
 Built the AML pipeline in it: receipt → extract → reconcile → report, with **a different
 signer for each step** and the policy signed by a third party. Verification passes.
+
+### The signing paths
+
+```
+            ┌──────────────┐                    ┌──────────────┐
+            │  EXTRACTOR   │                    │  RECONCILER  │
+            │  (Staple)    │                    │  (engine)    │
+            └──────┬───────┘                    └──────┬───────┘
+                   │ signs                             │ signs
+                   ▼                                   ▼
+  receipt.json ─► [ extract ] ─► extracted.json ─► [ reconcile ] ─► report.json
+                   │                   ▲  │                │
+              link.extract             │  │           link.reconcile
+              materials: receipt       │  │           materials: extracted
+              products : extracted ────┘  └──────────►  products : report
+                                      MATCH rule
+                                   (must be the same hash)
+                   ▲                                   ▲
+                   └───────────────┬───────────────────┘
+                                   │ both constrained by
+                          ┌────────┴─────────┐
+                          │   root.layout    │  ◄── signed by the OWNER (the bank)
+                          │  who may sign    │      a third, independent party
+                          │  what may flow   │
+                          └──────────────────┘
+```
+
+Three independent keys. The layout is signed by whoever owns the process, not by whoever
+performs it — which is exactly what a single-vendor audit log lacks.
 
 ### The capability that is genuinely absent elsewhere
 
@@ -373,13 +463,14 @@ report, where both sign a forged operation record without complaint.
 
 ### What it means
 
-**On the graph axis (Ulf's option (a)), MSD is not competitive today.** in-toto has the
+**On the graph axis (option (a) from the 08-28 scope correction), MSD is not competitive
+today.** in-toto has the
 policy layer, multi-party functionaries and working enforcement; MSD has **no graph or
 operation primitive at all**. Competing there is an unbuilt feature against a mature standard.
 
 **But in-toto does not take the embedding axis (option (b)).** Its links are separate files
 by design — the recipient must be handed the artifact *and* its metadata and keep them
-together, which is the same objection Josh raised against W3C VC. It is also file-level, so
+together, which is the same objection raised on the call against W3C VC. It is also file-level, so
 "which inputs produced *this field*" is out of scope.
 
 So the positioning is unchanged: MSD's distinct ground is provenance carried *inside* the
@@ -388,7 +479,7 @@ PDF.
 
 **The idea worth borrowing is the layout.** A signed statement of what the pipeline *should*
 be is cheap — hash-comparison policy, not new cryptography — and it is a concrete answer to
-Josh's own *"Staple saying trust me, bro"* description of the current implementation.
+the sponsor's own *"trust me, bro"* description of the current implementation.
 
 ---
 
@@ -433,13 +524,13 @@ primitive — a DID or a CA binding — away from being closed.
 ## Still open
 
 - **Task 4 — KYC-shaped graph** (two documents, one operation each, then a comparison
-  merging them). Deferred; the Week 4 notes suggest building it independently of Ulf's
-  version so that divergence exposes underspecified semantics.
+  merging them). Deferred; the Week 4 notes suggest building it independently of the
+  sponsor's version so that divergence exposes underspecified semantics.
 - ~~Task 5 — in-toto head-to-head~~ **done**, see above and `in_toto_comparison.ipynb`.
 - **File an upstream issue for the DEFLATE limitation**, covering both the write failure
   and the silent false negative on read. Nothing tracks it today.
-- `tokolosh` network dependency for dict `embed()` — ask Ulf whether it is intended
-  architecture.
+- `tokolosh` network dependency for dict `embed()` — confirm with the maintainer whether it
+  is intended architecture.
 - Whether a future c2pa-rs release accepts DEFLATE — this would close the Office gap
   entirely and should be re-checked before the final report.
 - Access: no internal Jenkins, sandbox tenant or sample corpus.
