@@ -10,6 +10,7 @@ Tested with `c2patool 0.27.15` on Linux.
 
 | File | What it is |
 |---|---|
+| **[`in_toto_comparison.ipynb`](in_toto_comparison.ipynb)** | Runnable demo — in-toto's policy layer vs MSD and C2PA |
 | **[`office_format_support_demo.ipynb`](office_format_support_demo.ipynb)** | Runnable demo — C2PA Office support after PR #499, and its DEFLATE limit |
 | **[`computational_operation_demo.ipynb`](computational_operation_demo.ipynb)** | Runnable demo — computational-operation provenance, C2PA vs MSD |
 | **[`aml_use_case_demo.ipynb`](aml_use_case_demo.ipynb)** | Runnable demo — Staple's real AML onboarding use case, reconstructed |
@@ -22,6 +23,7 @@ Tested with `c2patool 0.27.15` on Linux.
 | [`WEEK4_FINDINGS.md`](WEEK4_FINDINGS.md) | Week 4 — trust list numbers, computational operations, signed PDFs |
 | [`DEMO_README.md`](DEMO_README.md) | How to run the notebook |
 | [`CONTEXT.md`](CONTEXT.md) | Background and established facts |
+| [`TODO.md`](TODO.md) | Live progress tracker — open items, blockers, corrections |
 | [`CLAUDE.md`](CLAUDE.md) | Repo conventions and established findings, for AI assistants |
 
 ## Headline findings

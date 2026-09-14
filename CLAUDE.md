@@ -23,6 +23,8 @@ demonstrate it, say so rather than asserting it.
 | `CONTEXT.md` | Background; includes claims already retired — do not re-derive |
 | `sample/` | Test fixtures + vendor-signed evidence; the notebook depends on these |
 | `demo_out/` | Regenerated on every notebook run; gitignored, safe to delete |
+| **`TODO.md`** | **Live progress tracker — read first, update as part of any task** |
+| `reports/` | Submitted academic deliverables (IR1, IR2, final) |
 
 After editing the notebook:
 
@@ -32,6 +34,24 @@ jupyter nbconvert --to markdown c2pa_demo.ipynb                       # refresh 
 ```
 
 Both must be committed together — a stale `c2pa_demo.md` has caused confusion before.
+
+## Tracking progress
+
+**`TODO.md` is the live tracker. Read it at the start of a session and update it as part of
+finishing work** — it is not a separate chore.
+
+- Moving an item to **Done** requires naming the evidence (a notebook, a report section).
+  "Done" without an artifact does not count in this project.
+- Items **blocked on other people** stay in their own table with an owner and a date. Do not
+  silently build around a blocker; surface how long it has been waiting.
+- When a finding overturns something already submitted or reported, add it to
+  **IR1 corrections** (or the equivalent) rather than quietly editing the old claim — the
+  correction history is itself evidence of method.
+- **Claims to keep corrected** is the list of things the team has already had to retract.
+  Check any outgoing statement against it before sending.
+
+One weekly findings report per cycle (`WEEKn_FINDINGS.md`), carried forward when there is no
+sponsor meeting. Each notebook is the reproducible evidence behind a report section.
 
 ## Established findings — do not re-derive
 
