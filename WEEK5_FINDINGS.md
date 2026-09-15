@@ -46,7 +46,9 @@ the remaining gap.** The technical validation phase has answered what it can; ev
 remaining deliverable — promotion materials, positioning, GTM design — now depends on a
 direction being chosen rather than on more evidence.
 
-**We need a decision on the direction.** A one-page options brief follows separately.
+**A decision on the direction is now the blocking dependency**, as IR1 §9 already
+identified. This report raises the question; the strategic options are a separate
+deliverable.
 
 ---
 

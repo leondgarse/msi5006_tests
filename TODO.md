@@ -20,7 +20,6 @@ Last updated: 2026-09-14 (Week 5).
 
 | Item | Priority | Notes |
 |---|---|---|
-| **One-page decision brief** (GTM Option 1/2/3) for Thursday | **highest** | IR1 §8 commits to it for Week 6. Every remaining deliverable depends on direction, not on more evidence. Brian endorsed the options-paper approach. Include what the team does next week under *each* option — that makes the cost of not deciding visible. |
 | Re-run the Office probe against the newest c2patool before Thursday | quick | Insurance: if a release after 0.27.22 accepts DEFLATE, the headline finding changes and better to know before the meeting than during it. |
 | **File upstream DEFLATE issue** on `contentauth/c2pa-rs` | high | Repro ready in `office_format_support_demo.ipynb`. Cover both the write failure *and* the silent false negative on read. Raise at the next meeting first. An accepted upstream issue is a citable external artifact — addresses IR1's deliverable-risk gap. |
 | **Task 4 — KYC-shaped graph** | deferred | Two docs → one op each → merging comparison. Overlaps Ulf's assignment; build after his lands so divergence is meaningful. |
