@@ -1,7 +1,7 @@
 # Technical Report - Week 5
 
-Covers 2026-09-05 → 09-14. No sponsor meeting last week (IR1 was due 11 Sep), so this
-report carries forward the Week 4 testing and adds the upstream changes found since.
+Covers 2026-09-05 → 09-14. No sponsor meeting last week, so this report carries forward the
+Week 4 testing and adds the upstream changes found since.
 
 Tested on `c2patool 0.27.15` and **`0.27.22`** · `msd-sdk 0.2.8` / `zef 0.1.56` ·
 `in-toto 3.1.0` · official C2PA conformance data. Reproducible from the notebooks listed at
@@ -24,7 +24,7 @@ ChatGPT's own `.docx`.
 5. 🔴 **C2PA Office support shipped** (PR #499, open 26 months). DOCX/XLSX/PPTX/
 EPUB/ODT handlers now exist — **but they reject compressed archives**, so no Office file
 produced by real software can be signed *or reliably checked*. **"C2PA is media-only" is
-no longer true**, and several claims in this report and in IR1 are superseded by it.
+no longer true**, and several earlier claims are superseded by it.
 6. **PDF is now the durable gap.** Unimplemented, closed `not_planned`, no PR behind it.
 7. **in-toto has a policy layer that neither MSD nor C2PA has**, and it catches an attack
 both of them sign happily. It is advanced in the dependency-graph axis.
@@ -46,9 +46,8 @@ the remaining gap.** The technical validation phase has answered what it can; ev
 remaining deliverable — promotion materials, positioning, GTM design — now depends on a
 direction being chosen rather than on more evidence.
 
-**A decision on the direction is now the blocking dependency**, as IR1 §9 already
-identified. This report raises the question; the strategic options are a separate
-deliverable.
+**A decision on the direction is now the blocking dependency.** This report raises the
+question from the technical side; the strategic options are a separate deliverable.
 
 ---
 

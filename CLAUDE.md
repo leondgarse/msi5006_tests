@@ -55,7 +55,28 @@ sponsor meeting. Each notebook is the reproducible evidence behind a report sect
 
 `weekly_report_chinese.md` is a detailed Chinese walkthrough of the current week's report.
 **Overwrite it each week** — it tracks the latest `WEEKn_FINDINGS.md` only, and is not
-versioned per week.
+versioned per week. It is **internal**, so academic context belongs there.
+
+### Audience — who sees what
+
+| Document | Audience |
+|---|---|
+| `WEEKn_FINDINGS.md` | **Sponsor-shareable.** Write it that way by default. |
+| `weekly_report_chinese.md`, `TODO.md` | Internal to the team |
+| `reports/` (IR1, IR2, final) | **Academic only — never shared with the sponsor.** Only the final presentation is. |
+
+So `WEEKn_FINDINGS.md` must not contain:
+- references to IR1/IR2, the rubric, grading, or submission deadlines — the sponsor cannot
+  see those documents, so citing them is both meaningless and slightly odd
+- personal names (see below)
+- anything framing the work as coursework rather than findings
+
+Academic framing and correction-tracking live in `reports/`, `TODO.md` and the Chinese
+walkthrough instead.
+
+**No personal names in `WEEKn_FINDINGS.md`.** Attributing a position to an individual invites
+defensiveness where the point is the evidence. "The position raised on the call" carries the
+same meaning. Names are fine in internal documents.
 
 ## Established findings — do not re-derive
 
