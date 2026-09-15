@@ -31,6 +31,23 @@ both of them sign happily. It is advanced in the dependency-graph axis.
 8. 🔴 **Taken together, C2PA + W3C VC + in-toto cover every MSD capability except one** —
 embedding inside a PDF.
 
+### What this means for the project
+
+PR #499 is the signal worth acting on. It is not that Office support arrived working — it
+did not — but that a blocker sitting for 26 months cleared in a single commit, and the
+direction of travel is now visible. The project ships fast where it chooses to: **330+ PRs
+merged since June (checked 09-15), median 1 day open, 14 c2patool releases in the last two
+months.** What
+stalls is community format work and features the maintainers have declined, not the project
+itself.
+
+**Further validation of C2PA will mostly document their progress, and they may catch up on
+the remaining gap.** The technical validation phase has answered what it can; every
+remaining deliverable — promotion materials, positioning, GTM design — now depends on a
+direction being chosen rather than on more evidence.
+
+**We need a decision on the direction.** A one-page options brief follows separately.
+
 ---
 
 ## Short answers
