@@ -229,7 +229,7 @@ python3 -c "import zipfile,sys; print({i.compress_type for i in zipfile.ZipFile(
 
 `application/pdf` (`type is unsupported` — #527 remains `not_planned`), CSV, JSON. The A.8 plain-text [Experimental feature: unstable_plain_text (native in-tree plain-text asset handler, C2PA A.8) ](https://github.com/contentauth/c2pa-rs/issues/2505) and A.9 structured-text [feat(experimental): Add structured-text asset handler (C2PA A.9)](https://github.com/contentauth/c2pa-rs/pull/2283) handlers merged 09-10/11 but are **experimental behind non-default cargo flags**, so release binaries reject `.txt` / `.yaml` / `.md`.
 
-Numeric-array corruption (#2570) is **unchanged** on 0.27.22: `[96,384]` → `"YIA="`. Still open, still silently `Valid`.
+⚠️ **Correction to an earlier finding.** Numeric arrays in custom assertions are *reported* wrongly by `c2patool` — `[96,384]` prints as `"YIA="` — and this is unchanged on 0.27.22. But decoding the raw CBOR out of a signed file shows the data is **stored correctly**: `bbox [420,164,35,24]`, `floats [1.5,2.5]`, `over_255 [1,2,3,256]` all intact, as CBOR arrays. Upstream [PR #2611](https://github.com/contentauth/c2pa-rs/pull/2611) (open) confirms it: *"The array is stored correctly in CBOR; the report formatter mistakes it for bytes."* So this is a **CLI reporting defect, not data corruption** — the signature attests to correct data. It still matters for any pipeline reading assertions through the CLI's JSON output, but it is a narrower problem than previously described. [Issue #2570](https://github.com/contentauth/c2pa-rs/issues/2570) remains open with no maintainer response. Demonstrated in `c2pa_demo.ipynb` §5c.
 
 ### What this changes
 

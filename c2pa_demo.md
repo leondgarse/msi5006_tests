@@ -36,7 +36,12 @@ WORK   = ROOT / "demo_out"
 shutil.rmtree(WORK, ignore_errors=True)
 WORK.mkdir(exist_ok=True)
 
-C2PATOOL = shutil.which("c2patool") or str(Path.home() / "local_bin" / "c2patool")
+# Resolve c2patool: $C2PATOOL, then PATH, then any ~/local_bin/c2patool* build
+C2PATOOL = os.environ.get("C2PATOOL") or shutil.which("c2patool")
+if not C2PATOOL:
+    cands = sorted((Path.home() / "local_bin").glob("c2patool*"))
+    cands = [c for c in cands if c.is_file() and os.access(c, os.X_OK)]
+    C2PATOOL = str(cands[-1]) if cands else "c2patool"
 
 KEY  = SAMPLE / "es256_private.key"     # dev signing key (test cert, not on the trust list)
 CERT = SAMPLE / "es256_certs.pem"
@@ -63,12 +68,12 @@ for p in (KEY, CERT, IMG):
 print("workdir  :", WORK)
 ```
 
-    c2patool : /home/leondgarse/local_bin/c2patool
-    version  : c2patool 0.27.15
-      OK  /home/leondgarse/workspace/msi5006_tests/sample/es256_private.key
-      OK  /home/leondgarse/workspace/msi5006_tests/sample/es256_certs.pem
-      OK  /home/leondgarse/workspace/msi5006_tests/sample/image.jpg
-    workdir  : /home/leondgarse/workspace/msi5006_tests/demo_out
+    c2patool : /home/gwwang/local_bin/c2patool-0.27.22
+    version  : c2patool 0.27.22
+      OK  /mnt/data/gwwang/workspace/msi5006_tests/sample/es256_private.key
+      OK  /mnt/data/gwwang/workspace/msi5006_tests/sample/es256_certs.pem
+      OK  /mnt/data/gwwang/workspace/msi5006_tests/sample/image.jpg
+    workdir  : /mnt/data/gwwang/workspace/msi5006_tests/demo_out
 
 
 ### Preflight
@@ -143,8 +148,8 @@ print(json.dumps(manifest, indent=2)[:700], "...")
       ],
       "title": "Invoice INV-8842 extraction",
       "alg": "es256",
-      "private_key": "/home/leondgarse/workspace/msi5006_tests/sample/es256_private.key",
-      "sign_cert": "/home/leondgarse/workspace/msi5006_tests/sample/es256_certs.pem",
+      "private_key": "/mnt/data/gwwang/workspace/msi5006_tests/sample/es256_private.key",
+      "sign_cert": "/mnt/data/gwwang/workspace/msi5006_tests/sample/es256_certs.pem",
       "assertions": [
         {
           "label": "c2pa.actions",
@@ -190,7 +195,7 @@ print(f"manifest overhead: {signed.stat().st_size - IMG.stat().st_size:,} bytes"
 print("\nstill a valid JPEG:", signed.read_bytes()[:3] == b'\xff\xd8\xff')
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/image.jpg -m /home/leondgarse/workspace/msi5006_tests/demo_out/manifest.json -o /home/leondgarse/workspace/msi5006_tests/demo_out/invoice_signed.jpg -f
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/sample/image.jpg -m /mnt/data/gwwang/workspace/msi5006_tests/demo_out/manifest.json -o /mnt/data/gwwang/workspace/msi5006_tests/demo_out/invoice_signed.jpg -f
     signed OK   61,720 bytes  ->  125,364 bytes
     manifest overhead: 63,644 bytes
     
@@ -218,7 +223,7 @@ print(f"without thumbnail : {b:,}  (overhead {b - IMG.stat().st_size:,})")
 print(f"thumbnail costs   : {a - b:,} bytes")
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/image.jpg -m /home/leondgarse/workspace/msi5006_tests/demo_out/manifest.json -o /home/leondgarse/workspace/msi5006_tests/demo_out/invoice_signed_without_thumbnail.jpg -f --settings /home/leondgarse/workspace/msi5006_tests/demo_out/nothumb.toml
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/sample/image.jpg -m /mnt/data/gwwang/workspace/msi5006_tests/demo_out/manifest.json -o /mnt/data/gwwang/workspace/msi5006_tests/demo_out/invoice_signed_without_thumbnail.jpg -f --settings /mnt/data/gwwang/workspace/msi5006_tests/demo_out/nothumb.toml
     with thumbnail    : 125,364  (overhead 63,644)
     without thumbnail : 75,816  (overhead 14,096)
     thumbnail costs   : 49,548 bytes
@@ -238,10 +243,10 @@ print("signature       :", json.dumps(active.get("signature_info")))
 print("assertions      :", [a["label"] for a in active["assertions"]])
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/invoice_signed.jpg
-    active manifest : urn:c2pa:22b17664-67be-4966-af82-94f42030cff7
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/demo_out/invoice_signed.jpg
+    active manifest : urn:c2pa:058f978f-47e7-4bac-aa55-b2763ceb403c
     title           : Invoice INV-8842 extraction
-    generator       : [{"name": "StapleAI-demo", "version": "0.1.0", "org.contentauth.c2pa_rs": "0.90.15"}]
+    generator       : [{"name": "StapleAI-demo", "version": "0.1.0", "org.contentauth.c2pa_rs": "0.90.22"}]
     signature       : {"alg": "Es256", "issuer": "C2PA Test Signing Cert", "common_name": "C2PA Signer", "cert_serial_number": "640229841392226413189608867977836244731148734950"}
     assertions      : ['c2pa.actions.v2', 'com.staple.field-derivation']
 
@@ -340,12 +345,8 @@ print("codes introduced by the tamper:", new_codes or "(none)")
 print("tamper detected:", "assertion.dataHash.mismatch" in new_codes)
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/invoice_signed.jpg
-
-
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/invoice_tampered.jpg
-
-
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/demo_out/invoice_signed.jpg
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/demo_out/invoice_tampered.jpg
     original : ['signingCredential.untrusted']
     tampered : ['signingCredential.untrusted', 'assertion.dataHash.mismatch']
     
@@ -388,9 +389,9 @@ with_trust = json.loads(out) if rc == 0 else None
 print("WITH trust list   :", status_codes(with_trust) or "(clean — signer recognised)")
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/C.jpg
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/sample/C.jpg
     WITHOUT trust list: ['signingCredential.untrusted']
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/C.jpg trust --trust_anchors /home/leondgarse/workspace/msi5006_tests/sample/trust_anchors.pem --allowed_list /home/leondgarse/workspace/msi5006_tests/sample/allowed_list.pem --trust_config /home/leondgarse/workspace/msi5006_tests/sample/store.cfg
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/sample/C.jpg trust --trust_anchors /mnt/data/gwwang/workspace/msi5006_tests/sample/trust_anchors.pem --allowed_list /mnt/data/gwwang/workspace/msi5006_tests/sample/allowed_list.pem --trust_config /mnt/data/gwwang/workspace/msi5006_tests/sample/store.cfg
     WITH trust list   : (clean — signer recognised)
 
 
@@ -426,9 +427,7 @@ else:
         print(f"  {'':14} digitalSourceType={act.get('digitalSourceType','').split('/')[-1]}")
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/gemini_generated_image.jpeg
-
-
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/sample/gemini_generated_image.jpeg
     generator     : Google C2PA Core Generator Library
     signature     : {
                     "alg": "Es256",
@@ -464,9 +463,7 @@ if GEMINI_IMG.exists():
     print("informational :", [x["code"] for x in vr.get("informational", [])])
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/gemini_generated_image.jpeg
-
-
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/sample/gemini_generated_image.jpeg
     success       : ['timeStamp.validated', 'claimSignature.insideValidity', 'claimSignature.validated', 'assertion.hashedURI.match', 'assertion.hashedURI.match', 'assertion.dataHash.match']
     failure       : ['signingCredential.untrusted']
     informational : ['timeStamp.untrusted']
@@ -496,9 +493,7 @@ if GEMINI_IMG.exists():
         print(); print(r.stdout.strip())
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/gemini_generated_image.jpeg --certs
-
-
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/sample/gemini_generated_image.jpeg --certs
     certificates in chain: 2
 
 
@@ -545,17 +540,11 @@ if GEMINI_IMG.exists():
           "|", [x["code"] for x in vr3.get("failure", [])])
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/gemini_generated_image.jpeg
-
-
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/sample/gemini_generated_image.jpeg
     1. default           : Valid | ['signingCredential.untrusted']
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/gemini_generated_image.jpeg trust --trust_anchors /home/leondgarse/workspace/msi5006_tests/demo_out/google_chain.pem
-
-
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/sample/gemini_generated_image.jpeg trust --trust_anchors /mnt/data/gwwang/workspace/msi5006_tests/demo_out/google_chain.pem
     2. with Google chain : Trusted | (clean)
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/gemini_tampered.jpg
-
-
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/demo_out/gemini_tampered.jpg
     3. one byte flipped  : Invalid | ['signingCredential.untrusted', 'assertion.dataHash.mismatch']
 
 
@@ -580,7 +569,9 @@ if GEMINI_IMG.exists():
         print("Pillow not installed — skipping")
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/gemini_resaved.jpg
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/demo_out/gemini_resaved.jpg
+
+
     after PIL re-save: Error: No claim found
 
 
@@ -593,14 +584,19 @@ re-encoding. The lesson for our project: C2PA proves provenance when present, bu
 absence proves nothing. A pipeline that depends on it needs the manifest preserved
 deliberately, or a second, more robust channel.
 
-## 5. ⚠️ The finding that matters most: silent data corruption
+## 5. ⚠️ A reporting defect that looks like data corruption
 
-C2PA converts assertion JSON to **CBOR** at sign time. Homogeneous numeric arrays get
-coerced into CBOR byte strings — and values that do not fit in a single byte are
-**destroyed with no error at all**.
+Hand a numeric array to a custom assertion and read it back with `c2patool`, and the values
+come back mangled — `[420,164,35,24]` returns as a base64 blob. That looks like C2PA is
+destroying structured data at sign time.
 
-This is the single most important practical result of our testing, because it lands
-squarely on OCR bounding boxes.
+**It is not.** §5c decodes the raw CBOR out of the signed file and shows the data is stored
+perfectly. The defect is in `c2patool`'s **JSON report formatter**, which mistakes
+homogeneous numeric arrays for byte strings.
+
+The distinction matters: the signed content is sound, but **anything reading assertions via
+the CLI's JSON output sees wrong values**. That is still a real problem for a pipeline — it
+is just a different problem from the one it appears to be.
 
 
 ```python
@@ -638,10 +634,10 @@ for k, v in probe.items():
     print(f"{k:12} {json.dumps(v)[:26]:28} {json.dumps(g)[:26]:28} {ok}")
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/image.jpg -m /home/leondgarse/workspace/msi5006_tests/demo_out/probe.json -o /home/leondgarse/workspace/msi5006_tests/demo_out/probe.jpg -f
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/sample/image.jpg -m /mnt/data/gwwang/workspace/msi5006_tests/demo_out/probe.json -o /mnt/data/gwwang/workspace/msi5006_tests/demo_out/probe.jpg -f
 
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/probe.jpg
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/demo_out/probe.jpg
     key          sent                         received                     ok
     ------------------------------------------------------------------------------
     small_ints   [1, 2, 3, 255]               "AQID/w=="                   XX
@@ -655,40 +651,93 @@ for k, v in probe.items():
     nested       {"inner": [10, 20, 30]}      {"inner": "ChQe"}            XX
 
 
-Read that table carefully:
+Read that table carefully — this is what `c2patool` **reports**:
 
-- `[1,2,3,256]` → `"AQIDAA=="`, which decodes to bytes `01 02 03 00`. **256 became 0.**
-- `[-1,2,3]` → two bytes. **The negative was dropped.**
-- `[1.5,2.5]` → `""`. **The array vanished.**
-- `[420,164,35,24]` → a base64 blob. **The bounding box is gone.**
+- `[1,2,3,256]` → `"AQIDAA=="`, which decodes to bytes `01 02 03 00`. 256 shown as 0.
+- `[-1,2,3]` → two bytes. The negative is missing.
+- `[1.5,2.5]` → `""`. The array appears empty.
+- `[420,164,35,24]` → a base64 blob.
 
-Mixed arrays and scalars survive. Anything homogeneous and numeric is at risk.
+Mixed arrays and scalars are reported correctly. Anything homogeneous and numeric is
+misreported.
+
+§5c shows what the file actually contains.
 
 
 ```python
-# The corruption is in the SIGNED bytes, not the read path — so validation still passes.
 st = read_manifest(probe_img)
 print("validation status :", status_codes(st) or "(clean)")
 print("validation_state  :", st.get("validation_state"))
 print()
-print(">>> C2PA reports the file as VALID while the data inside is corrupted.")
-print(">>> The signature faithfully attests to already-corrupted bytes.")
+print(">>> The file validates cleanly — which is correct, because the signed")
+print(">>> data is fine. It is the CLI's JSON rendering that is wrong.")
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/probe.jpg
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/demo_out/probe.jpg
+
+
     validation status : ['signingCredential.untrusted']
     validation_state  : Valid
     
-    >>> C2PA reports the file as VALID while the data inside is corrupted.
-    >>> The signature faithfully attests to already-corrupted bytes.
+    >>> The file validates cleanly — which is correct, because the signed
+    >>> data is fine. It is the CLI's JSON rendering that is wrong.
 
 
-That is the dangerous part. There is no error, no warning, and the file verifies. A
-downstream consumer has no way to tell.
+### 5c. What is actually stored in the file
 
-### The fix: serialize to a string first
+Rather than trusting either the tool or our own earlier reading of it, decode the CBOR
+directly out of the JUMBF.
 
-A JSON string is not a numeric array, so nothing gets coerced.
+
+```python
+raw = probe_img.read_bytes()
+i = raw.find(b"cbor", raw.find(b"com.staple.typeprobe"))
+blob = raw[i + 4:i + 4 + 600]          # generous window; the map has 9 keys
+print("raw CBOR (first 48 bytes):", blob[:48].hex())
+print()
+
+try:
+    import cbor2
+    decoded = None
+    for length in range(20, len(blob)):
+        try:
+            decoded = cbor2.loads(blob[:length]); break
+        except Exception:
+            pass
+    if decoded:
+        print("decoded straight from the signed file:")
+        for k in ("bbox", "floats", "over_255", "negatives", "small_ints"):
+            if k in decoded:
+                print(f"   {k:11}: {decoded[k]}")
+        print()
+        print(">>> Stored correctly — CBOR major type 4 (array), exact values.")
+        print(">>> The mangling exists only in c2patool's JSON report.")
+    else:
+        print("could not decode in this window — see the hand decode below")
+except ImportError:
+    print("cbor2 not installed — hand decode:")
+    print("   84      = array of 4 items  (major type 4, NOT a byte string)")
+    print("   19 01a4 = uint16 420")
+    print("   18 a4   = uint8  164")
+    print(">>> pip install cbor2 to run the full check")
+```
+
+    raw CBOR (first 48 bytes): a96462626f78841901a418a41823181866666c6f61747382fb3ff8000000000000fb4004000000000000656d69786564
+    
+    decoded straight from the signed file:
+       bbox       : [420, 164, 35, 24]
+       floats     : [1.5, 2.5]
+       over_255   : [1, 2, 3, 256]
+       negatives  : [-1, 2, 3]
+       small_ints : [1, 2, 3, 255]
+    
+    >>> Stored correctly — CBOR major type 4 (array), exact values.
+    >>> The mangling exists only in c2patool's JSON report.
+
+
+### The workaround: serialize to a string first
+
+A JSON string is not a numeric array, so the report formatter leaves it alone.
 
 
 ```python
@@ -717,10 +766,10 @@ print()
 print("LOSSLESS round-trip:", restored == probe)
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/image.jpg -m /home/leondgarse/workspace/msi5006_tests/demo_out/wrapped.json -o /home/leondgarse/workspace/msi5006_tests/demo_out/wrapped.jpg -f
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/sample/image.jpg -m /mnt/data/gwwang/workspace/msi5006_tests/demo_out/wrapped.json -o /mnt/data/gwwang/workspace/msi5006_tests/demo_out/wrapped.jpg -f
 
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/wrapped.jpg
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/demo_out/wrapped.jpg
     bbox      : [420, 164, 35, 24]
     floats    : [1.5, 2.5]
     over_255  : [1, 2, 3, 256]
@@ -729,16 +778,17 @@ print("LOSSLESS round-trip:", restored == probe)
     LOSSLESS round-trip: True
 
 
-**Rule for our pipeline: never hand raw structured data to a C2PA assertion.**
-`json.dumps` it first. The cost is that the assertion is no longer queryable as
-structure — an acceptable trade against silent corruption.
+**Rule for our pipeline: do not read numeric arrays back through `c2patool`'s JSON output.**
+`json.dumps` the payload before signing, or parse the CBOR directly. The cost of string-
+wrapping is that the assertion is no longer queryable as structure.
 
-## 6. How much custom data fits?
-
-The team asked about maximum size. There is no hard cap in practice — the real limit is
-memory. Peak RSS runs roughly 40× the payload.
-
-Sizes kept modest here so the notebook stays fast; raise `SIZES_KB` if you want to push it.
+⚠️ **This corrects an earlier reading.** Previous versions of this notebook concluded that
+C2PA destroys the data at write time and that "the signature attests to corrupted bytes".
+§5c shows that is wrong — the signed CBOR is intact. Upstream
+[PR #2611](https://github.com/contentauth/c2pa-rs/pull/2611) ("Preserve numeric arrays in
+JSON output", open) states the same: *"The array is stored correctly in CBOR; the report
+formatter mistakes it for bytes."* Issue
+[#2570](https://github.com/contentauth/c2pa-rs/issues/2570) remains open.
 
 
 ```python
@@ -782,16 +832,16 @@ for kb in SIZES_KB:
     ----------------------------------------------------
 
 
-          10KB    0.19s     185,346        122  OK
+          10KB    0.09s     185,346        122  OK
 
 
-         100KB    0.19s     278,559      1,200  OK
+         100KB    0.09s     278,559      1,200  OK
 
 
-        1000KB    0.30s   1,211,138     11,864  OK
+        1000KB    0.12s   1,211,138     11,864  OK
 
 
-        5000KB    0.59s   5,355,392     58,769  OK
+        5000KB    0.24s   5,355,392     58,769  OK
 
 
 Scales linearly and round-trips exactly. Measured separately, outside this notebook:
@@ -851,9 +901,9 @@ for name in targets:
     t.json     NO     type is unsupported
     t.txt      NO     type is unsupported
     t.html     NO     type is unsupported
-    t.docx     NO     type is unsupported
-    t.xlsx     NO     type is unsupported
-    t.pptx     NO     type is unsupported
+    t.docx     YES    —
+    t.xlsx     YES    —
+    t.pptx     YES    —
 
 
 PDF fails **identically to the rest on the write path** — `type is unsupported`, the
@@ -876,13 +926,13 @@ rc, _, err = c2pa(WORK / "t.pdf", "-m", man_path, "-o", WORK / "sc.pdf", "-s", "
 print("  PDF sidecar  :", "OK" if rc == 0 else err.strip().splitlines()[-1])
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/t.pdf
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/demo_out/t.pdf
     read valid PDF : Error: No claim found
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/t.csv
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/demo_out/t.csv
     read CSV       : Error: Unsupported file type
     
     --sidecar rescue attempt:
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/demo_out/t.pdf -m /home/leondgarse/workspace/msi5006_tests/demo_out/manifest.json -o /home/leondgarse/workspace/msi5006_tests/demo_out/sc.pdf -s -f
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/demo_out/t.pdf -m /mnt/data/gwwang/workspace/msi5006_tests/demo_out/manifest.json -o /mnt/data/gwwang/workspace/msi5006_tests/demo_out/sc.pdf -s -f
       PDF sidecar  :     type is unsupported
 
 
@@ -916,7 +966,7 @@ else:
     print("validation_state:", store.get("validation_state"))
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/adobe-pdf.pdf
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/sample/adobe-pdf.pdf
     file            : adobe-pdf.pdf (626,615 bytes)
     format          : application/pdf
     claim_generator : Adobe_Express/1.0.0 adobe_c2pa/0.7.11 c2pa-rs/0.28.1
@@ -942,9 +992,7 @@ if ADOBE_PDF.exists():
           "OK" if rc == 0 else err.strip().splitlines()[-1])
 ```
 
-    cmd: c2patool /home/leondgarse/workspace/msi5006_tests/sample/adobe-pdf.pdf -m /home/leondgarse/workspace/msi5006_tests/demo_out/manifest.json -o /home/leondgarse/workspace/msi5006_tests/demo_out/adobe_resigned.pdf -f
-
-
+    cmd: c2patool /mnt/data/gwwang/workspace/msi5006_tests/sample/adobe-pdf.pdf -m /mnt/data/gwwang/workspace/msi5006_tests/demo_out/manifest.json -o /mnt/data/gwwang/workspace/msi5006_tests/demo_out/adobe_resigned.pdf -f
     re-sign the same PDF we just read:     type is unsupported
 
 
