@@ -14,6 +14,7 @@ Tested on `c2patool 0.27.15` and **`0.27.22`** · `msd-sdk 0.2.8` / `zef 0.1.56`
 6. **PDF is now the durable gap.** Unimplemented, closed `not_planned`, no PR behind it.
 7. **in-toto has a policy layer that neither MSD nor C2PA has**, and it catches an attack both of them sign happily. It is advanced in the dependency-graph axis.
 8. 🔴 **Taken together, C2PA + W3C VC + in-toto cover every MSD capability except one** — embedding inside a PDF.
+9. ⚠️ **Correction to an earlier finding.** We previously reported that C2PA silently corrupts numeric arrays in custom assertions. Decoding the raw CBOR from a signed file shows the data is **stored correctly** — it is `c2patool`'s JSON *report* that mangles it, which upstream [PR #2611](https://github.com/contentauth/c2pa-rs/pull/2611) confirms. A CLI reporting defect, not data corruption.
 
 ### What this means for the project
 
