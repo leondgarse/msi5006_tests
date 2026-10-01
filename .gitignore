@@ -41,3 +41,20 @@ a_small_guide_to_focus.docx
 content-provenance-handbook.pdf
 office_out/
 intoto_out/
+
+# Vendor source shared under contributor terms — never publish
+zef/
+msd-showcase-zef
+
+# Internal: academic deliverables, sponsor feedback, meeting records
+IR1/
+IR2/
+week5_meeting/
+reports/
+
+# Loose working files
+audited_arabic_rtl.docx
+sample_document.docx
+sample_c2pa_test.pdf
+c2pa-implementation-guide-2026.pdf
+MSI5006 Interim Report 1 - 3S.md
