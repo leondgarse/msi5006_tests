@@ -2,7 +2,7 @@
 
 **MSI5006 capstone — Team 3S × Staple AI**
 
-Reconstruction of the AML demo Josh shared in Week 1 (`week1_meeting/aml part 3.mov`).
+Reconstruction of the AML demo the sponsor shared in Week 1 (an internal walkthrough video).
 This is the **actual commercial use case** MSD was built for — worth understanding
 precisely, because it explains design decisions that look arbitrary in the abstract.
 
@@ -13,7 +13,7 @@ Five source documents arrive: a passport, a Swiss residence permit, a utility bi
 business application, and an adviser declaration. Staple extracts structured data from
 each, reconciles them against the CRM record, and raises exceptions where they disagree.
 
-Then the crucial part — Josh's framing at 00:00:01:
+Then the crucial part — the sponsor's framing at 00:00:01:
 
 > "let's look at how that data then **travels together once it leaves Staple**."
 
@@ -162,7 +162,7 @@ print("fields extracted:", len(POI_EXTRACTED))
     fields extracted: 22
 
 
-Josh's point at 00:03:27:
+the sponsor's point at 00:03:27:
 
 > "that means that you wouldn't have to process this document again. It's got the
 > structured information inside"
@@ -322,7 +322,7 @@ for a in AUDIT_TRAIL:
 
 ## 5. Packing it into the document
 
-Josh, 00:00:58:
+the sponsor, 00:00:58:
 
 > "the audit trail, that is the information extracted from this document, is also the
 > reconciliation data. And that is packed into this using a system called MSD"
@@ -461,7 +461,7 @@ structures far simpler than this.
 
 ## 7. Tamper evidence
 
-Josh, 00:01:50: *"this file has not been tampered with. The signature it gives tamper
+the sponsor, 00:01:50: *"this file has not been tampered with. The signature it gives tamper
 evidence."*
 
 
@@ -483,7 +483,7 @@ except Exception as e:
 
 ## 8. The JSON case
 
-The part most relevant to our C2PA comparison. Josh, 00:04:38:
+The part most relevant to our C2PA comparison. the sponsor, 00:04:38:
 
 > "This works for not only for PDFs, we also do it for general JSONs and other file types"
 
@@ -513,7 +513,7 @@ except BaseException as e:          # zef raises a Rust PanicException, not Exce
     print("embed() on a dict FAILED:", type(e).__name__)
     print(" ", str(e)[:200])
     print()
-    print(">>> This is the tokolosh network dependency from WEEK2_FINDINGS.md.")
+    print(">>> This is the tokolosh network dependency from the written analysis.")
     print(">>> sign()/verify() work offline; dict embed() requires a service.")
 ```
 
@@ -523,7 +523,7 @@ except BaseException as e:          # zef raises a Rust PanicException, not Exce
     embed() on a dict FAILED: PanicException
       called `Result::unwrap()` on an `Err` value: "💥💥 Entity type 'ZstdCompressed' not found in local cache or tokolosh: Error.NotConnected(\n  kind='failed',\n  description='tokolosh connect failed: No to
     
-    >>> This is the tokolosh network dependency from WEEK2_FINDINGS.md.
+    >>> This is the tokolosh network dependency from the written analysis.
     >>> sign()/verify() work offline; dict embed() requires a service.
 
 
@@ -538,7 +538,7 @@ except BaseException as e:          # zef raises a Rust PanicException, not Exce
 Seeing the real use case sharpens several conclusions from earlier weeks.
 
 **The deliverable is a business document, not a media asset.** Everything Staple ships is
-PDF, JSON, CSV or Excel. From `WEEK2_FINDINGS.md`, C2PA writes **none** of these — it is
+PDF, JSON, CSV or Excel. From the written analysis, C2PA writes **none** of these — it is
 media-only, PDF is read-only, and `--sidecar` does not help. C2PA could not carry this
 demo at all. That is not a close call.
 
@@ -558,10 +558,10 @@ stakes rather than a differentiator.
   raises `NotImplementedError`. The demo shows *"valid signature"* and stops there. A bank
   asking *"valid — but signed by whom, and do I trust them?"* has no answer today.
 - The reconciliation is a **star around a CRM anchor**, not the multi-party dependency DAG
-  Ulf described on 08-28. This use case does not exercise the graph story at all — which
+  the protocol author described on 08-28. This use case does not exercise the graph story at all — which
   makes open question #1 (graph or embedding?) even more pressing. **The shipped product
   is the embedding half.**
-- Josh's own limiting case applies: the recipient here gets **one file**. Interlinkability
+- the sponsor's own limiting case applies: the recipient here gets **one file**. Interlinkability
   buys nothing yet; the value is the self-contained audit package.
 
 **Where this points.** MSD's defensible position is exactly what this demo does —
@@ -570,5 +570,5 @@ cannot embed at all; C2PA cannot write these formats. The gap the product must s
 is identity: a valid signature from an unidentified signer is not enough for a regulated
 AML workflow.
 
-Companion notebooks: `c2pa_demo.ipynb`, `provenance_graph_demo.ipynb`,
+Companion notebooks: `c2pa_demo.ipynb`, a companion notebook,
 `w3c_vc_comparison.ipynb`.

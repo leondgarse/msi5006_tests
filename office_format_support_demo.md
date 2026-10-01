@@ -170,7 +170,7 @@ print("status          :", [s["code"] for s in store.get("validation_status", []
 
 
 `Valid`, with only the expected `signingCredential.untrusted` (our dev cert is deliberately
-off the trust list — see `CLAUDE.md`).
+off the trust list — see the project notes).
 
 
 ```python
@@ -458,5 +458,5 @@ No open issue tracks the DEFLATE limitation (searched 2026-09-14). Filing one �
 repro in §4 — would be a small, genuine contribution to the standard the team is
 evaluating, and it is the kind of artifact an examiner can point at.
 
-Companions: `c2pa_demo.ipynb`, `aml_use_case_demo.ipynb`, `provenance_graph_demo.ipynb`,
-`w3c_vc_comparison.ipynb`, `computational_operation_demo.ipynb`.
+Companions: `c2pa_demo.ipynb`, `aml_use_case_demo.ipynb`, a companion notebook,
+`w3c_vc_comparison.ipynb`, a companion notebook.

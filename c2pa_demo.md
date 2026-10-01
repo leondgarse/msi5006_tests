@@ -1024,4 +1024,4 @@ will not close on its own — which is precisely why the hybrid with MSD exists.
    auditability, and C2PA cannot write a single document format today, that gap — not
    the standard's design — is what the adoption decision turns on.
 
-Artifacts are in `demo_out/`. Full written analysis: `WEEK2_FINDINGS.md`.
+Artifacts are in `demo_out/`. Full written analysis: the written analysis.

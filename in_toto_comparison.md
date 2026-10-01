@@ -2,7 +2,7 @@
 
 **MSI5006 capstone — Team 3S × Staple AI**
 
-Ulf, 09-04, describing MSD's intended differentiator:
+the protocol author, 09-04, describing MSD's intended differentiator:
 
 > "you want to be able to specify the exact computational operation... together with the
 > input data, and **verify that that is the result**... the crucial point especially in the
@@ -15,7 +15,7 @@ CNCF-graduated, with multiple production implementations. Its `link` metadata at
 > *this artifact was produced by **this step**, from **these materials**, by **this
 > functionary***
 
-That is Ulf's description almost word for word, applied to software supply chains instead of
+That is the protocol author's description almost word for word, applied to software supply chains instead of
 accounting. If MSD's pitch is verifiable computational provenance and in-toto goes
 unaddressed, it is the first question a reviewer asks.
 
@@ -31,13 +31,13 @@ genuinely absent from both MSD and C2PA.
 | 5 | What in-toto does *not* do |
 | 6 | Head-to-head |
 
-Companions: `computational_operation_demo.ipynb`, `w3c_vc_comparison.ipynb`,
-`provenance_graph_demo.ipynb`, `aml_use_case_demo.ipynb`.
+Companions: a companion notebook, `w3c_vc_comparison.ipynb`,
+a companion notebook, `aml_use_case_demo.ipynb`.
 
 ## 1. The AML pipeline, with separate signers
 
 The crucial design choice: **each step is signed by a different party.** This is what
-answers Josh's single-file limiting case — provenance across parties, not one vendor's
+answers the sponsor's single-file limiting case — provenance across parties, not one vendor's
 internal log.
 
 
@@ -139,7 +139,7 @@ print("signed by keyid:", link["signatures"][0]["keyid"][:32])
 
 Each link records **materials** (inputs) and **products** (outputs) by cryptographic hash,
 the command that ran, and is signed by the functionary who performed the step. So far this
-is comparable to what we hand-rolled for MSD in `provenance_graph_demo.ipynb`.
+is comparable to what we hand-rolled for MSD in a companion notebook.
 
 The difference comes next.
 
@@ -219,7 +219,7 @@ left `expected_command` unset on the steps, so in-toto notes the mismatch withou
 Now the test that matters. An attacker substitutes the intermediate file **between** the two
 steps — the extraction result is replaced before reconciliation consumes it.
 
-In `computational_operation_demo.ipynb` §2 we showed that **both C2PA and MSD sign a forged
+In a companion notebook §2 we showed that **both C2PA and MSD sign a forged
 operation record without complaint.** Does in-toto?
 
 
@@ -300,7 +300,7 @@ For a fair comparison, the limits matter as much as the capability.
 
 - **No embedding.** Links and layouts are *separate files* — `.link`, `.layout`. Nothing is
   written inside the artifact. The recipient must be handed the artifact *and* its metadata
-  and keep them together, which is precisely the objection Josh raised against W3C VC.
+  and keep them together, which is precisely the objection the sponsor raised against W3C VC.
 - **Artifact-oriented, not value-oriented.** Materials and products are files identified by
   path and hash. It has no concept of a field within a document, so "which inputs produced
   *this cell*" is out of scope.
@@ -310,7 +310,7 @@ For a fair comparison, the limits matter as much as the capability.
 - **Non-deterministic steps.** Like everything else in this space, it attests that a step
   ran and what it consumed and produced — it cannot prove an OCR or LLM call was performed
   correctly. The attestation-vs-proof boundary from
-  `computational_operation_demo.ipynb` §7 applies here too.
+  a companion notebook §7 applies here too.
 
 ## 6. Head-to-head
 
@@ -348,10 +348,10 @@ for r in rows:
 
 ### What this means for the project
 
-**On the "graph" axis (Ulf's option (a)), MSD is not competitive today.** in-toto has a
+**On the "graph" axis (the protocol author's option (a)), MSD is not competitive today.** in-toto has a
 signed policy layer, multi-party functionaries, and enforcement that catches an attack both
 MSD and C2PA sign happily — published 2019, CNCF-graduated. MSD has **no graph or operation
-primitive at all** (`computational_operation_demo.ipynb` §5). Competing there means an
+primitive at all** (a companion notebook §5). Competing there means an
 unbuilt feature against a mature standard.
 
 **What in-toto does not take is the embedding axis (option (b)).** Its links are side files,
@@ -362,7 +362,7 @@ and which C2PA still cannot do for PDF.
 **The idea worth stealing:** the layout. A signed statement of *what the pipeline should be*
 is cheap to add — it is a hash-comparison policy, not new cryptography — and it is the
 difference between "Staple says this happened" and "this matches the process the bank
-approved." That is a concrete, defensible answer to Josh's *"trust me, bro"* characterisation
+approved." That is a concrete, defensible answer to the sponsor's *"trust me, bro"* characterisation
 of the current implementation.
 
 **For the literature review**, in-toto is the strongest citation available: Torres-Arias,

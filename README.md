@@ -1,70 +1,59 @@
-# MSI5006 — C2PA / MSD provenance testing
+# C2PA provenance testing — reproducible notebooks
 
-Capstone testing for **Team 3S × Staple AI**: empirical evaluation of
-[C2PA](https://c2pa.org) (Content Credentials) against MSD (Meta Structured Data) for
-document auditability.
+Empirical tests of **C2PA** (Content Credentials) and adjacent provenance standards,
+produced for an MSI5006 capstone project. Every claim here is backed by output from the
+real `c2patool` binary or the named library — nothing is asserted from documentation alone.
 
-Tested with `c2patool 0.27.15` on Linux.
+Tested with `c2patool` 0.27.15 and 0.27.22 on Linux.
 
-## Start here
+## Notebooks
 
-| File | What it is |
+| Notebook | Covers |
 |---|---|
-| **[`in_toto_comparison.ipynb`](in_toto_comparison.ipynb)** | Runnable demo — in-toto's policy layer vs MSD and C2PA |
-| **[`office_format_support_demo.ipynb`](office_format_support_demo.ipynb)** | Runnable demo — C2PA Office support after PR #499, and its DEFLATE limit |
-| **[`computational_operation_demo.ipynb`](computational_operation_demo.ipynb)** | Runnable demo — computational-operation provenance, C2PA vs MSD |
-| **[`aml_use_case_demo.ipynb`](aml_use_case_demo.ipynb)** | Runnable demo — Staple's real AML onboarding use case, reconstructed |
-| **[`c2pa_demo.ipynb`](c2pa_demo.ipynb)** | Runnable demo — embed custom data, extract it, tamper-test, verify real vendor signatures |
-| **[`provenance_graph_demo.ipynb`](provenance_graph_demo.ipynb)** | Runnable demo — MSD dependency graph vs C2PA ingredients |
-| **[`w3c_vc_comparison.ipynb`](w3c_vc_comparison.ipynb)** | Runnable demo — W3C Verifiable Credentials vs MSD vs C2PA |
-| [`c2pa_demo.md`](c2pa_demo.md) | Rendered export of the notebook, readable without Jupyter |
-| [`WEEK2_FINDINGS.md`](WEEK2_FINDINGS.md) | Week 2 — C2PA capability tests (embedding) |
-| [`WEEK3_FINDINGS.md`](WEEK3_FINDINGS.md) | Week 3 — the graph, MSD SDK audit, W3C VC comparison |
-| [`WEEK4_FINDINGS.md`](WEEK4_FINDINGS.md) | Week 4 — trust list numbers, computational operations, signed PDFs |
-| [`DEMO_README.md`](DEMO_README.md) | How to run the notebook |
-| [`CONTEXT.md`](CONTEXT.md) | Background and established facts |
-| [`weekly_report_chinese.md`](weekly_report_chinese.md) | 当周报告的中文详解（每周覆盖重写） |
-| [`TODO.md`](TODO.md) | Live progress tracker — open items, blockers, corrections |
-| [`CLAUDE.md`](CLAUDE.md) | Repo conventions and established findings, for AI assistants |
+| **[`c2pa_demo.ipynb`](c2pa_demo.ipynb)** | Embedding custom data, extraction, tamper detection, trust states, format coverage |
+| **[`office_format_support_demo.ipynb`](office_format_support_demo.ipynb)** | Office support after PR #499, and the DEFLATE limitation that blocks it in practice |
+| **[`in_toto_comparison.ipynb`](in_toto_comparison.ipynb)** | in-toto's signed policy layer vs signature-only provenance |
+| **[`w3c_vc_comparison.ipynb`](w3c_vc_comparison.ipynb)** | W3C Verifiable Credentials head-to-head |
+| **[`aml_use_case_demo.ipynb`](aml_use_case_demo.ipynb)** | A document-auditability pipeline end to end, on synthetic data |
 
-## Headline findings
+Each has a rendered `.md` export alongside it for reading without Jupyter.
 
-1. **C2PA carries custom JSON at scale** — 150 MB embedded successfully; the limit is
-   memory, not the spec.
-2. ⚠️ **Numeric arrays are silently corrupted.** `[1,2,3,256]` comes back with 256 turned
-   into 0; `[1.5,2.5]` vanishes entirely; OCR bounding boxes are destroyed. The file
-   still reports `validation_state: Valid` — the signature attests to corrupted data.
-   **Serialize payloads to a JSON string first.**
-3. **Write support: media, plus Office as of 0.27.22** — PR #499 merged 2026-09-04, so
-   DOCX/XLSX/PPTX/EPUB/ODT now sign. ⚠️ But only *uncompressed* ZIPs: every real Office
-   file uses DEFLATE and is rejected. PDF, CSV and JSON still refuse; PDF is read-only.
-4. **But C2PA-in-PDF is real** — `sample/adobe-pdf.pdf` is signed by Adobe in production
-   (issuer "Adobe Inc.", `cai-prod`). This is a tooling gap in the open-source library,
-   not a limitation of the standard. Upstream closed PDF write as `not_planned` (#527).
-5. **Vendor adoption verified locally** — the Gemini image carries a genuine Google
-   signature with a full certificate chain and an RFC 3161 timestamp, verifiable offline.
-6. **C2PA is trivially strippable** — a plain image re-save removes the manifest
-   entirely. Its absence proves nothing.
+## Selected findings
 
-## Running the demo
+1. **Custom JSON scales** — 150 MB embedded into a single image; the limit is memory, not
+   the specification.
+2. **Numeric arrays are reported wrongly, not stored wrongly.** `c2patool` prints
+   `[96,384]` as `"YIA="`, but decoding the raw CBOR shows the data intact. Upstream
+   [PR #2611](https://github.com/contentauth/c2pa-rs/pull/2611) confirms it is a report
+   formatter defect.
+3. **Office support shipped on 2026-09-04** ([PR #499](https://github.com/contentauth/c2pa-rs/pull/499),
+   open 26 months) — but only accepts *uncompressed* ZIPs, and every real Office file uses
+   DEFLATE. A signed file also cannot survive re-zipping.
+4. **PDF write remains unimplemented** —
+   [#527](https://github.com/contentauth/c2pa-rs/issues/527) closed `not_planned`, no PR.
+   Yet production PDFs are signed: `sample/openai-chatgpt-signed.pdf` validates as
+   **Trusted** against the official trust list.
+5. **The trust list is smaller and more open than assumed** — 17 organisations, 30 root
+   certificates, 188 conformant products, and no application fee.
+6. **Declared conformance is not deployed signing.** Products declaring Office support ship
+   unsigned exports.
+
+## Running them
 
 ```bash
-jupyter notebook c2pa_demo.ipynb     # Kernel -> Restart & Run All
+jupyter nbconvert --to notebook --execute --inplace c2pa_demo.ipynb
 ```
 
-Requires `c2patool` on `PATH` (or at `~/local_bin/c2patool`). Takes ~30 s, no network
-access needed. Outputs go to `demo_out/` (gitignored, rebuilt each run).
+Requires `c2patool` on `PATH` (or `$C2PATOOL`), plus `pip install cbor2 in-toto didkit`
+for the comparison notebooks. No network access needed.
 
 ## A note on `sample/`
 
-These are the **public test fixtures** from the
-[c2pa-rs](https://github.com/contentauth/c2pa-rs) release, kept here so the notebook
-runs out of the box.
+Test fixtures from the [c2pa-rs](https://github.com/contentauth/c2pa-rs) release, kept so
+the notebooks run unmodified, plus several genuinely vendor-signed artifacts used as
+verification evidence.
 
-`sample/es256_private.key` is a **publicly published test key** distributed by the C2PA
-project for exactly this purpose. It is not a secret, it signs nothing of value, and its
-certificate is deliberately absent from the C2PA trust list — which is why the notebook
-reports `signingCredential.untrusted` throughout. **Never use it for anything real.**
-
-`sample/adobe-pdf.pdf` and the Gemini image are genuine vendor-signed artifacts, included
-as verification evidence.
+`sample/es256_private.key` is the **publicly published C2PA test key**, committed
+deliberately. It is not a secret, it signs nothing of value, and its certificate is
+deliberately absent from the C2PA trust list — which is why `signingCredential.untrusted`
+appears throughout. Never use it for anything real.

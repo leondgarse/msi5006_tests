@@ -7,7 +7,7 @@ CONTEXT.md lists this as the strongest expected challenge, and nobody had prepar
 > **Benchmark vs W3C Verifiable Credentials** — JSON-native, W3C Rec, signed structured
 > claims. Strongest expected challenge.
 
-If MSD's differentiator is the **graph** rather than the **embedding** (Ulf's 08-28 scope
+If MSD's differentiator is the **graph** rather than the **embedding** (the protocol author's 08-28 scope
 correction), then C2PA stops being the right comparison and VC becomes the closest
 collision. Both sign structured JSON. Both express derivation. One is a W3C
 Recommendation with an ecosystem behind it.
@@ -25,7 +25,7 @@ This notebook runs VC for real and answers, honestly: **what does MSD do that VC
 | 7 | Selective disclosure — VC's claimed advantage |
 | 8 | Head-to-head, and the honest verdict |
 
-Companion notebooks: `c2pa_demo.ipynb` (embedding), `provenance_graph_demo.ipynb` (graph).
+Companion notebooks: `c2pa_demo.ipynb` (embedding), a companion notebook (graph).
 
 ## 1. Setup
 
@@ -264,7 +264,7 @@ This is a straightforward win over C2PA for our use case, and a tie with MSD.
 
 ## 5. Dependency chains — the graph question
 
-`provenance_graph_demo.ipynb` built MSD's chain by hand, because the SDK has **no linking
+a companion notebook built MSD's chain by hand, because the SDK has **no linking
 primitive**: we invented a `derived_from` convention on top of `content_hash`.
 
 VC has this **in the specification**. The `evidence` property exists precisely to record
@@ -330,7 +330,7 @@ print("n2's own signature still valid:", json.loads(await didkit.verify_credenti
 
 
 Identical behaviour to MSD's hand-rolled chain — and identical to what C2PA **cannot** do
-(§6 of `provenance_graph_demo.ipynb`: a C2PA child still reports `Valid` after its
+(§6 of a companion notebook: a C2PA child still reports `Valid` after its
 ancestor is tampered, because ingredients record ingest-time results).
 
 The difference from MSD is provenance of the *design*: `evidence` is a standard property
@@ -376,7 +376,7 @@ service.
 
 ## 7. Selective disclosure
 
-Ulf's requirement: expose the subgraph one auditor needs, without handing over everything.
+the protocol author's requirement: expose the subgraph one auditor needs, without handing over everything.
 
 VC's canonical answer is **BBS+** (`BbsBlsSignature2020`), which allows proving statements
 about fields you do not reveal. Is it actually available here?
@@ -505,4 +505,4 @@ That points somewhere specific and worth putting to the sponsor: MSD's defensibl
 is the intersection C2PA and VC both miss — **structured provenance carried inside
 business documents** — not the dependency graph, where a W3C Recommendation already exists.
 
-Companion notebooks: `c2pa_demo.ipynb`, `provenance_graph_demo.ipynb`.
+Companion notebooks: `c2pa_demo.ipynb`, a companion notebook.
