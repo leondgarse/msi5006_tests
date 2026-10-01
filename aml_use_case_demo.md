@@ -285,7 +285,7 @@ see and sign off.
 ## 4. The audit trail
 
 Who did what, when. Taken from the video at 00:04:11 — note it spans both **system**
-actions (matching engine, workflow) and **human** ones (`allen.antony@staple.io` opening
+actions (matching engine, workflow) and **human** ones (`reviewer@example.com` opening
 and linking).
 
 
@@ -300,10 +300,10 @@ AUDIT_TRAIL = [
     {"ts": "2026-08-12T17:27", "event": "Exceptions Raised", "actor": "System — Matching Engine",
      "detail": "Raised 1 link, 2 comparison exceptions. Status set to Not Reconciled."},
     {"ts": "2026-08-12T17:28", "event": "Assigned to User", "actor": "System — Workflow",
-     "detail": "Assigned to allen.antony@staple.io for review."},
-    {"ts": "2026-08-12T19:27", "event": "User Opened Set", "actor": "allen.antony@staple.io",
+     "detail": "Assigned to reviewer@example.com for review."},
+    {"ts": "2026-08-12T19:27", "event": "User Opened Set", "actor": "reviewer@example.com",
      "detail": "Reconciliation details viewed. Document viewers accessed."},
-    {"ts": "2026-08-12T20:07", "event": "Document linked", "actor": "allen.antony@staple.io",
+    {"ts": "2026-08-12T20:07", "event": "Document linked", "actor": "reviewer@example.com",
      "detail": "Linked 04_PORA_Broadband_Bill.pdf to Declan Ó Ruairc."},
 ]
 
@@ -316,8 +316,8 @@ for a in AUDIT_TRAIL:
       2026-08-12T17:26  Residence permit expired   System — Matching Engine
       2026-08-12T17:27  Exceptions Raised          System — Matching Engine
       2026-08-12T17:28  Assigned to User           System — Workflow
-      2026-08-12T19:27  User Opened Set            allen.antony@staple.io
-      2026-08-12T20:07  Document linked            allen.antony@staple.io
+      2026-08-12T19:27  User Opened Set            reviewer@example.com
+      2026-08-12T20:07  Document linked            reviewer@example.com
 
 
 ## 5. Packing it into the document
