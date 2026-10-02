@@ -6,6 +6,12 @@ real `c2patool` binary or the named library — nothing is asserted from documen
 
 Tested with `c2patool` 0.27.15 and 0.27.22 on Linux.
 
+## Explainer
+
+**[How provenance actually works](docs/index.html)** — a plain-language page for a
+non-technical reader: which steps in a pipeline you can verify yourself, and which rest on
+someone's signature. Self-contained HTML, no build step.
+
 ## Notebooks
 
 | Notebook | Covers |
