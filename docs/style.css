@@ -19,6 +19,11 @@ html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--text-1);font:16.5px/1.65 var(--sans);
   -webkit-font-smoothing:antialiased}
 .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+/* Prose needs a narrower column than layout blocks do. Capping paragraphs
+   with a ch measure inside the full 1040px column left them filling only
+   45-64% of it, which reads as text stranded beside empty space. Give the
+   text its own column instead; stats, cards, tables and media keep 1040. */
+.prose{max-width:760px}
 .narrow{max-width:720px}
 
 /* nav */
@@ -36,8 +41,8 @@ h1{font:700 clamp(32px,5vw,46px)/1.12 var(--display);letter-spacing:-.025em;marg
   text-wrap:balance;max-width:28ch}
 h2{font:650 27px/1.25 var(--display);letter-spacing:-.018em;margin:58px 0 14px;text-wrap:balance}
 h3{font:650 18px/1.4 var(--display);margin:30px 0 8px;text-wrap:balance}
-p{margin:0 0 16px;max-width:66ch;text-wrap:pretty}
-.lede{font-size:19px;color:var(--text-2);max-width:54ch;text-wrap:pretty}
+p{margin:0 0 16px;max-width:760px;text-wrap:pretty}
+.lede{font-size:19px;color:var(--text-2);max-width:760px;text-wrap:pretty}
 .eyebrow{font:600 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
   color:var(--teal);margin-bottom:16px}
 .muted{color:var(--text-2)} .small{font-size:14.5px}
@@ -50,7 +55,7 @@ header.hero{padding:72px 0 52px;border-bottom:1px solid var(--border)}
    gutter a lone left-aligned text block leaves in a 1040px column. */
 .hero-center{text-align:center}
 .hero-center h1{max-width:34ch;margin-left:auto;margin-right:auto}
-.hero-center .lede{max-width:70ch;margin-left:auto;margin-right:auto}
+.hero-center .lede{max-width:760px;margin-left:auto;margin-right:auto}
 .hero-center .cta-row{justify-content:center}
 .hero-center .legend{justify-content:center}
 /* a longer headline needs its own measure, or 34ch breaks it mid-phrase */
@@ -144,7 +149,7 @@ footer p{max-width:none;text-wrap:pretty}
 .band h2{margin-top:0}
 
 /* lead paragraph under a heading, then blocks — never a wall of <p> */
-.section-lede{font-size:17.5px;color:var(--text-2);max-width:62ch;margin:0 0 26px;text-wrap:pretty}
+.section-lede{font-size:17.5px;color:var(--text-2);max-width:760px;margin:0 0 26px;text-wrap:pretty}
 
 /* cost / stat row */
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:4px 0 0}
@@ -182,7 +187,7 @@ footer p{max-width:none;text-wrap:pretty}
 .compare ul{margin:0;padding-left:17px;font-size:13.5px;color:var(--text-2)}
 
 /* quiet inline note */
-.note{font-size:14px;color:var(--text-3);margin:14px 0 0;max-width:56ch;text-wrap:pretty}
+.note{font-size:14px;color:var(--text-3);margin:14px 0 0;text-wrap:pretty}
 
 /* ---- hero CTAs and analogy (pattern borrowed from c2pa.org / in-toto.io) ---- */
 .cta-row{display:flex;flex-wrap:wrap;gap:11px;margin:26px 0 0}
@@ -194,7 +199,7 @@ footer p{max-width:none;text-wrap:pretty}
 .btn-primary:hover{background:#0b7f74;border-color:#0b7f74;color:#fff}
 .analogy{background:var(--teal-bg);border:1px solid rgba(13,148,136,.2);
   border-radius:var(--radius-lg);padding:20px 24px;margin:44px 0 0}
-.analogy p{margin:0;font-size:17px;max-width:66ch;text-wrap:pretty}
+.analogy p{margin:0;font-size:17px;text-wrap:pretty}
 
 /* ---- full-width colour bands (in-toto's main structural device) ---- */
 .band-accent{background:var(--primary);color:#fff;border:0}
