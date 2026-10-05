@@ -41,8 +41,8 @@ h1{font:700 clamp(32px,5vw,46px)/1.12 var(--display);letter-spacing:-.025em;marg
   text-wrap:balance;max-width:28ch}
 h2{font:650 27px/1.25 var(--display);letter-spacing:-.018em;margin:58px 0 14px;text-wrap:balance}
 h3{font:650 18px/1.4 var(--display);margin:30px 0 8px;text-wrap:balance}
-p{margin:0 0 16px;max-width:760px;text-wrap:pretty}
-.lede{font-size:19px;color:var(--text-2);max-width:760px;text-wrap:pretty}
+p{margin:0 0 16px;max-width:760px;text-wrap:balance}
+.lede{font-size:19px;color:var(--text-2);max-width:760px;text-wrap:balance}
 .eyebrow{font:600 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
   color:var(--teal);margin-bottom:16px}
 .muted{color:var(--text-2)} .small{font-size:14.5px}
@@ -78,7 +78,10 @@ header.hero{padding:72px 0 52px;border-bottom:1px solid var(--border)}
 
 /* cards */
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:26px 0}
-@media(max-width:820px){.cards{grid-template-columns:1fr}}
+/* four cards split 2x2 rather than leaving one stranded on its own row */
+.cards:has(> :nth-child(4)):not(:has(> :nth-child(5))){grid-template-columns:repeat(2,1fr)}
+@media(max-width:820px){.cards,
+  .cards:has(> :nth-child(4)):not(:has(> :nth-child(5))){grid-template-columns:1fr}}
 .card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);
   padding:22px;box-shadow:var(--shadow-sm);text-decoration:none;color:inherit;display:block;
   transition:box-shadow .16s,transform .16s}
@@ -149,7 +152,11 @@ footer p{max-width:none;text-wrap:pretty}
 .band h2{margin-top:0}
 
 /* lead paragraph under a heading, then blocks — never a wall of <p> */
-.section-lede{font-size:17.5px;color:var(--text-2);max-width:760px;margin:0 0 26px;text-wrap:pretty}
+.section-lede{font-size:17.5px;color:var(--text-2);max-width:760px;margin:0 0 26px;text-wrap:balance}
+/* a heading centred over a full-width card row, where a left-aligned one
+   would sit oddly against three evenly spaced cards */
+h2.center{text-align:center}
+h2.center + .cards{margin-top:22px}
 
 /* cost / stat row */
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:4px 0 0}
