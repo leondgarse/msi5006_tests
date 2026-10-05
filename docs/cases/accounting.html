@@ -41,14 +41,21 @@
   </div>
 </div></header>
 
-<div class="wrap narrow">
 
-<h2>The situation</h2>
-<p>A supplier sends invoice INV-1042 for S$48,200. A purchase order, PO-7731, authorises up to S$50,000. Extraction reads the invoice, a matching step confirms the two agree, and the figure lands in the Q3 expense report.</p><p>Four steps, three systems, two companies.</p>
+<section class="band"><div class="wrap">
+  <div class="duo">
+    <div>
+      <h2>The situation</h2>
+      <p>A supplier sends invoice INV-1042 for S$48,200. A purchase order, PO-7731, authorises up to S$50,000. Extraction reads the invoice, a matching step confirms the two agree, and the figure lands in the Q3 expense report.</p><p>Four steps, three systems, two companies.</p>
+    </div>
+    <div>
+      <h2>What goes wrong without it</h2>
+      <p>The invoice and the PO are each signed by the party that issued them, and the match can be recomputed by anyone holding both. That part is solid.</p><p>But the payment approval has no signed record behind it. The report says the decision was to proceed — and nothing supports it. Today that surfaces during an audit, months later, as an email search. With a provenance chain it surfaces immediately, as a visible break between the match and the report.</p>
+    </div>
+  </div>
+</div></section>
 
-<h2>What goes wrong without it</h2>
-<p>The invoice and the PO are each signed by the party that issued them, and the match can be recomputed by anyone holding both. That part is solid.</p><p>But the payment approval has no signed record behind it. The report says the decision was to proceed — and nothing supports it. Today that surfaces during an audit, months later, as an email search. With a provenance chain it surfaces immediately, as a visible break between the match and the report.</p>
-
+<section class="band plain"><div class="wrap">
 <h2>The chain</h2>
 <p>Each step references the one before it. Some can be re-run; others carry a signature.</p>
 <table>
@@ -63,23 +70,32 @@
   </tbody>
 </table>
 
-<h2>What the auditor does</h2>
-<ol class="steps">
+</div></section>
+
+<section class="band"><div class="wrap">
+  <div class="duo">
+    <div>
+      <h2>What the auditor does</h2>
+      <ol class="steps">
   <li><strong>Check the report you were given</strong><span>Confirm the figure matches what was published, and that the publisher signed it.</span></li>
   <li><strong>Ask for the inputs</strong><span>The invoice, the PO, the extraction and the match record — each must match a reference already in the chain.</span></li>
   <li><strong>Re-run the match</strong><span>Invoice against PO. Either it agrees or it does not; no trust involved.</span></li>
   <li><strong>Check the signatures</strong><span>The supplier on the invoice, the buyer on the PO, the operator on the extraction.</span></li>
   <li><strong>Find the break</strong><span>The approval has no signed record. The report depends on a step that cannot be shown.</span></li>
-</ol>
-
-<div class="limits">
-  <h3>What this still cannot tell you</h3>
-  <ul>
+      </ol>
+    </div>
+    <div class="limits">
+        <h3>What this still cannot tell you</h3>
+        <ul>
     <li>A signature shows which <strong>key</strong> approved something, not which person held it.</li>
     <li>Re-running the match proves the comparison was faithful, not that the invoice itself is genuine.</li>
     <li>A missing approval might exist somewhere unrecorded — the chain shows it is absent from the evidence, not that it never happened.</li>
-  </ul>
-</div>
+        </ul>
+    </div>
+  </div>
+</div></section>
+
+<section class="band plain"><div class="wrap">
 
 <h2>Other use cases</h2>
 <div class="cards">
@@ -87,11 +103,12 @@
   <a class="card" href="ai-agent.html"><span class="tag">AI agents</span><h3>Trace a decision to its sources</h3><p>An agent recommends a supplier, citing a price feed that cannot be found.</p></a>
 </div>
 
-<footer>
+</div></section>
+
+<div class="wrap"><footer>
   <p><strong>Draft.</strong> Produced for an MSI5006 capstone project (NUS) as promotional material for MSD. This scenario uses synthetic data and does not depict any real organisation or transaction.</p>
   <p>msd-protocol.org</p>
-</footer>
+</footer></div>
 
-</div>
 </body>
 </html>

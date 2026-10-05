@@ -41,14 +41,21 @@
   </div>
 </div></header>
 
-<div class="wrap narrow">
 
-<h2>The situation</h2>
-<p>A procurement agent retrieves a contract with a unit price, and a company policy requiring at least two quotes. It reasons over both, calls a price-comparison tool, and recommends Supplier B.</p><p>The recommendation is acted on.</p>
+<section class="band"><div class="wrap">
+  <div class="duo">
+    <div>
+      <h2>The situation</h2>
+      <p>A procurement agent retrieves a contract with a unit price, and a company policy requiring at least two quotes. It reasons over both, calls a price-comparison tool, and recommends Supplier B.</p><p>The recommendation is acted on.</p>
+    </div>
+    <div>
+      <h2>What goes wrong without it</h2>
+      <p>The retrieved documents are signed by their owners, and the model call is signed by the operator that ran it — reasonable, since an LLM call cannot be replayed to the same answer.</p><p>But the price comparison cites a live feed, and no record of that feed exists. The agent's output depends on a number nobody can now produce. The recommendation reads as confident; the evidence underneath has a hole in it.</p>
+    </div>
+  </div>
+</div></section>
 
-<h2>What goes wrong without it</h2>
-<p>The retrieved documents are signed by their owners, and the model call is signed by the operator that ran it — reasonable, since an LLM call cannot be replayed to the same answer.</p><p>But the price comparison cites a live feed, and no record of that feed exists. The agent's output depends on a number nobody can now produce. The recommendation reads as confident; the evidence underneath has a hole in it.</p>
-
+<section class="band plain"><div class="wrap">
 <h2>The chain</h2>
 <p>Each step references the one before it. Some can be re-run; others carry a signature.</p>
 <table>
@@ -63,23 +70,32 @@
   </tbody>
 </table>
 
-<h2>What the auditor does</h2>
-<ol class="steps">
+</div></section>
+
+<section class="band"><div class="wrap">
+  <div class="duo">
+    <div>
+      <h2>What the auditor does</h2>
+      <ol class="steps">
   <li><strong>Start from the recommendation</strong><span>Choose Supplier B. It references a price comparison.</span></li>
   <li><strong>Follow the comparison to its inputs</strong><span>A contract, a policy, and a live price feed that was cited but never captured.</span></li>
   <li><strong>Check what was signed</strong><span>The documents by their owners, the model call by its operator.</span></li>
   <li><strong>Accept what cannot be re-run</strong><span>The model call is not reproducible. The signature records who ran it, with which model and settings.</span></li>
   <li><strong>See the hole</strong><span>A cited source that cannot be produced is visible as a gap, not buried in a log.</span></li>
-</ol>
-
-<div class="limits">
-  <h3>What this still cannot tell you</h3>
-  <ul>
+      </ol>
+    </div>
+    <div class="limits">
+        <h3>What this still cannot tell you</h3>
+        <ul>
     <li>A signature on a model call records that it ran, not that its reasoning was sound.</li>
     <li>Citing a source is not the same as having used it correctly.</li>
     <li>The chain shows the evidence is incomplete. Whether Supplier B was the right choice remains a commercial judgement.</li>
-  </ul>
-</div>
+        </ul>
+    </div>
+  </div>
+</div></section>
+
+<section class="band plain"><div class="wrap">
 
 <h2>Other use cases</h2>
 <div class="cards">
@@ -87,11 +103,12 @@
   <a class="card" href="kyc.html"><span class="tag">KYC onboarding</span><h3>Not until every check is in</h3><p>Passport verified, sanctions clear, risk scored — on a document that was never filed.</p></a>
 </div>
 
-<footer>
+</div></section>
+
+<div class="wrap"><footer>
   <p><strong>Draft.</strong> Produced for an MSI5006 capstone project (NUS) as promotional material for MSD. This scenario uses synthetic data and does not depict any real organisation or transaction.</p>
   <p>msd-protocol.org</p>
-</footer>
+</footer></div>
 
-</div>
 </body>
 </html>

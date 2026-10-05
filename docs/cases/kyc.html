@@ -41,14 +41,21 @@
   </div>
 </div></header>
 
-<div class="wrap narrow">
 
-<h2>The situation</h2>
-<p>A new client is onboarded. An ID provider verifies the passport scan. A liveness vendor matches a selfie at 0.97. A screening service reports no sanctions matches. A risk model scores the applicant low, and the account is opened.</p><p>Three vendors, one model, one decision.</p>
+<section class="band"><div class="wrap">
+  <div class="duo">
+    <div>
+      <h2>The situation</h2>
+      <p>A new client is onboarded. An ID provider verifies the passport scan. A liveness vendor matches a selfie at 0.97. A screening service reports no sanctions matches. A risk model scores the applicant low, and the account is opened.</p><p>Three vendors, one model, one decision.</p>
+    </div>
+    <div>
+      <h2>What goes wrong without it</h2>
+      <p>Each vendor signed its own result, which is exactly right — none of these can be re-run, so a signature is the only evidence available.</p><p>The risk score, though, was supposed to take a proof of address as an input. No such document was ever filed. The score was computed anyway, and the approval rests on it. Nothing in the account record says so.</p>
+    </div>
+  </div>
+</div></section>
 
-<h2>What goes wrong without it</h2>
-<p>Each vendor signed its own result, which is exactly right — none of these can be re-run, so a signature is the only evidence available.</p><p>The risk score, though, was supposed to take a proof of address as an input. No such document was ever filed. The score was computed anyway, and the approval rests on it. Nothing in the account record says so.</p>
-
+<section class="band plain"><div class="wrap">
 <h2>The chain</h2>
 <p>Each step references the one before it. Some can be re-run; others carry a signature.</p>
 <table>
@@ -63,23 +70,32 @@
   </tbody>
 </table>
 
-<h2>What the auditor does</h2>
-<ol class="steps">
+</div></section>
+
+<section class="band"><div class="wrap">
+  <div class="duo">
+    <div>
+      <h2>What the auditor does</h2>
+      <ol class="steps">
   <li><strong>Start from the decision</strong><span>The account was approved. The approval references a risk score.</span></li>
   <li><strong>Follow the score to its inputs</strong><span>Passport, selfie, sanctions — and a proof of address that is referenced but absent.</span></li>
   <li><strong>Check each vendor signature</strong><span>Three independent parties, three keys, three claims about their own work.</span></li>
   <li><strong>Note what cannot be re-run</strong><span>None of these checks are reproducible. Signatures are the only evidence, which is the correct design.</span></li>
   <li><strong>Surface the gap at onboarding</strong><span>Not at the next regulatory review.</span></li>
-</ol>
-
-<div class="limits">
-  <h3>What this still cannot tell you</h3>
-  <ul>
+      </ol>
+    </div>
+    <div class="limits">
+        <h3>What this still cannot tell you</h3>
+        <ul>
     <li>A vendor signature says that vendor produced the result. It does not prove the result is correct.</li>
     <li>Knowing which key signed is not the same as knowing which person or system authorised it.</li>
     <li>The chain shows an input is missing. Whether the applicant is genuine is still a human judgement.</li>
-  </ul>
-</div>
+        </ul>
+    </div>
+  </div>
+</div></section>
+
+<section class="band plain"><div class="wrap">
 
 <h2>Other use cases</h2>
 <div class="cards">
@@ -87,11 +103,12 @@
   <a class="card" href="ai-agent.html"><span class="tag">AI agents</span><h3>Trace a decision to its sources</h3><p>An agent recommends a supplier, citing a price feed that cannot be found.</p></a>
 </div>
 
-<footer>
+</div></section>
+
+<div class="wrap"><footer>
   <p><strong>Draft.</strong> Produced for an MSI5006 capstone project (NUS) as promotional material for MSD. This scenario uses synthetic data and does not depict any real organisation or transaction.</p>
   <p>msd-protocol.org</p>
-</footer>
+</footer></div>
 
-</div>
 </body>
 </html>

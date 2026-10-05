@@ -32,11 +32,12 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 @media(max-width:600px){.nav-links a.hide-sm{display:none}}
 
 /* type */
-h1{font:700 clamp(32px,5vw,46px)/1.12 var(--display);letter-spacing:-.025em;margin:0 0 18px}
-h2{font:650 27px/1.25 var(--display);letter-spacing:-.018em;margin:58px 0 14px}
-h3{font:650 18px/1.4 var(--display);margin:30px 0 8px}
-p{margin:0 0 16px;max-width:68ch}
-.lede{font-size:19px;color:var(--text-2);max-width:62ch}
+h1{font:700 clamp(32px,5vw,46px)/1.12 var(--display);letter-spacing:-.025em;margin:0 0 18px;
+  text-wrap:balance;max-width:28ch}
+h2{font:650 27px/1.25 var(--display);letter-spacing:-.018em;margin:58px 0 14px;text-wrap:balance}
+h3{font:650 18px/1.4 var(--display);margin:30px 0 8px;text-wrap:balance}
+p{margin:0 0 16px;max-width:66ch;text-wrap:pretty}
+.lede{font-size:19px;color:var(--text-2);max-width:54ch;text-wrap:pretty}
 .eyebrow{font:600 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
   color:var(--teal);margin-bottom:16px}
 .muted{color:var(--text-2)} .small{font-size:14.5px}
@@ -130,7 +131,7 @@ footer p{max-width:72ch}
 .band h2{margin-top:0}
 
 /* lead paragraph under a heading, then blocks — never a wall of <p> */
-.section-lede{font-size:17.5px;color:var(--text-2);max-width:60ch;margin:0 0 26px}
+.section-lede{font-size:17.5px;color:var(--text-2);max-width:56ch;margin:0 0 26px;text-wrap:pretty}
 
 /* cost / stat row */
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:4px 0 0}
@@ -146,6 +147,11 @@ footer p{max-width:72ch}
 .duo{display:grid;grid-template-columns:1.05fr .95fr;gap:34px;align-items:start}
 @media(max-width:820px){.duo{grid-template-columns:1fr;gap:22px}}
 .duo p:last-child{margin-bottom:0}
+.duo > div > h2:first-child{margin-top:0}
+/* a limits panel that is itself a duo column aligns with the heading beside it;
+   one nested inside a column starts at the top of that column */
+.duo > .limits{margin-top:46px}
+@media(max-width:820px){.duo > .limits{margin-top:0}}
 
 /* compact comparison strip */
 .compare{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);
@@ -173,17 +179,18 @@ footer p{max-width:72ch}
 .btn-primary:hover{background:#0b7f74;border-color:#0b7f74;color:#fff}
 .analogy{background:var(--teal-bg);border:1px solid rgba(13,148,136,.2);
   border-radius:var(--radius-lg);padding:20px 24px;margin:44px 0 0}
-.analogy p{margin:0;font-size:17px;max-width:66ch}
+.analogy p{margin:0;font-size:17px;max-width:66ch;text-wrap:pretty}
 
 /* ---- full-width colour bands (in-toto's main structural device) ---- */
 .band-accent{background:var(--primary);color:#fff;border:0}
 .band-accent .wrap{padding:44px 24px;text-align:center}
-.band-accent p{margin:0 auto;max-width:62ch;font-size:18px;line-height:1.6;color:#fff;opacity:.95}
+.band-accent p{margin:0 auto;max-width:58ch;font-size:18px;line-height:1.6;color:#fff;
+  opacity:.95;text-wrap:pretty}
 .band-accent strong{color:#fff;font-weight:650}
 
 .band-teal{background:var(--teal);color:#fff;border:0}
 .band-teal .wrap{padding:36px 24px;text-align:center}
-.band-teal p{margin:0 auto;max-width:60ch;color:#fff;font-size:16.5px}
+.band-teal p{margin:0 auto;max-width:60ch;color:#fff;font-size:16.5px;text-wrap:pretty}
 .band-teal a{color:#fff;text-decoration:underline;text-underline-offset:3px}
 
 /* icon-style feature row, one sentence each */
