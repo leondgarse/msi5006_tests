@@ -174,3 +174,25 @@ footer p{max-width:72ch}
 .analogy{background:var(--teal-bg);border:1px solid rgba(13,148,136,.2);
   border-radius:var(--radius-lg);padding:20px 24px;margin:44px 0 0}
 .analogy p{margin:0;font-size:17px;max-width:66ch}
+
+/* ---- full-width colour bands (in-toto's main structural device) ---- */
+.band-accent{background:var(--primary);color:#fff;border:0}
+.band-accent .wrap{padding:44px 24px;text-align:center}
+.band-accent p{margin:0 auto;max-width:62ch;font-size:18px;line-height:1.6;color:#fff;opacity:.95}
+.band-accent strong{color:#fff;font-weight:650}
+
+.band-teal{background:var(--teal);color:#fff;border:0}
+.band-teal .wrap{padding:36px 24px;text-align:center}
+.band-teal p{margin:0 auto;max-width:60ch;color:#fff;font-size:16.5px}
+.band-teal a{color:#fff;text-decoration:underline;text-underline-offset:3px}
+
+/* icon-style feature row, one sentence each */
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;text-align:center}
+@media(max-width:820px){.features{grid-template-columns:1fr;gap:26px}}
+.feature .mark{width:38px;height:38px;margin:0 auto 14px;border-radius:9px;
+  background:var(--teal-bg);display:flex;align-items:center;justify-content:center}
+.feature .mark svg{width:19px;height:19px;stroke:var(--teal);fill:none;stroke-width:1.9}
+.feature h3{margin:0 0 6px;font-size:16.5px}
+.feature p{margin:0 0 10px;font-size:14.5px;color:var(--text-2)}
+.feature a{font-size:14px;text-decoration:none;border-bottom:1px solid currentColor;
+  padding-bottom:1px}

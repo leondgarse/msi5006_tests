@@ -3,8 +3,9 @@
 Four layers, matching the structure agreed on the 10-02 call.
 
 ```
-index.html              landing — high level, catchy, mostly links (~300 words)
+index.html              landing — high level, catchy, mostly links (~370 words)
 business.html           "if I'm in finance, how do I understand this?"
+community.html          open protocol, honest stage, how to get involved
 cases/accounting.html   accounts payable
 cases/kyc.html          KYC onboarding
 cases/ai-agent.html     AI agent decisions
@@ -36,6 +37,21 @@ This is a staging surface for writing and review; the content is the deliverable
 shell. `style.css` mirrors the live site's design tokens (`--bg`, `--text-1`, `--primary`,
 `--teal`, the radius and shadow scale, Inter / Manrope / JetBrains Mono), so re-expressing
 these as Svelte components should be close to mechanical.
+
+## Borrowed from in-toto.io
+
+in-toto is the closest comparison — an early protocol without a logo wall to lean on. Three
+devices taken from it:
+
+- **Full-width colour bands** carry the landing page instead of boxed sections on a neutral
+  ground. Each band does one job and the eye can skip between them.
+- **A one-sentence explainer band** right after the hero, before any mechanism.
+- **Three feature cards, one sentence each**, with a "read more"-style link.
+
+Their *ecosystem* page was deliberately **not** copied: it works because they have real
+adopters to list, and ours would be an empty room. The community page carries the
+honest-stage message instead. Blog and News were also skipped — both look abandoned without
+a publishing cadence.
 
 ## Notes
 
