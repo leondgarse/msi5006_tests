@@ -50,7 +50,7 @@ header.hero{padding:72px 0 52px;border-bottom:1px solid var(--border)}
    a centred paragraph over two lines is harder to read than a left-aligned one */
 .hero-center{text-align:center}
 .hero-center h1{max-width:34ch;margin-left:auto;margin-right:auto}
-.hero-center .lede{max-width:62ch;margin-left:auto;margin-right:auto}
+.hero-center .lede{max-width:70ch;margin-left:auto;margin-right:auto}
 .hero-center .cta-row{justify-content:center}
 .hero-center .legend{justify-content:center}
 
@@ -140,7 +140,7 @@ footer p{max-width:none;text-wrap:pretty}
 .band h2{margin-top:0}
 
 /* lead paragraph under a heading, then blocks — never a wall of <p> */
-.section-lede{font-size:17.5px;color:var(--text-2);max-width:56ch;margin:0 0 26px;text-wrap:pretty}
+.section-lede{font-size:17.5px;color:var(--text-2);max-width:62ch;margin:0 0 26px;text-wrap:pretty}
 
 /* cost / stat row */
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:4px 0 0}
