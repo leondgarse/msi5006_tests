@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI agent decisions — MSD</title>
+<meta name="description" content="An agent recommends a supplier, citing a live price feed that cannot be produced.">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<nav><div class="wrap">
+  <a class="brand" href="../">MSD<span>.</span></a>
+  <div class="nav-links">
+    <a href="../#how">How it works</a>
+    <a href="../#cases">Use cases</a>
+    <a class="hide-sm" href="https://network.msd-protocol.org/">Network</a>
+    <a class="hide-sm" href="https://key-tools.msd-protocol.org/">Key tools</a>
+  </div>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <a class="backlink" href="../#cases">&#8592; All use cases</a>
+  <div class="eyebrow">Use case: AI agent decisions</div>
+  <h1>Trace every AI decision back to its sources.</h1>
+  <p class="lede">An agent reads a contract and a policy, compares prices, and recommends a supplier. It cites three sources. One of them cannot be produced.</p>
+
+  <div class="video-wrap">
+    <video controls preload="none" poster="../media/msd-ai_agent.jpg" playsinline>
+      <source src="../media/msd-ai_agent.mp4" type="video/mp4">
+      Your browser cannot play this video.
+    </video>
+    <div class="video-cap">Use case: AI agent decisions — 30 seconds</div>
+  </div>
+
+  <div class="legend">
+    <span><i class="dot sign"></i><b>Signed</b> — someone stands behind it</span>
+    <span><i class="dot ver"></i><b>Verifiable</b> — you can re-run it yourself</span>
+    <span><i class="dot miss"></i><b>Missing</b> — a gap you can see</span>
+  </div>
+</div></header>
+
+<div class="wrap narrow">
+
+<h2>The situation</h2>
+<p>A procurement agent retrieves a contract with a unit price, and a company policy requiring at least two quotes. It reasons over both, calls a price-comparison tool, and recommends Supplier B.</p><p>The recommendation is acted on.</p>
+
+<h2>What goes wrong without it</h2>
+<p>The retrieved documents are signed by their owners, and the model call is signed by the operator that ran it — reasonable, since an LLM call cannot be replayed to the same answer.</p><p>But the price comparison cites a live feed, and no record of that feed exists. The agent's output depends on a number nobody can now produce. The recommendation reads as confident; the evidence underneath has a hole in it.</p>
+
+<h2>The chain</h2>
+<p>Each step references the one before it. Some can be re-run; others carry a signature.</p>
+<table>
+  <thead><tr><th>Step</th><th>What it is</th><th>How you check it</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Contract.pdf</strong></td><td>Retrieved document, unit price S$12</td><td>Signature from the document owner</td></tr>
+    <tr><td><strong>Policy.docx</strong></td><td>Company policy, 2 quotes minimum</td><td>Signature from procurement</td></tr>
+    <tr><td><strong>LLM reasoning</strong></td><td>Model call, 3 sources cited</td><td>Signature from the operator</td></tr>
+    <tr><td><strong>Live price feed</strong></td><td>Cited data source</td><td><span style='color:var(--amber)'>Cited source not found</span></td></tr>
+    <tr><td><strong>Price comparison</strong></td><td>Tool call, lowest = Supplier B</td><td><span style='color:var(--amber)'>Missing an input</span></td></tr>
+    <tr><td><strong>Recommendation</strong></td><td>Agent output</td><td>Depends on the missing step</td></tr>
+  </tbody>
+</table>
+
+<h2>What the auditor does</h2>
+<ol class="steps">
+  <li><strong>Start from the recommendation</strong><span>Choose Supplier B. It references a price comparison.</span></li>
+  <li><strong>Follow the comparison to its inputs</strong><span>A contract, a policy, and a live price feed that was cited but never captured.</span></li>
+  <li><strong>Check what was signed</strong><span>The documents by their owners, the model call by its operator.</span></li>
+  <li><strong>Accept what cannot be re-run</strong><span>The model call is not reproducible. The signature records who ran it, with which model and settings.</span></li>
+  <li><strong>See the hole</strong><span>A cited source that cannot be produced is visible as a gap, not buried in a log.</span></li>
+</ol>
+
+<div class="limits">
+  <h3>What this still cannot tell you</h3>
+  <ul>
+    <li>A signature on a model call records that it ran, not that its reasoning was sound.</li>
+    <li>Citing a source is not the same as having used it correctly.</li>
+    <li>The chain shows the evidence is incomplete. Whether Supplier B was the right choice remains a commercial judgement.</li>
+  </ul>
+</div>
+
+<h2>Other use cases</h2>
+<div class="cards">
+  <a class="card" href="accounting.html"><span class="tag">Accounts payable</span><h3>Close the books with evidence</h3><p>An invoice, a purchase order, a match — and an approval nobody can produce.</p></a>
+  <a class="card" href="kyc.html"><span class="tag">KYC onboarding</span><h3>Not until every check is in</h3><p>Passport verified, sanctions clear, risk scored — on a document that was never filed.</p></a>
+</div>
+
+<footer>
+  <p><strong>Draft.</strong> Produced for an MSI5006 capstone project (NUS) as promotional
+  material for MSD. This scenario uses synthetic data and does not depict any real
+  organisation or transaction.</p>
+  <p>msd-protocol.org</p>
+</footer>
+
+</div>
+</body>
+</html>

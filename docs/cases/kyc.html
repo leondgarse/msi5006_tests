@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KYC onboarding — MSD</title>
+<meta name="description" content="Passport verified, sanctions clear, risk scored — on a proof of address that was never filed.">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<nav><div class="wrap">
+  <a class="brand" href="../">MSD<span>.</span></a>
+  <div class="nav-links">
+    <a href="../#how">How it works</a>
+    <a href="../#cases">Use cases</a>
+    <a class="hide-sm" href="https://network.msd-protocol.org/">Network</a>
+    <a class="hide-sm" href="https://key-tools.msd-protocol.org/">Key tools</a>
+  </div>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <a class="backlink" href="../#cases">&#8592; All use cases</a>
+  <div class="eyebrow">Use case: KYC onboarding</div>
+  <h1>Ready to onboard? Not until every check is in.</h1>
+  <p class="lede">The passport checks out. The selfie matches. Sanctions screening is clear. The account is approved — on a risk score computed without one of its inputs.</p>
+
+  <div class="video-wrap">
+    <video controls preload="none" poster="../media/msd-kyc.jpg" playsinline>
+      <source src="../media/msd-kyc.mp4" type="video/mp4">
+      Your browser cannot play this video.
+    </video>
+    <div class="video-cap">Use case: KYC onboarding — 30 seconds</div>
+  </div>
+
+  <div class="legend">
+    <span><i class="dot sign"></i><b>Signed</b> — someone stands behind it</span>
+    <span><i class="dot ver"></i><b>Verifiable</b> — you can re-run it yourself</span>
+    <span><i class="dot miss"></i><b>Missing</b> — a gap you can see</span>
+  </div>
+</div></header>
+
+<div class="wrap narrow">
+
+<h2>The situation</h2>
+<p>A new client is onboarded. An ID provider verifies the passport scan. A liveness vendor matches a selfie at 0.97. A screening service reports no sanctions matches. A risk model scores the applicant low, and the account is opened.</p><p>Three vendors, one model, one decision.</p>
+
+<h2>What goes wrong without it</h2>
+<p>Each vendor signed its own result, which is exactly right — none of these can be re-run, so a signature is the only evidence available.</p><p>The risk score, though, was supposed to take a proof of address as an input. No such document was ever filed. The score was computed anyway, and the approval rests on it. Nothing in the account record says so.</p>
+
+<h2>The chain</h2>
+<p>Each step references the one before it. Some can be re-run; others carry a signature.</p>
+<table>
+  <thead><tr><th>Step</th><th>What it is</th><th>How you check it</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Passport scan</strong></td><td>Identity document</td><td>Signature from the ID provider</td></tr>
+    <tr><td><strong>Selfie match</strong></td><td>Liveness check, score 0.97</td><td>Signature from the vendor</td></tr>
+    <tr><td><strong>Sanctions check</strong></td><td>Screening, 0 matches</td><td>Signature from the screener</td></tr>
+    <tr><td><strong>Proof of address</strong></td><td>Required document</td><td><span style='color:var(--amber)'>No document found</span></td></tr>
+    <tr><td><strong>Risk score</strong></td><td>Model output, risk low</td><td><span style='color:var(--amber)'>Missing an input</span></td></tr>
+    <tr><td><strong>Open account</strong></td><td>The decision</td><td>Depends on the missing step</td></tr>
+  </tbody>
+</table>
+
+<h2>What the auditor does</h2>
+<ol class="steps">
+  <li><strong>Start from the decision</strong><span>The account was approved. The approval references a risk score.</span></li>
+  <li><strong>Follow the score to its inputs</strong><span>Passport, selfie, sanctions — and a proof of address that is referenced but absent.</span></li>
+  <li><strong>Check each vendor signature</strong><span>Three independent parties, three keys, three claims about their own work.</span></li>
+  <li><strong>Note what cannot be re-run</strong><span>None of these checks are reproducible. Signatures are the only evidence, which is the correct design.</span></li>
+  <li><strong>Surface the gap at onboarding</strong><span>Not at the next regulatory review.</span></li>
+</ol>
+
+<div class="limits">
+  <h3>What this still cannot tell you</h3>
+  <ul>
+    <li>A vendor signature says that vendor produced the result. It does not prove the result is correct.</li>
+    <li>Knowing which key signed is not the same as knowing which person or system authorised it.</li>
+    <li>The chain shows an input is missing. Whether the applicant is genuine is still a human judgement.</li>
+  </ul>
+</div>
+
+<h2>Other use cases</h2>
+<div class="cards">
+  <a class="card" href="accounting.html"><span class="tag">Accounts payable</span><h3>Close the books with evidence</h3><p>An invoice, a purchase order, a match — and an approval nobody can produce.</p></a>
+  <a class="card" href="ai-agent.html"><span class="tag">AI agents</span><h3>Trace a decision to its sources</h3><p>An agent recommends a supplier, citing a price feed that cannot be found.</p></a>
+</div>
+
+<footer>
+  <p><strong>Draft.</strong> Produced for an MSI5006 capstone project (NUS) as promotional
+  material for MSD. This scenario uses synthetic data and does not depict any real
+  organisation or transaction.</p>
+  <p>msd-protocol.org</p>
+</footer>
+
+</div>
+</body>
+</html>

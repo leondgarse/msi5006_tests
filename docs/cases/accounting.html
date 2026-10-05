@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Accounts payable — MSD</title>
+<meta name="description" content="An invoice, a purchase order and a match that checks out — until someone asks who approved the payment.">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<nav><div class="wrap">
+  <a class="brand" href="../">MSD<span>.</span></a>
+  <div class="nav-links">
+    <a href="../#how">How it works</a>
+    <a href="../#cases">Use cases</a>
+    <a class="hide-sm" href="https://network.msd-protocol.org/">Network</a>
+    <a class="hide-sm" href="https://key-tools.msd-protocol.org/">Key tools</a>
+  </div>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <a class="backlink" href="../#cases">&#8592; All use cases</a>
+  <div class="eyebrow">Use case: accounts payable</div>
+  <h1>Close the books with evidence, not guesswork.</h1>
+  <p class="lede">Month-end. The numbers reconcile, the report is ready, and then somebody asks who approved the payment. The match is sound. The approval is nowhere.</p>
+
+  <div class="video-wrap">
+    <video controls preload="none" poster="../media/msd-accounting.jpg" playsinline>
+      <source src="../media/msd-accounting.mp4" type="video/mp4">
+      Your browser cannot play this video.
+    </video>
+    <div class="video-cap">Use case: accounts payable — 30 seconds</div>
+  </div>
+
+  <div class="legend">
+    <span><i class="dot sign"></i><b>Signed</b> — someone stands behind it</span>
+    <span><i class="dot ver"></i><b>Verifiable</b> — you can re-run it yourself</span>
+    <span><i class="dot miss"></i><b>Missing</b> — a gap you can see</span>
+  </div>
+</div></header>
+
+<div class="wrap narrow">
+
+<h2>The situation</h2>
+<p>A supplier sends invoice INV-1042 for S$48,200. A purchase order, PO-7731, authorises up to S$50,000. Extraction reads the invoice, a matching step confirms the two agree, and the figure lands in the Q3 expense report.</p><p>Four steps, three systems, two companies.</p>
+
+<h2>What goes wrong without it</h2>
+<p>The invoice and the PO are each signed by the party that issued them, and the match can be recomputed by anyone holding both. That part is solid.</p><p>But the payment approval has no signed record behind it. The report says the decision was to proceed — and nothing supports it. Today that surfaces during an audit, months later, as an email search. With a provenance chain it surfaces immediately, as a visible break between the match and the report.</p>
+
+<h2>The chain</h2>
+<p>Each step references the one before it. Some can be re-run; others carry a signature.</p>
+<table>
+  <thead><tr><th>Step</th><th>What it is</th><th>How you check it</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Invoice INV-1042</strong></td><td>PDF from the supplier</td><td>Signature from the supplier</td></tr>
+    <tr><td><strong>OCR extract</strong></td><td>Reading fields off the PDF</td><td>Signature from the operator that ran it</td></tr>
+    <tr><td><strong>Purchase order PO-7731</strong></td><td>Authorisation limit from the buyer</td><td>Signature from the buyer</td></tr>
+    <tr><td><strong>Invoice vs PO match</strong></td><td>A deterministic comparison</td><td><strong>Re-run it</strong> — same inputs, same result</td></tr>
+    <tr><td><strong>Payment approval</strong></td><td>A human decision</td><td><span style='color:var(--amber)'>No signed record found</span></td></tr>
+    <tr><td><strong>Q3 expense report</strong></td><td>The published figure</td><td>Depends on the missing step</td></tr>
+  </tbody>
+</table>
+
+<h2>What the auditor does</h2>
+<ol class="steps">
+  <li><strong>Check the report you were given</strong><span>Confirm the figure matches what was published, and that the publisher signed it.</span></li>
+  <li><strong>Ask for the inputs</strong><span>The invoice, the PO, the extraction and the match record — each must match a reference already in the chain.</span></li>
+  <li><strong>Re-run the match</strong><span>Invoice against PO. Either it agrees or it does not; no trust involved.</span></li>
+  <li><strong>Check the signatures</strong><span>The supplier on the invoice, the buyer on the PO, the operator on the extraction.</span></li>
+  <li><strong>Find the break</strong><span>The approval has no signed record. The report depends on a step that cannot be shown.</span></li>
+</ol>
+
+<div class="limits">
+  <h3>What this still cannot tell you</h3>
+  <ul>
+    <li>A signature shows which <strong>key</strong> approved something, not which person held it.</li>
+    <li>Re-running the match proves the comparison was faithful, not that the invoice itself is genuine.</li>
+    <li>A missing approval might exist somewhere unrecorded — the chain shows it is absent from the evidence, not that it never happened.</li>
+  </ul>
+</div>
+
+<h2>Other use cases</h2>
+<div class="cards">
+  <a class="card" href="kyc.html"><span class="tag">KYC onboarding</span><h3>Not until every check is in</h3><p>Passport verified, sanctions clear, risk scored — on a document that was never filed.</p></a>
+  <a class="card" href="ai-agent.html"><span class="tag">AI agents</span><h3>Trace a decision to its sources</h3><p>An agent recommends a supplier, citing a price feed that cannot be found.</p></a>
+</div>
+
+<footer>
+  <p><strong>Draft.</strong> Produced for an MSI5006 capstone project (NUS) as promotional
+  material for MSD. This scenario uses synthetic data and does not depict any real
+  organisation or transaction.</p>
+  <p>msd-protocol.org</p>
+</footer>
+
+</div>
+</body>
+</html>

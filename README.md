@@ -6,11 +6,12 @@ real `c2patool` binary or the named library — nothing is asserted from documen
 
 Tested with `c2patool` 0.27.15 and 0.27.22 on Linux.
 
-## Explainer
+## Marketing site draft
 
-**[How provenance actually works](docs/index.html)** — a plain-language page for a
-non-technical reader: which steps in a pipeline you can verify yourself, and which rest on
-someone's signature. Self-contained HTML, no build step.
+**[`docs/`](docs/)** — a static site explaining the provenance model to a non-technical
+reader: a landing page plus three use-case pages (accounts payable, KYC onboarding, AI agent
+decisions), each built around a 30-second video. Staging surface for content that ports into
+msd-protocol.org.
 
 ## Notebooks
 

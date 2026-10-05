@@ -2,280 +2,156 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How provenance actually works — MSD explained</title>
-<meta name="description" content="A plain-language walkthrough of how cryptographic data provenance works: what you can check yourself, and what you have to take someone's word for.">
-<style>
-  :root{
-    --ink:#16181d; --ink-2:#4a5160; --ink-3:#79818f;
-    --bg:#fcfcfd; --card:#fff; --line:#e4e7ec;
-    --accent:#1b6ef3; --accent-soft:#eef4ff;
-    --check:#0f8a52; --check-soft:#e8f6ee;
-    --trust:#a8630a; --trust-soft:#fdf3e3;
-    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
-  }
-  @media (prefers-color-scheme:dark){
-    :root{
-      --ink:#e9ecf1; --ink-2:#aab3c0; --ink-3:#7c8695;
-      --bg:#0e1014; --card:#161920; --line:#272c36;
-      --accent:#6aa6ff; --accent-soft:#16233a;
-      --check:#4ad28a; --check-soft:#12291d;
-      --trust:#e0a44a; --trust-soft:#2c2112;
-    }
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);
-    font:16.5px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    -webkit-font-smoothing:antialiased}
-  .wrap{max-width:760px;margin:0 auto;padding:0 22px}
-  header{padding:76px 0 40px;border-bottom:1px solid var(--line)}
-  .eyebrow{font:600 12.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
-    color:var(--accent);margin-bottom:20px}
-  h1{font-size:clamp(30px,5.4vw,46px);line-height:1.1;letter-spacing:-.022em;margin:0 0 20px;font-weight:650}
-  .lede{font-size:19px;color:var(--ink-2);margin:0;max-width:62ch}
-  h2{font-size:25px;letter-spacing:-.015em;margin:60px 0 16px;font-weight:650}
-  h3{font-size:17.5px;margin:34px 0 10px;font-weight:620}
-  p{margin:0 0 17px;max-width:68ch}
-  .sub{color:var(--ink-3);font-size:15px}
-  code{font:.9em var(--mono);background:var(--accent-soft);color:var(--accent);
-    padding:.12em .42em;border-radius:5px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:13px;
-    padding:22px 24px;margin:22px 0}
-  .pull{border-left:3px solid var(--accent);background:var(--accent-soft);
-    border-radius:0 10px 10px 0;padding:18px 22px;margin:26px 0;font-size:17.5px}
-  .pull strong{font-weight:650}
-  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}
-  @media(max-width:640px){.two{grid-template-columns:1fr}}
-  .kind{border-radius:13px;padding:20px 22px;border:1px solid var(--line)}
-  .kind.k-check{background:var(--check-soft);border-color:color-mix(in srgb,var(--check) 26%,transparent)}
-  .kind.k-trust{background:var(--trust-soft);border-color:color-mix(in srgb,var(--trust) 26%,transparent)}
-  .kind h4{margin:0 0 4px;font-size:16.5px;font-weight:650}
-  .k-check h4{color:var(--check)} .k-trust h4{color:var(--trust)}
-  .kind .tag{font:600 11.5px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;
-    opacity:.75;display:block;margin-bottom:11px}
-  .kind p{font-size:15px;margin:0 0 11px}
-  .kind p:last-child{margin-bottom:0}
-  .kind ul{margin:0;padding-left:19px;font-size:14.5px;color:var(--ink-2)}
-  figure{margin:30px 0}
-  figure svg{width:100%;height:auto;display:block}
-  /* SVG theming via classes — custom properties in presentation attributes
-     are unreliable in some engines, so paint through CSS instead. */
-  svg .s-band-trust{fill:var(--trust-soft)}
-  svg .s-band-check{fill:var(--check-soft)}
-  svg .s-band{stroke:var(--line)}
-  svg .s-node{fill:var(--card);stroke:var(--line)}
-  svg .s-title{fill:var(--ink)}
-  svg .s-muted{fill:var(--ink-3)}
-  svg .s-body{fill:var(--ink-2)}
-  svg .s-trust{fill:var(--trust)}
-  svg .s-check{fill:var(--check)}
-  svg .s-arrow{stroke:var(--ink-3);fill:none}
-  svg .s-head{fill:var(--ink-3)}
-  figcaption{font-size:13.5px;color:var(--ink-3);margin-top:12px;text-align:center}
-  table{width:100%;border-collapse:collapse;margin:22px 0;font-size:15px}
-  th,td{text-align:left;padding:11px 13px;border-bottom:1px solid var(--line);vertical-align:top}
-  th{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
-  tbody tr:last-child td{border-bottom:none}
-  .steps{counter-reset:s;list-style:none;padding:0;margin:24px 0}
-  .steps li{counter-increment:s;position:relative;padding:0 0 20px 46px;margin:0}
-  .steps li::before{content:counter(s);position:absolute;left:0;top:-1px;width:29px;height:29px;
-    border-radius:50%;background:var(--accent);color:#fff;font:600 14px/29px var(--mono);text-align:center}
-  .steps li::after{content:"";position:absolute;left:14px;top:33px;bottom:2px;width:1px;background:var(--line)}
-  .steps li:last-child::after{display:none}
-  .steps strong{display:block;margin-bottom:3px;font-weight:620}
-  .steps span{color:var(--ink-2);font-size:15px}
-  .limits{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--trust);
-    border-radius:0 12px 12px 0;padding:20px 23px;margin:26px 0}
-  .limits h3{margin:0 0 10px;font-size:16.5px;color:var(--trust)}
-  .limits ul{margin:0;padding-left:19px;font-size:15px;color:var(--ink-2)}
-  .limits li{margin-bottom:7px}
-  footer{margin:72px 0 60px;padding-top:26px;border-top:1px solid var(--line);
-    font-size:14px;color:var(--ink-3)}
-  footer a{color:var(--accent);text-decoration:none}
-  footer a:hover{text-decoration:underline}
-  .note{font-size:13.5px;color:var(--ink-3);font-style:italic}
-</style>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MSD — see how your data connects</title>
+<meta name="description" content="MSD records how data moves between systems, so you can trace any number back to what produced it — and see immediately what is missing.">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<nav><div class="wrap">
+  <a class="brand" href="./">MSD<span>.</span></a>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#cases">Use cases</a>
+    <a class="hide-sm" href="https://network.msd-protocol.org/">Network</a>
+    <a class="hide-sm" href="https://key-tools.msd-protocol.org/">Key tools</a>
+  </div>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <div class="eyebrow">Meta Structured Data</div>
+  <h1>Every number came from somewhere.<br>MSD remembers where.</h1>
+  <p class="lede">Data moves between systems all day — scanned, extracted, transformed,
+  approved, reported. The evidence for how it got there usually does not travel with it. MSD
+  records the connections, so any figure can be traced back to what produced it.</p>
+
+  <div class="video-wrap">
+    <video controls preload="none" poster="media/msd-general.jpg" playsinline>
+      <source src="media/msd-general.mp4" type="video/mp4">
+      Your browser cannot play this video.
+    </video>
+    <div class="video-cap">How MSD works — 30 seconds</div>
+  </div>
+
+  <div class="legend">
+    <span><i class="dot sign"></i><b>Signed</b> — someone stands behind it</span>
+    <span><i class="dot ver"></i><b>Verifiable</b> — you can re-run it yourself</span>
+    <span><i class="dot miss"></i><b>Missing</b> — a gap you can see</span>
+  </div>
+</div></header>
+
 <div class="wrap">
 
-<header>
-  <div class="eyebrow">Data provenance, explained</div>
-  <h1>Some of it you can check yourself. The rest you take on trust.</h1>
-  <p class="lede">Provenance systems promise to tell you where a number came from. The useful
-  question is sharper: <em>which parts of that story can you verify independently, and which
-  parts rest on someone's word?</em> Most tools blur the line. This one draws it.</p>
-</header>
+<h2 id="how">The question that is hard to answer</h2>
+<p>A figure appears in a quarterly report. Somebody asks where it came from. The honest
+answer usually involves four systems, two vendors and a spreadsheet nobody can find.</p>
+<p>The data made it through. The <em>evidence</em> did not.</p>
 
-<h2>The scenario</h2>
-<p>A delivery driver photographs an invoice. Software reads the fields off the photo. Those
-fields are reformatted, totalled, and rendered into a PDF report. The report goes to a
-customer, who files it. Months later an auditor asks a reasonable question:</p>
+<div class="pull">MSD attaches the trail to the data itself, so the answer travels with the
+number instead of living in somebody's memory.</div>
 
-<div class="pull"><strong>This figure in your report — where did it come from?</strong></div>
+<h2>Some of it you can check. The rest you take on trust.</h2>
+<p>This is the distinction that makes a provenance trail useful rather than decorative.
+Every step in a pipeline is one of two kinds, and they are not equally trustworthy.</p>
 
-<p>Four handoffs sit between the photograph and the figure. The honest answer is not a single
-yes or no, because the four steps are not the same kind of thing.</p>
-
-<h2>Two kinds of step</h2>
-<p>Every step in a data pipeline falls into one of two categories, and the difference decides
-what an auditor can do about it.</p>
-
-<div class="two">
-  <div class="kind k-check">
-    <h4>Reproducible</h4>
-    <span class="tag">Re-run it</span>
-    <p>Same input, same output, every time. Converting <code>"1,190.00"</code> into
-    <code>119000</code> cents. Totalling a column. Rendering a template.</p>
-    <p>Record the function, the input and the output — each by a fingerprint of its content.
-    An auditor fetches the function and the input, runs it, and compares.</p>
-    <ul><li>No signature needed</li><li>No key to trust</li><li>No one to believe</li></ul>
+<div class="split">
+  <div class="panel check">
+    <span class="tag">Verifiable</span>
+    <h3>You can re-run it</h3>
+    <p>Totalling a column. Converting a currency. Matching an invoice to a purchase order.
+    Same input, same answer, every time.</p>
+    <p>MSD records the function, the input and the output. You fetch them and run it again.</p>
+    <ul><li>No signature needed</li><li>Nobody to believe</li></ul>
   </div>
-  <div class="kind k-trust">
-    <h4>Not reproducible</h4>
-    <span class="tag">Someone signs for it</span>
-    <p>Reading text off a photograph. Asking a model for a judgement. Taking the photo in the
-    first place. Run it twice and you may get two answers.</p>
-    <p>Replay proves nothing here. So the operator records what went in, which model and
-    settings, what came out — and signs it.</p>
-    <ul><li>Signature is the evidence</li><li>Trust rests on the key</li><li>And on who vouched for it</li></ul>
+  <div class="panel trust">
+    <span class="tag">Attested</span>
+    <h3>Someone signs for it</h3>
+    <p>Reading text off a scan. Asking a model for a judgement. Taking the photo at all.
+    Run it twice and you may get two answers.</p>
+    <p>So the operator records what went in and what came out, and signs it.</p>
+    <ul><li>The signature is the evidence</li><li>Trust rests on whose key it is</li></ul>
   </div>
 </div>
 
-<div class="pull">For the reproducible steps, <strong>the auditor does not have to believe
-anyone. They can check.</strong> That is the part most provenance tools cannot offer.</div>
+<p>A real pipeline is always a mixture. Being able to say <strong>which parts are checkable
+and which are merely attested</strong> is the point — compare it with a single signature over
+a finished report, where everything inside is equally opaque.</p>
 
-<h2>What the record looks like</h2>
-<p>Everything is referred to by a <em>fingerprint of its content</em> rather than by a
-filename or a database row. A filename can point at different content tomorrow; a content
-fingerprint cannot. Two useful things follow.</p>
+<h2 id="cases">Three places this matters</h2>
+<p>Same mechanism, different consequences when a step is missing.</p>
 
-<figure>
-<svg viewBox="0 0 700 272" xmlns="http://www.w3.org/2000/svg" role="img"
-     aria-label="A chain of four steps from photograph to report. The capture and OCR steps are signed; the normalisation and rendering steps are reproducible.">
-  <defs>
-    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-      <path class="s-head" d="M0 0 L10 5 L0 10 z"/>
-    </marker>
-  </defs>
-  <g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif" font-size="12.5">
-
-    <rect class="s-band s-band-trust" x="12" y="20" width="316" height="150" rx="12"/>
-    <text class="s-trust" x="28" y="42" font-size="11" font-weight="650"
-          letter-spacing=".07em">NOT REPRODUCIBLE &#8212; SIGNED</text>
-
-    <rect class="s-band s-band-check" x="356" y="20" width="332" height="150" rx="12"/>
-    <text class="s-check" x="372" y="42" font-size="11" font-weight="650"
-          letter-spacing=".07em">REPRODUCIBLE &#8212; RE-RUNNABLE</text>
-
-    <g class="s-node">
-      <rect x="28" y="62" width="128" height="52" rx="9"/>
-      <rect x="186" y="62" width="128" height="52" rx="9"/>
-      <rect x="372" y="62" width="138" height="52" rx="9"/>
-      <rect x="538" y="62" width="134" height="52" rx="9"/>
-    </g>
-    <g class="s-title" text-anchor="middle" font-weight="600">
-      <text x="92"  y="84">Photograph</text>
-      <text x="250" y="84">Read fields</text>
-      <text x="441" y="84">Reformat</text>
-      <text x="605" y="84">Render PDF</text>
-    </g>
-    <g class="s-muted" text-anchor="middle" font-size="11.5">
-      <text x="92"  y="102">taken by driver</text>
-      <text x="250" y="102">OCR model</text>
-      <text x="441" y="102">pure function</text>
-      <text x="605" y="102">pure function</text>
-    </g>
-
-    <g class="s-arrow" marker-end="url(#a)">
-      <path d="M156 88 H180"/>
-      <path d="M314 88 H366"/>
-      <path d="M510 88 H532"/>
-    </g>
-
-    <g text-anchor="middle" font-size="11" font-weight="600">
-      <text class="s-trust" x="92"  y="142">signed by driver</text>
-      <text class="s-trust" x="250" y="142">signed by pipeline</text>
-      <text class="s-check" x="441" y="142">re-run to confirm</text>
-      <text class="s-check" x="605" y="142">re-run to confirm</text>
-    </g>
-
-    <text class="s-body" x="350" y="212" text-anchor="middle" font-size="13">
-      Each step references the one before it by content fingerprint.
-    </text>
-    <text class="s-muted" x="350" y="234" text-anchor="middle" font-size="12.5">
-      Swap anything in the chain and the fingerprints stop matching.
-    </text>
-  </g>
-</svg>
-<figcaption>The same pipeline, split by what an auditor can do about each step.</figcaption>
-</figure>
-
-<div class="card">
-  <h3 style="margin-top:0">Why fingerprints rather than filenames</h3>
-  <p><strong>You can refer to something without sending it.</strong> A report can point at a
-  4&nbsp;MB photograph without carrying it. If the image is produced later, anyone can confirm
-  it is the one that was referenced.</p>
-  <p style="margin-bottom:0"><strong>References never go stale.</strong> "The version of this
-  calculation we used in September" stays meaningful next year, even after the code changes.</p>
+<div class="cards">
+  <a class="card" href="cases/accounting.html">
+    <span class="tag">Accounts payable</span>
+    <h3>Close the books with evidence</h3>
+    <p>An invoice, a purchase order, a match — and an approval nobody can produce.</p>
+  </a>
+  <a class="card" href="cases/kyc.html">
+    <span class="tag">KYC onboarding</span>
+    <h3>Not until every check is in</h3>
+    <p>Passport verified, sanctions clear, risk scored — on a document that was never filed.</p>
+  </a>
+  <a class="card" href="cases/ai-agent.html">
+    <span class="tag">AI agents</span>
+    <h3>Trace a decision to its sources</h3>
+    <p>An agent recommends a supplier, citing a price feed that cannot be found.</p>
+  </a>
 </div>
 
-<h2>What the auditor actually does</h2>
-<ol class="steps">
-  <li><strong>Start with what arrived</strong><span>A PDF and a signed statement from the
-  company. The statement points at the report data, the calculation, the reading step and the
-  original photograph — all by fingerprint. The PDF can be checked immediately, without any of
-  the upstream material.</span></li>
-  <li><strong>Ask for the pieces</strong><span>The company discloses the referenced fragments.
-  Each must match a fingerprint already present in the evidence, so nothing can be quietly
-  substituted after the fact.</span></li>
-  <li><strong>Re-run what can be re-run</strong><span>Replay the reformatting and the
-  rendering. Compare the results. No trust involved — this either matches or it does not.</span></li>
-  <li><strong>Check signatures on the rest</strong><span>The photograph, the reading step, the
-  publication. Here the question becomes <em>whose key is this, and were they authorised to
-  sign for that</em>.</span></li>
-  <li><strong>Notice what is absent</strong><span>A reference with nothing behind it is a
-  visible hole, not a silent one. You can see precisely which link in the chain is
-  missing.</span></li>
-</ol>
-
-<h2>The division, in one table</h2>
+<h2>What you can do with it</h2>
 <table>
-  <thead><tr><th></th><th>Reproducible step</th><th>Non-reproducible step</th></tr></thead>
   <tbody>
-    <tr><td><strong>Examples</strong></td><td>Reformatting, totalling, rendering</td><td>OCR, model inference, photo capture</td></tr>
-    <tr><td><strong>What is recorded</strong></td><td>Function, input, output — by fingerprint</td><td>Inputs, model, settings, output — then signed</td></tr>
-    <tr><td><strong>Auditor's move</strong></td><td>Run it again</td><td>Verify the signature, judge the signer</td></tr>
-    <tr><td><strong>Trust required</strong></td><td>None</td><td>The key, and who vouched for it</td></tr>
+    <tr><td style="width:30%"><strong>Trace a number</strong></td>
+        <td>Follow any output back through every step that produced it.</td></tr>
+    <tr><td><strong>Check what you were sent</strong></td>
+        <td>Re-run the reproducible steps yourself. Verify signatures on the rest.</td></tr>
+    <tr><td><strong>See what is absent</strong></td>
+        <td>A missing step shows as a gap in the chain, not as silence.</td></tr>
+    <tr><td><strong>Prove your own output</strong></td>
+        <td>Hand a counterparty a figure they can verify without trusting your word for it.</td></tr>
   </tbody>
 </table>
 
-<p>A real pipeline is always a mixture. Being able to say <em>which</em> parts are checkable
-and which are attested is the point — compare it with a single signature over a finished
-report, where everything inside is equally opaque.</p>
+<div class="status">
+  <h3>Where this is today</h3>
+  <p class="muted" style="margin-bottom:10px">MSD is a new and open protocol, and it is
+  early. We would rather say so than imply an adoption story that does not exist yet.</p>
+  <p class="muted small" style="margin:0">What works today: signing and verifying structured
+  data, content-addressed references between records, and embedding into the documents you
+  already send. An SDK and key tooling are public. What is still being built: the visual
+  tooling that assembles a graph from dropped files automatically.</p>
+</div>
 
 <div class="limits">
-  <h3>What this still cannot tell you</h3>
+  <h3>What it still cannot tell you</h3>
   <ul>
     <li>A signature attributes a claim to a <strong>key</strong>, not to a person. Connecting
-    a key to a real identity is a separate problem, and a social one.</li>
-    <li>No amount of fingerprinting shows that the OCR <em>read the invoice correctly</em>.
-    Only looking at the photograph answers that.</li>
-    <li>Re-running the later calculations cannot repair a bad reading at the start. It can
-    only show the calculations were faithful to it.</li>
+    a key to a real identity is a separate problem.</li>
+    <li>No amount of checking shows that an extraction <em>read the document correctly</em>.
+    Only looking at the original answers that.</li>
+    <li>Re-running later calculations cannot repair a bad reading at the start — it can only
+    show the calculations were faithful to it.</li>
   </ul>
 </div>
 
-<p class="sub">A provenance system that claimed to settle those questions would be
-overselling. Drawing the line precisely is more useful than drawing it generously.</p>
+<h2>Next</h2>
+<div class="cards">
+  <a class="card" href="https://network.msd-protocol.org/">
+    <span class="tag">Verify</span><h3>MSD Network</h3>
+    <p>Who signed this, and can I trust them?</p></a>
+  <a class="card" href="https://key-tools.msd-protocol.org/">
+    <span class="tag">Build</span><h3>Key tools</h3>
+    <p>Create keys, sign data, work with the protocol directly.</p></a>
+  <a class="card" href="cases/accounting.html">
+    <span class="tag">Read</span><h3>Worked example</h3>
+    <p>One pipeline, step by step, with the gaps shown.</p></a>
+</div>
 
 <footer>
-  <p>Draft explainer produced for an MSI5006 capstone project (NUS) with Staple AI.
-  Describes the model behind <strong>MSD (Meta Structured Data)</strong>. Illustrative
-  walkthrough using synthetic data; not a product specification.</p>
-  <p>Reproducible provenance tests, including comparisons with C2PA, in-toto and W3C
-  Verifiable Credentials, are in
-  <a href="https://github.com/leondgarse/msi5006_tests">this repository</a>.</p>
+  <p><strong>Draft.</strong> Produced for an MSI5006 capstone project (NUS) as promotional
+  material for MSD. Scenarios use synthetic data and do not depict any real organisation.</p>
+  <p>msd-protocol.org</p>
 </footer>
 
 </div>
