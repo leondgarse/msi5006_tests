@@ -19,11 +19,10 @@ html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--text-1);font:16.5px/1.65 var(--sans);
   -webkit-font-smoothing:antialiased}
 .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
-/* Prose needs a narrower column than layout blocks do. Capping paragraphs
-   with a ch measure inside the full 1040px column left them filling only
-   45-64% of it, which reads as text stranded beside empty space. Give the
-   text its own column instead; stats, cards, tables and media keep 1040. */
-.prose{max-width:760px}
+/* Prose takes the width of whatever column it sits in: one long line in the
+   source, wrapped by the browser to fit. Capping it narrower than the column
+   is what produced stranded text and short orphan last lines. Narrow screens
+   are handled by .wrap shrinking, not by a cap. */
 .narrow{max-width:720px}
 
 /* nav */
@@ -41,8 +40,8 @@ h1{font:700 clamp(32px,5vw,46px)/1.12 var(--display);letter-spacing:-.025em;marg
   text-wrap:balance;max-width:28ch}
 h2{font:650 27px/1.25 var(--display);letter-spacing:-.018em;margin:58px 0 14px;text-wrap:balance}
 h3{font:650 18px/1.4 var(--display);margin:30px 0 8px;text-wrap:balance}
-p{margin:0 0 16px;max-width:760px;text-wrap:balance}
-.lede{font-size:19px;color:var(--text-2);max-width:760px;text-wrap:balance}
+p{margin:0 0 16px;text-wrap:pretty}
+.lede{font-size:19px;color:var(--text-2);text-wrap:pretty}
 .eyebrow{font:600 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;
   color:var(--teal);margin-bottom:16px}
 .muted{color:var(--text-2)} .small{font-size:14.5px}
@@ -152,7 +151,7 @@ footer p{max-width:none;text-wrap:pretty}
 .band h2{margin-top:0}
 
 /* lead paragraph under a heading, then blocks — never a wall of <p> */
-.section-lede{font-size:17.5px;color:var(--text-2);max-width:760px;margin:0 0 26px;text-wrap:balance}
+.section-lede{font-size:17.5px;color:var(--text-2);margin:0 0 26px;text-wrap:pretty}
 /* a heading centred over a full-width card row, where a left-aligned one
    would sit oddly against three evenly spaced cards */
 h2.center{text-align:center}
