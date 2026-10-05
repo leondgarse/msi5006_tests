@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MSD — see how your data connects</title>
-<meta name="description" content="MSD records how data moves between systems, so you can trace any number back to what produced it — and see immediately what is missing.">
+<meta name="description" content="MSD records how data moves between systems, so any number can be traced back to what produced it — and gaps show up instead of staying hidden.">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,7 +12,7 @@
 <nav><div class="wrap">
   <a class="brand" href="./">MSD<span>.</span></a>
   <div class="nav-links">
-    <a href="#how">How it works</a>
+    <a href="business.html">For business</a>
     <a href="#cases">Use cases</a>
     <a class="hide-sm" href="https://network.msd-protocol.org/">Network</a>
     <a class="hide-sm" href="https://key-tools.msd-protocol.org/">Key tools</a>
@@ -22,9 +22,9 @@
 <header class="hero"><div class="wrap">
   <div class="eyebrow">Meta Structured Data</div>
   <h1>Every number came from somewhere.<br>MSD remembers where.</h1>
-  <p class="lede">Data moves between systems all day — scanned, extracted, transformed,
-  approved, reported. The evidence for how it got there usually does not travel with it. MSD
-  records the connections, so any figure can be traced back to what produced it.</p>
+  <p class="lede">An open protocol for recording how data moves between systems — so a figure
+  can be traced back to what produced it, and a missing step shows up instead of staying
+  hidden.</p>
 
   <div class="video-wrap">
     <video controls preload="none" poster="media/msd-general.jpg" playsinline>
@@ -43,114 +43,51 @@
 
 <div class="wrap">
 
-<h2 id="how">The question that is hard to answer</h2>
-<p>A figure appears in a quarterly report. Somebody asks where it came from. The honest
-answer usually involves four systems, two vendors and a spreadsheet nobody can find.</p>
-<p>The data made it through. The <em>evidence</em> did not.</p>
-
-<div class="pull">MSD attaches the trail to the data itself, so the answer travels with the
-number instead of living in somebody's memory.</div>
-
-<h2>Some of it you can check. The rest you take on trust.</h2>
-<p>This is the distinction that makes a provenance trail useful rather than decorative.
-Every step in a pipeline is one of two kinds, and they are not equally trustworthy.</p>
-
-<div class="split">
-  <div class="panel check">
-    <span class="tag">Verifiable</span>
-    <h3>You can re-run it</h3>
-    <p>Totalling a column. Converting a currency. Matching an invoice to a purchase order.
-    Same input, same answer, every time.</p>
-    <p>MSD records the function, the input and the output. You fetch them and run it again.</p>
-    <ul><li>No signature needed</li><li>Nobody to believe</li></ul>
-  </div>
-  <div class="panel trust">
-    <span class="tag">Attested</span>
-    <h3>Someone signs for it</h3>
-    <p>Reading text off a scan. Asking a model for a judgement. Taking the photo at all.
-    Run it twice and you may get two answers.</p>
-    <p>So the operator records what went in and what came out, and signs it.</p>
-    <ul><li>The signature is the evidence</li><li>Trust rests on whose key it is</li></ul>
-  </div>
-</div>
-
-<p>A real pipeline is always a mixture. Being able to say <strong>which parts are checkable
-and which are merely attested</strong> is the point — compare it with a single signature over
-a finished report, where everything inside is equally opaque.</p>
-
-<h2 id="cases">Three places this matters</h2>
-<p>Same mechanism, different consequences when a step is missing.</p>
+<h2 id="cases">See how it works</h2>
+<p class="muted">Three pipelines, 30 seconds each. Pick the one closest to your work.</p>
 
 <div class="cards">
   <a class="card" href="cases/accounting.html">
     <span class="tag">Accounts payable</span>
     <h3>Close the books with evidence</h3>
-    <p>An invoice, a purchase order, a match — and an approval nobody can produce.</p>
+    <p>An invoice, a purchase order, a clean match — and an approval nobody can produce.</p>
   </a>
   <a class="card" href="cases/kyc.html">
     <span class="tag">KYC onboarding</span>
     <h3>Not until every check is in</h3>
-    <p>Passport verified, sanctions clear, risk scored — on a document that was never filed.</p>
+    <p>Passport verified, sanctions clear, risk scored — on a document never filed.</p>
   </a>
   <a class="card" href="cases/ai-agent.html">
     <span class="tag">AI agents</span>
     <h3>Trace a decision to its sources</h3>
-    <p>An agent recommends a supplier, citing a price feed that cannot be found.</p>
+    <p>An agent picks a supplier, citing a price feed that cannot be found.</p>
   </a>
 </div>
 
-<h2>What you can do with it</h2>
-<table>
-  <tbody>
-    <tr><td style="width:30%"><strong>Trace a number</strong></td>
-        <td>Follow any output back through every step that produced it.</td></tr>
-    <tr><td><strong>Check what you were sent</strong></td>
-        <td>Re-run the reproducible steps yourself. Verify signatures on the rest.</td></tr>
-    <tr><td><strong>See what is absent</strong></td>
-        <td>A missing step shows as a gap in the chain, not as silence.</td></tr>
-    <tr><td><strong>Prove your own output</strong></td>
-        <td>Hand a counterparty a figure they can verify without trusting your word for it.</td></tr>
-  </tbody>
-</table>
-
-<div class="status">
-  <h3>Where this is today</h3>
-  <p class="muted" style="margin-bottom:10px">MSD is a new and open protocol, and it is
-  early. We would rather say so than imply an adoption story that does not exist yet.</p>
-  <p class="muted small" style="margin:0">What works today: signing and verifying structured
-  data, content-addressed references between records, and embedding into the documents you
-  already send. An SDK and key tooling are public. What is still being built: the visual
-  tooling that assembles a graph from dropped files automatically.</p>
-</div>
-
-<div class="limits">
-  <h3>What it still cannot tell you</h3>
-  <ul>
-    <li>A signature attributes a claim to a <strong>key</strong>, not to a person. Connecting
-    a key to a real identity is a separate problem.</li>
-    <li>No amount of checking shows that an extraction <em>read the document correctly</em>.
-    Only looking at the original answers that.</li>
-    <li>Re-running later calculations cannot repair a bad reading at the start — it can only
-    show the calculations were faithful to it.</li>
-  </ul>
-</div>
-
-<h2>Next</h2>
+<h2>Where to go next</h2>
 <div class="cards">
+  <a class="card" href="business.html">
+    <span class="tag">Business</span><h3>What this is worth</h3>
+    <p>The problem, the mechanism and the limits — for a finance or audit reader.</p></a>
   <a class="card" href="https://network.msd-protocol.org/">
     <span class="tag">Verify</span><h3>MSD Network</h3>
     <p>Who signed this, and can I trust them?</p></a>
   <a class="card" href="https://key-tools.msd-protocol.org/">
-    <span class="tag">Build</span><h3>Key tools</h3>
+    <span class="tag">Build</span><h3>Key tools &amp; SDK</h3>
     <p>Create keys, sign data, work with the protocol directly.</p></a>
-  <a class="card" href="cases/accounting.html">
-    <span class="tag">Read</span><h3>Worked example</h3>
-    <p>One pipeline, step by step, with the gaps shown.</p></a>
+</div>
+
+<div class="status">
+  <h3>Where this is today</h3>
+  <p class="muted small" style="margin:0">MSD is new and open, and it is early — we would
+  rather say so than imply an adoption story that does not exist. Signing, verifying,
+  content-addressed references and document embedding work today; the SDK and key tooling are
+  public. The visual tooling that assembles a graph from dropped files is still being built.</p>
 </div>
 
 <footer>
   <p><strong>Draft.</strong> Produced for an MSI5006 capstone project (NUS) as promotional
-  material for MSD. Scenarios use synthetic data and do not depict any real organisation.</p>
+  material for MSD. Scenarios use synthetic data and depict no real organisation.</p>
   <p>msd-protocol.org</p>
 </footer>
 

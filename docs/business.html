@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MSD for finance and audit — what it is worth</title>
+<meta name="description" content="What a provenance trail is actually worth to a finance or audit team: what you can check yourself, what rests on a signature, and what neither can tell you.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav><div class="wrap">
+  <a class="brand" href="./">MSD<span>.</span></a>
+  <div class="nav-links">
+    <a href="business.html">For business</a>
+    <a href="./#cases">Use cases</a>
+    <a class="hide-sm" href="https://network.msd-protocol.org/">Network</a>
+    <a class="hide-sm" href="https://key-tools.msd-protocol.org/">Key tools</a>
+  </div>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <a class="backlink" href="./">&#8592; Back</a>
+  <div class="eyebrow">For finance, audit and operations</div>
+  <h1>The data arrives. The evidence does not.</h1>
+  <p class="lede">A figure reaches a report having passed through four systems, two vendors
+  and a spreadsheet. Reconstructing how it got there is an email search months later. This
+  page is about what changes when the trail travels with the number.</p>
+</div></header>
+
+<div class="wrap narrow">
+
+<h2>The cost of reconstructing</h2>
+<p>Nothing here is a failure of controls. The invoice was approved, the client was screened,
+the model was asked. The difficulty is that each step leaves its evidence in a different
+system, in a different format, under a different owner — and assembling them afterwards is
+manual work performed under time pressure, usually by whoever is least able to refuse.</p>
+<p>Three costs follow, and finance teams will recognise all of them.</p>
+
+<table>
+  <tbody>
+    <tr><td style="width:34%"><strong>Audit preparation</strong></td>
+        <td>Evidence is gathered retrospectively, from people and inboxes rather than from the record.</td></tr>
+    <tr><td><strong>Counterparty trust</strong></td>
+        <td>A figure sent outside the company carries no evidence, so the recipient either trusts you or repeats the work.</td></tr>
+    <tr><td><strong>Silent gaps</strong></td>
+        <td>A missing approval looks exactly like a present one until somebody goes looking.</td></tr>
+  </tbody>
+</table>
+
+<h2>Two kinds of step, and why it matters commercially</h2>
+<p>This distinction is what separates a provenance trail that is worth something from one
+that is decorative. Every step in a pipeline is one of two kinds, and they carry different
+weight as evidence.</p>
+
+<div class="split">
+  <div class="panel check">
+    <span class="tag">Verifiable</span>
+    <h3>You can re-run it</h3>
+    <p>Totalling a column. Converting a currency. Matching an invoice against a purchase
+    order. The same inputs always produce the same answer.</p>
+    <p>The record keeps the calculation, its inputs and its result. A counterparty fetches
+    them and runs it again.</p>
+    <ul><li>No signature required</li><li>Nobody has to be believed</li></ul>
+  </div>
+  <div class="panel trust">
+    <span class="tag">Attested</span>
+    <h3>Someone signs for it</h3>
+    <p>Reading figures off a scan. Asking a model to judge something. A human approval. Run
+    it twice and the answer may differ.</p>
+    <p>So the operator records the inputs, the method and the result, and signs it.</p>
+    <ul><li>The signature is the evidence</li><li>Weight depends on whose key it is</li></ul>
+  </div>
+</div>
+
+<div class="pull">Most of what a finance pipeline does is <strong>reproducible</strong>. Those
+steps stop requiring trust entirely — which is the part that is genuinely new.</div>
+
+<p>A real pipeline mixes the two. Being able to state which parts a counterparty can check
+and which rest on an attestation is more useful than a single signature over a finished
+report, where everything inside carries the same unexamined weight.</p>
+
+<h2>What an auditor does with it</h2>
+<ol class="steps">
+  <li><strong>Start from the figure</strong><span>The published number, and the signed
+  statement that accompanies it.</span></li>
+  <li><strong>Request the inputs</strong><span>Each disclosed piece must match a reference
+  already present in the evidence, so nothing can be substituted afterwards.</span></li>
+  <li><strong>Re-run what can be re-run</strong><span>The calculations either agree or they
+  do not. No judgement required.</span></li>
+  <li><strong>Check signatures on the rest</strong><span>Which key signed, and was it
+  authorised for that role.</span></li>
+  <li><strong>Read the gaps</strong><span>A step with nothing behind it is visible, rather
+  than indistinguishable from a step that was completed.</span></li>
+</ol>
+
+<h2>What it does not solve</h2>
+<p>A provenance system that claimed to settle everything would be overselling. Drawing the
+line precisely is more useful than drawing it generously.</p>
+
+<div class="limits">
+  <h3>Honest limits</h3>
+  <ul>
+    <li>A signature attributes a claim to a <strong>key</strong>, not to a person. Connecting
+    keys to people is a governance problem, not a cryptographic one.</li>
+    <li>No amount of checking shows that an extraction <em>read the document correctly</em>.
+    Only comparing against the original does.</li>
+    <li>Re-running later calculations cannot repair a bad reading at the start. It shows the
+    calculations were faithful to whatever they were given.</li>
+    <li>It records what happened. It does not decide whether what happened was acceptable.</li>
+  </ul>
+</div>
+
+<h2>Where this is today</h2>
+<p>MSD is a new and open protocol, and it is early. Signing and verifying structured data,
+content-addressed references between records, and embedding into documents you already send
+all work today; the SDK and key tooling are public. The visual tooling that assembles a graph
+from dropped files is still being built.</p>
+<p class="muted small">We would rather state the stage plainly than imply an adoption story
+that does not exist yet.</p>
+
+<h2>See it in context</h2>
+<div class="cards">
+  <a class="card" href="cases/accounting.html">
+    <span class="tag">Accounts payable</span><h3>Close the books with evidence</h3>
+    <p>An invoice, a purchase order, a clean match — and an approval nobody can produce.</p></a>
+  <a class="card" href="cases/kyc.html">
+    <span class="tag">KYC onboarding</span><h3>Not until every check is in</h3>
+    <p>Passport verified, sanctions clear, risk scored — on a document never filed.</p></a>
+  <a class="card" href="cases/ai-agent.html">
+    <span class="tag">AI agents</span><h3>Trace a decision to its sources</h3>
+    <p>An agent picks a supplier, citing a price feed that cannot be found.</p></a>
+</div>
+
+<footer>
+  <p><strong>Draft.</strong> Produced for an MSI5006 capstone project (NUS) as promotional
+  material for MSD. Scenarios use synthetic data and depict no real organisation.</p>
+  <p>msd-protocol.org</p>
+</footer>
+
+</div>
+</body>
+</html>
