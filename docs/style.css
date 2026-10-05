@@ -46,13 +46,17 @@ a{color:var(--teal)}
 /* hero */
 header.hero{padding:72px 0 52px;border-bottom:1px solid var(--border)}
 
-/* centred hero (in-toto's arrangement): works only because the copy is short —
-   a centred paragraph over two lines is harder to read than a left-aligned one */
+/* centred hero (in-toto's arrangement). Centring also closes the empty right
+   gutter a lone left-aligned text block leaves in a 1040px column. */
 .hero-center{text-align:center}
 .hero-center h1{max-width:34ch;margin-left:auto;margin-right:auto}
 .hero-center .lede{max-width:70ch;margin-left:auto;margin-right:auto}
 .hero-center .cta-row{justify-content:center}
 .hero-center .legend{justify-content:center}
+/* a longer headline needs its own measure, or 34ch breaks it mid-phrase */
+.hero-center h1.wide{max-width:28ch}
+/* the back arrow is navigation, not hero copy: it stays at the left edge */
+.hero-center .backlink{display:block;text-align:left}
 
 /* video */
 .video-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);
