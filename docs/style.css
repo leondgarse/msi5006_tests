@@ -145,6 +145,8 @@ footer p{max-width:72ch}
 
 /* two-up: text beside a visual or a second block */
 .duo{display:grid;grid-template-columns:1.05fr .95fr;gap:34px;align-items:start}
+/* a short aside (limits, note) beside a long list should not claim half the row */
+.duo:has(> .limits){grid-template-columns:1.35fr .65fr}
 @media(max-width:820px){.duo{grid-template-columns:1fr;gap:22px}}
 .duo p:last-child{margin-bottom:0}
 .duo > div > h2:first-child{margin-top:0}
