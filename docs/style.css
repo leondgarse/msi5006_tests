@@ -68,6 +68,14 @@ header.hero-split{padding:clamp(36px,4vh,56px) 0 clamp(32px,3.5vh,48px);
   min-height:min(calc(78svh - 62px),760px);display:flex;align-items:center}
 @media(max-width:900px){header.hero-split{min-height:0;display:block}}
 
+/* case-page hero: the headlines are longer than the landing page's, and the
+   copy column is shorter, so it takes a wider measure and sits a little
+   higher than dead centre against the video */
+.hero-case .hero-copy h1{max-width:min(22ch,100%);font-size:clamp(28px,2.6vw,40px)}
+.hero-case .hero-copy .lede{max-width:min(44ch,100%);font-size:clamp(16.5px,1.2vw,19px)}
+.hero-case .backlink{display:inline-block;margin-bottom:14px;font-size:14.5px}
+.hero-case{min-height:min(calc(72svh - 62px),680px)}
+
 /* centred hero (in-toto's arrangement). Centring also closes the empty right
    gutter a lone left-aligned text block leaves in a 1040px column. */
 .hero-center{text-align:center}
@@ -124,6 +132,14 @@ a.card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
 .card p{font-size:14.5px;color:var(--text-2);margin:0}
 .card .tag{font:600 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;
   color:var(--teal);display:block;margin-bottom:10px}
+
+/* cards that lead with the case's poster frame: the image is the content, so it
+   goes edge to edge and the padding moves to an inner body */
+.cards-media .card{padding:0;overflow:hidden;display:flex;flex-direction:column}
+.cards-media .card img{width:100%;height:auto;aspect-ratio:1600/842;object-fit:contain;
+  display:block;background:#e8edf0;border-bottom:1px solid var(--border)}
+.cards-media .card-body{padding:18px 20px 20px}
+.cards-media .card p{text-wrap:pretty}
 
 /* two-column concept blocks */
 .split{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:26px 0}
