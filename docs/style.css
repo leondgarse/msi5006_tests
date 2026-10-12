@@ -18,11 +18,12 @@
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--text-1);font:16.5px/1.65 var(--sans);
   -webkit-font-smoothing:antialiased}
-.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
-/* Prose takes the width of whatever column it sits in: one long line in the
-   source, wrapped by the browser to fit. Capping it narrower than the column
-   is what produced stranded text and short orphan last lines. Narrow screens
-   are handled by .wrap shrinking, not by a cap. */
+.wrap{max-width:1320px;margin:0 auto;padding:0 clamp(24px,4vw,56px)}
+/* Prose takes the width of whatever column it sits in, wrapped by the browser
+   to fit. Capping it narrower than the column is what produced stranded text
+   and short orphan last lines. Narrow screens are handled by .wrap shrinking.
+   The exception is a full-1320px column: a single line of body text across it
+   is past a comfortable measure, so centred bands cap their own prose below. */
 .narrow{max-width:720px}
 
 /* nav */
@@ -71,9 +72,9 @@ header.hero-split{padding:48px 0 44px}
   gap:44px;align-items:center}
 .hero-split .hero-copy{min-width:0}
 /* 20ch keeps 'Every number came / from somewhere.' on two lines */
-.hero-split h1{max-width:min(20ch,100%);font-size:clamp(30px,3.3vw,40px)}
-.hero-split .lede{max-width:min(42ch,100%)}
-.hero-split .note{max-width:min(46ch,100%)}
+.hero-split h1{max-width:min(17ch,100%);font-size:clamp(32px,3.4vw,52px)}
+.hero-split .lede{max-width:min(36ch,100%);font-size:clamp(17px,1.35vw,21px)}
+.hero-split .note{max-width:min(40ch,100%);font-size:clamp(13.5px,1vw,15.5px)}
 .hero-split .video-wrap{margin:0}
 /* one column below the point where two would squeeze the headline */
 @media(max-width:900px){
@@ -170,7 +171,11 @@ footer p{max-width:none;text-wrap:pretty}
 .band h2{margin-top:0}
 
 /* lead paragraph under a heading, then blocks — never a wall of <p> */
-.section-lede{font-size:17.5px;color:var(--text-2);margin:0 0 26px;text-wrap:pretty}
+/* Prose keeps a reading measure even though .wrap is now 1320px wide: a single
+   line of body text across the full column is well past comfortable. Layout
+   blocks — cards, tables, .duo, media — still take the whole width. */
+.section-lede{font-size:17.5px;color:var(--text-2);margin:0 0 26px;text-wrap:pretty;
+  max-width:min(78ch,100%)}
 /* a heading centred over a full-width card row, where a left-aligned one
    would sit oddly against three evenly spaced cards */
 h2.center{text-align:center}
@@ -229,13 +234,13 @@ h2.center + .cards{margin-top:22px}
 /* ---- full-width colour bands (in-toto's main structural device) ---- */
 .band-accent{background:var(--primary);color:#fff;border:0}
 .band-accent .wrap{padding:44px 24px;text-align:center}
-.band-accent p{margin:0 auto;max-width:58ch;font-size:18px;line-height:1.6;color:#fff;
+.band-accent p{margin:0 auto;max-width:62ch;font-size:18.5px;line-height:1.6;color:#fff;
   opacity:.95;text-wrap:pretty}
 .band-accent strong{color:#fff;font-weight:650}
 
 .band-teal{background:var(--teal);color:#fff;border:0}
 .band-teal .wrap{padding:36px 24px;text-align:center}
-.band-teal p{margin:0 auto;max-width:60ch;color:#fff;font-size:16.5px;text-wrap:pretty}
+.band-teal p{margin:0 auto;max-width:64ch;color:#fff;font-size:16.5px;text-wrap:pretty}
 .band-teal a{color:#fff;text-decoration:underline;text-underline-offset:3px}
 
 /* icon-style feature row, one sentence each */
