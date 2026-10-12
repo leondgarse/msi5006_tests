@@ -18,7 +18,15 @@
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--text-1);font:16.5px/1.65 var(--sans);
   -webkit-font-smoothing:antialiased}
-.wrap{max-width:1320px;margin:0 auto;padding:0 clamp(24px,4vw,56px)}
+/* Ratio-based, not a fixed cap: the column grows with the viewport so a wide
+   monitor does not spend its extra width on margins. 90vw governs throughout
+   on common sizes; 2000px is a backstop for ultrawide, and prose inside keeps
+   its own reading measure (see .section-lede) rather than running the column. */
+.wrap{width:min(90vw,2000px);max-width:100%;margin:0 auto;padding:0 clamp(20px,1.6vw,28px)}
+/* Below the tablet breakpoint the ratio width is wrong: 90vw plus small padding
+   leaves too little gutter, which wrapped the nav onto the wordmark. Narrow
+   screens go back to full width with a fixed, comfortable gutter. */
+@media(max-width:700px){.wrap{width:100%;padding:0 20px}}
 /* Prose takes the width of whatever column it sits in, wrapped by the browser
    to fit. Capping it narrower than the column is what produced stranded text
    and short orphan last lines. Narrow screens are handled by .wrap shrinking.
@@ -51,7 +59,14 @@ a{color:var(--teal)}
 /* hero */
 header.hero{padding:72px 0 52px;border-bottom:1px solid var(--border)}
 /* the split hero carries its own height in the media column, so it needs less air */
-header.hero-split{padding:48px 0 44px}
+/* The hero takes most of the first screen, so the analogy band — the sentence
+   that says what MSD actually is — meets the fold instead of floating mid-page.
+   78svh, not 100: a full-height hero hides the band entirely, and the band
+   showing at the bottom edge is what invites the scroll. min-height, so the
+   content still governs when it needs more room. */
+header.hero-split{padding:clamp(36px,4vh,56px) 0 clamp(32px,3.5vh,48px);
+  min-height:min(calc(78svh - 62px),760px);display:flex;align-items:center}
+@media(max-width:900px){header.hero-split{min-height:0;display:block}}
 
 /* centred hero (in-toto's arrangement). Centring also closes the empty right
    gutter a lone left-aligned text block leaves in a 1040px column. */
