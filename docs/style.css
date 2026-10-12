@@ -49,6 +49,8 @@ a{color:var(--teal)}
 
 /* hero */
 header.hero{padding:72px 0 52px;border-bottom:1px solid var(--border)}
+/* the split hero carries its own height in the media column, so it needs less air */
+header.hero-split{padding:48px 0 44px}
 
 /* centred hero (in-toto's arrangement). Centring also closes the empty right
    gutter a lone left-aligned text block leaves in a 1040px column. */
@@ -61,6 +63,23 @@ header.hero{padding:72px 0 52px;border-bottom:1px solid var(--border)}
 .hero-center h1.wide{max-width:min(28ch,100%)}
 /* the back arrow is navigation, not hero copy: it stays at the left edge */
 .hero-center .backlink{display:block;text-align:left}
+
+/* split hero: copy left, media right (the arrangement c2pa.org and sigstore use).
+   The video fills the right gutter that made a lone text block look stranded, so
+   the page reaches its first real content far sooner than a centred stack does. */
+.hero-split .wrap{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);
+  gap:44px;align-items:center}
+.hero-split .hero-copy{min-width:0}
+/* 20ch keeps 'Every number came / from somewhere.' on two lines */
+.hero-split h1{max-width:min(20ch,100%);font-size:clamp(30px,3.3vw,40px)}
+.hero-split .lede{max-width:min(42ch,100%)}
+.hero-split .note{max-width:min(46ch,100%)}
+.hero-split .video-wrap{margin:0}
+/* one column below the point where two would squeeze the headline */
+@media(max-width:900px){
+  .hero-split .wrap{grid-template-columns:1fr;gap:30px}
+  .hero-split h1,.hero-split .lede,.hero-split .note{max-width:100%}
+}
 
 /* video */
 .video-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);
