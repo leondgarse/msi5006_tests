@@ -40,7 +40,10 @@
 
   // Umami website id. Empty means "record locally, send nothing" — which is a
   // working state, not a broken one: the instrument runs either way.
-  var UMAMI_WEBSITE_ID = '';
+  // Registered 2026-10-17 for leondgarse.github.io. This is a public
+  // identifier, not a secret: it appears in the page source of every site that
+  // uses Umami, and it grants no access to the dashboard.
+  var UMAMI_WEBSITE_ID = '4cb907b0-a4ec-4c89-bfc9-680d0b41a116';
   var UMAMI_SRC = 'https://cloud.umami.is/script.js';
 
   var SESSION_KEY = 'msd.session';
@@ -87,8 +90,7 @@
 
   // Umami caps event names at 50 characters and string values at 500, and takes
   // a flat data object — so the event goes over as name plus its own fields.
-  function forward(event) {
-    if (!UMAMI_WEBSITE_ID || typeof window.umami === 'undefined') return;
+  function send(event) {
     safe(function () {
       var data = {};
       for (var k in event) {
@@ -100,13 +102,37 @@
     });
   }
 
-  // The overview offered in exchange for an address. Gating a useful document
-  // behind an email is the pattern that actually captures interest — but the
-  // current PDF says MSD was developed at Staple AI, and the site deliberately
-  // says nothing of the kind. Publishing the contradiction as the first thing a
-  // stranger reads is worse than offering nothing, so this stays empty until
-  // the team settles that line. Set it and the link appears on submit.
-  var OVERVIEW_URL = '';
+  // The tracker loads async, and page_view fires the moment this script runs —
+  // so without a queue the first and most important event of every visit is
+  // dropped on the floor. Events wait here until window.umami exists.
+  var pending = [];
+  function forward(event) {
+    if (!UMAMI_WEBSITE_ID) return;
+    if (typeof window.umami !== 'undefined') send(event);
+    else pending.push(event);
+  }
+  function flush() {
+    if (typeof window.umami === 'undefined') return false;
+    while (pending.length) send(pending.shift());
+    return true;
+  }
+
+  // The overview offered in exchange for an address.
+  //
+  // ⚠️ PLACEHOLDER. This is not the MSD overview — it is a C2PA-signed PDF from
+  // the public test fixtures, standing in so the gated-download flow can be
+  // demonstrated end to end. The real one-pager is not wired yet because it
+  // still says MSD was developed at Staple AI while this site deliberately says
+  // nothing of the kind; publishing that contradiction as the first thing a
+  // stranger reads is worse than offering nothing.
+  //
+  // Before this site goes anywhere public: either point this at the settled
+  // overview, or set it back to '' so no download is offered.
+  var OVERVIEW_URL = 'files/msd-overview-placeholder.pdf';
+  // Say what the file actually is. While it is the placeholder, promising "the
+  // one-page overview" and handing over a test fixture would be the one kind of
+  // dishonesty this whole project is arguing against.
+  var OVERVIEW_LABEL = 'Download the sample document (placeholder)';
 
   function revealDownload() {
     if (!OVERVIEW_URL) return;
@@ -117,7 +143,7 @@
     a.className = 'signup-download';
     a.href = OVERVIEW_URL;
     a.setAttribute('download', '');
-    a.textContent = 'Download the one-page overview';
+    a.textContent = OVERVIEW_LABEL;
     a.addEventListener('click', function () { record('overview_download', {}); });
     host.parentNode.insertBefore(a, host);
   }
@@ -134,6 +160,16 @@
     // Our own page_view carries the zone and referrer detail we actually want,
     // so Umami's automatic one would double-count every visit.
     tag.setAttribute('data-auto-track', 'false');
+    tag.addEventListener('load', function () {
+      // onload fires before the tracker has finished defining window.umami in
+      // some builds, so retry briefly rather than trusting the event alone.
+      if (flush()) return;
+      var tries = 0;
+      var timer = setInterval(function () {
+        if (flush() || ++tries > 20) clearInterval(timer);
+      }, 100);
+    });
+    tag.addEventListener('error', function () { pending.length = 0; });
     document.head.appendChild(tag);
   }
 
