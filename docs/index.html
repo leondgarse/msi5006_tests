@@ -24,13 +24,13 @@
   <div class="hero-copy">
     <div class="eyebrow">Meta Structured Data</div>
     <h1>Every number came from somewhere.</h1>
-    <p class="lede">See where data came from, what happened to it, and what is missing.</p>
+    <p class="lede">MSD helps teams show where a figure came from, what happened to it along the way, and what is missing — so the evidence arrives with the number instead of being reconstructed months later.</p>
 
     <div class="cta-row">
-      <a class="btn" href="business.html">See how it works</a>
-      <a class="btn btn-primary" href="https://key-tools.msd-protocol.org/">Try the key tools</a>
+      <a class="btn btn-primary" href="cases.html">See how it works</a>
+      <a class="btn" href="business.html">What it is worth</a>
     </div>
-    <p class="note">Open protocol, free to use. The SDK and key tools are public — nothing to request, no account needed.</p>
+    <p class="note">Free and open. Nothing to request, no account needed.</p>
   </div>
 
   <div class="hero-media">
@@ -49,6 +49,28 @@
 </div></section>
 
 <section class="band plain"><div class="wrap">
+  <h2 class="routes-h">Where teams are using it</h2>
+  <p class="section-lede">Each one is a worked example: what the evidence looks like when it holds, and what it looks like when a step is missing.</p>
+  <div class="routes">
+    <a class="route" href="cases/accounting.html">
+      <span class="route-k">MSD for accounting</span>
+      <span class="route-w">For the person who has to close the books and show why the figure is right.</span>
+      <span class="route-go">An invoice, a PO, and a missing approval &rsaquo;</span>
+    </a>
+    <a class="route" href="cases/kyc.html">
+      <span class="route-k">MSD for compliance</span>
+      <span class="route-w">For the person who has to prove an onboarding decision was properly supported.</span>
+      <span class="route-go">Three vendor checks, one document never filed &rsaquo;</span>
+    </a>
+    <a class="route" href="cases/ai-agent.html">
+      <span class="route-k">MSD for AI</span>
+      <span class="route-w">For the person answering what an agent based its recommendation on.</span>
+      <span class="route-go">A citation nobody can produce &rsaquo;</span>
+    </a>
+  </div>
+</div></section>
+
+<section class="band"><div class="wrap">
   <div class="features">
     <div class="feature">
       <div class="mark"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg></div>
@@ -59,18 +81,33 @@
     <div class="feature">
       <div class="mark"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
       <h3>Check it yourself</h3>
-      <p>Reproducible steps can be re-run, so they need no signature and no trust.</p>
-      <a href="cases.html">See three pipelines &rsaquo;</a>
+      <p>Where a step can be recomputed, anyone holding the inputs can confirm it — no signature, and nobody to take on trust.</p>
+      <a href="business.html">How checking works &rsaquo;</a>
     </div>
     <div class="feature">
       <div class="mark"><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg></div>
-      <h3>Working tooling</h3>
-      <p>A public SDK and key tools, usable today without waiting for anything.</p>
-      <a href="https://key-tools.msd-protocol.org/">Start building &rsaquo;</a>
+      <h3>Gaps show up</h3>
+      <p>A step with nothing behind it is visible straight away, instead of surfacing in an audit months later.</p>
+      <a href="cases/accounting.html">See a gap in context &rsaquo;</a>
     </div>
   </div>
 
-  <p class="features-more">Already have a file to check? <a href="https://network.msd-protocol.org/">Look it up on the MSD Network</a> — who signed this, and can I trust them?</p>
+  <p class="features-more">Already have a file to check? <a href="https://network.msd-protocol.org/">Look it up on the MSD Network</a>. Building with it? The <a href="https://key-tools.msd-protocol.org/">tools and SDK</a> are public, and <a href="community.html">the protocol is open to contributions</a>.</p>
+</div></section>
+
+<section class="band plain signup-band"><div class="wrap">
+  <div class="signup">
+    <div class="signup-copy">
+      <h2>Keep me posted</h2>
+      <p>MSD is early. If you want to hear when there is something worth trying — a release, a tool, a worked example — leave an address and nothing else.</p>
+    </div>
+    <form class="signup-form" id="signupForm" novalidate>
+      <label class="sr-only" for="signupEmail">Email address</label>
+      <input id="signupEmail" name="email" type="email" required placeholder="you@company.com" autocomplete="email">
+      <button class="btn btn-primary" type="submit">Keep me posted</button>
+      <p class="signup-note" id="signupNote">No newsletter, no sharing. One message when there is news.</p>
+    </form>
+  </div>
 </div></section>
 
 <section class="band-teal"><div class="wrap">
@@ -82,6 +119,8 @@
   <p><strong>Draft.</strong> Promotional material for the MSD protocol. Scenarios use synthetic data.</p>
   <p>msd-protocol.org</p>
 </footer></div>
+
+<script src="msd-analytics.js" defer></script>
 
 </body>
 </html>
