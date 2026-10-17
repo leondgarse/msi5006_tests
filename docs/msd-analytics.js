@@ -134,18 +134,21 @@
   // dishonesty this whole project is arguing against.
   var OVERVIEW_LABEL = 'Download the sample document (placeholder)';
 
-  function revealDownload() {
-    if (!OVERVIEW_URL) return;
-    var host = document.getElementById('signupNote');
-    if (!host || document.getElementById('signupDownload')) return;
-    var a = document.createElement('a');
-    a.id = 'signupDownload';
-    a.className = 'signup-download';
-    a.href = OVERVIEW_URL;
-    a.setAttribute('download', '');
-    a.textContent = OVERVIEW_LABEL;
-    a.addEventListener('click', function () { record('overview_download', { gated: true }); });
-    host.parentNode.insertBefore(a, host);
+  function deliverOverview() {
+    if (!OVERVIEW_URL) return false;
+    record('overview_download', { gated: true });
+    // A hidden anchor rather than location.href, so the download starts without
+    // navigating the page away from the acknowledgement the visitor just got.
+    safe(function () {
+      var a = document.createElement('a');
+      a.href = OVERVIEW_URL;
+      a.setAttribute('download', '');
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function () { a.remove(); }, 0);
+    });
+    return true;
   }
 
   // Injected rather than written into every page, so there is one place to
@@ -222,8 +225,14 @@
 
   function start() {
     loadUmami();
-    // The offer is only made if it can be kept.
-    if (OVERVIEW_URL) { var sub = document.getElementById('signupSub'); if (sub) sub.hidden = false; }
+    // The offer is only made if it can be kept: with no document configured,
+    // the form falls back to being a plain mailing-list sign-up.
+    if (!OVERVIEW_URL) {
+      var go = document.getElementById('signupGo');
+      if (go) go.textContent = 'Keep me posted';
+      var em = document.getElementById('signupEmail');
+      if (em) { em.required = true; em.placeholder = 'you@company.com'; }
+    }
     record('page_view', { referrer: document.referrer || null, title: document.title });
     onScroll();
 
@@ -240,42 +249,56 @@
       e.preventDefault();
       var input = document.getElementById('signupEmail');
       var note = document.getElementById('signupNote');
-      if (!input.value || !input.checkValidity()) {
+      var address = (input.value || '').trim();
+
+      // An address is optional. The document is the thing the visitor came for,
+      // so it is never withheld — an earlier version made it mandatory and then
+      // navigated to a mail client, which destroyed the download link before
+      // anyone could use it.
+      if (address && !input.checkValidity()) {
         record('signup_invalid', {});
-        note.textContent = 'That does not look like an email address.';
+        note.textContent = 'That does not look like an email address. Clear it to download without one.';
         note.className = 'signup-note is-warn';
         input.focus();
         return;
       }
-      // The event records that someone asked and the domain they came from,
-      // never the address: analytics should not carry contact details.
-      record('signup_submit', { domain: input.value.split('@').pop().toLowerCase() });
 
-      // Delivery, until the protocol has an owned destination. mailto keeps the
-      // address in the visitor's own mail client and routes it through no third
-      // party, which is the only honest option while this is a holding address
-      // rather than a managed list. Swap MSD_SIGNUP_ENDPOINT in for a posted
-      // form once there is somewhere for it to go.
-      var address = input.value;
-      form.classList.add('is-done');
-      revealDownload();
-      if (typeof window.MSD_SIGNUP_ENDPOINT === 'string') {
-        safe(function () {
-          fetch(window.MSD_SIGNUP_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: address, page: location.pathname })
+      var got = deliverOverview();
+
+      if (!got && !address) {
+        record('signup_invalid', {});
+        note.textContent = 'Please add an email address.';
+        note.className = 'signup-note is-warn';
+        input.focus();
+        return;
+      }
+
+      if (address) {
+        record('signup_submit', { domain: address.split('@').pop().toLowerCase() });
+        if (typeof window.MSD_SIGNUP_ENDPOINT === 'string') {
+          safe(function () {
+            fetch(window.MSD_SIGNUP_ENDPOINT, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email: address, page: location.pathname })
+            });
           });
-        });
-        note.textContent = 'Thank you — we will be in touch when there is something worth trying.';
+          note.textContent = 'Downloading. We will be in touch when there is something worth trying.';
+        } else {
+          // Opened in a new tab, not by navigating this one: a mailto on
+          // location.href takes the page away and the download with it.
+          safe(function () {
+            window.open('mailto:' + SIGNUP_MAILBOX +
+              '?subject=' + encodeURIComponent('MSD — keep me posted') +
+              '&body=' + encodeURIComponent('Please add ' + address + ' to the MSD updates list.'), '_blank');
+          });
+          note.textContent = 'Downloading. A short message to send is open in your mail client.';
+        }
+        input.value = '';
       } else {
-        location.href = 'mailto:' + SIGNUP_MAILBOX +
-          '?subject=' + encodeURIComponent('MSD — keep me posted') +
-          '&body=' + encodeURIComponent('Please add ' + address + ' to the MSD updates list.');
-        note.textContent = 'Thank you — your mail client should open with a short message ready to send.';
+        note.textContent = 'Downloading. Add an address any time if you want to hear about changes.';
       }
       note.className = 'signup-note is-ok';
-      input.value = '';
     });
   }
 
