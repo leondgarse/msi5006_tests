@@ -144,7 +144,7 @@
     a.href = OVERVIEW_URL;
     a.setAttribute('download', '');
     a.textContent = OVERVIEW_LABEL;
-    a.addEventListener('click', function () { record('overview_download', {}); });
+    a.addEventListener('click', function () { record('overview_download', { gated: true }); });
     host.parentNode.insertBefore(a, host);
   }
 
@@ -226,6 +226,13 @@
     if (OVERVIEW_URL) { var sub = document.getElementById('signupSub'); if (sub) sub.hidden = false; }
     record('page_view', { referrer: document.referrer || null, title: document.title });
     onScroll();
+
+    // The ungated copy on the business page. Recorded under its own name so the
+    // two routes can be compared: how many take the document when it is free
+    // against how many trade an address for it. That ratio is the measurement
+    // the gate exists to produce, and it needs both halves to mean anything.
+    var direct = document.getElementById('overviewDirect');
+    if (direct) direct.addEventListener('click', function () { record('overview_download', { gated: false }); });
 
     var form = document.getElementById('signupForm');
     if (!form) return;
