@@ -52,11 +52,9 @@
   </div>
 </div></section>
 
-
-
 <section class="band plain"><div class="wrap">
 <h2>The evidence graph</h2>
-<p class="section-lede">Four inputs, four checks, one decision. Three of the inputs are signed by the vendor that produced them. One was never filed — and the risk score that the approval rests on was computed anyway.</p>
+<p class="section-lede">Four inputs, four checks, one decision. Nothing here can be re-run, so each step rests on the signature of whoever produced it — except the one that was never filed. The risk score was computed anyway, and the approval rests on that.</p>
 
 <figure class="evidence">
   <div class="ev-stats">
@@ -174,23 +172,6 @@
 
   <figcaption>Three vendors signed their own results and all three reconcile. The fourth input was never filed, so the risk score — and the approval that rests on it — carry the gap forward instead of hiding it.</figcaption>
 </figure>
-</div></section>
-
-<section class="band plain"><div class="wrap">
-<h2>The chain</h2>
-<p>Each step references the one before it. Some can be re-run; others carry a signature.</p>
-<table>
-  <thead><tr><th>Step</th><th>What it is</th><th>How you check it</th></tr></thead>
-  <tbody>
-    <tr><td><strong>Passport scan</strong></td><td>Identity document</td><td>Signature from the ID provider</td></tr>
-    <tr><td><strong>Selfie match</strong></td><td>Liveness check, score 0.97</td><td>Signature from the vendor</td></tr>
-    <tr><td><strong>Sanctions check</strong></td><td>Screening, 0 matches</td><td>Signature from the screener</td></tr>
-    <tr><td><strong>Proof of address</strong></td><td>Required document</td><td><span style='color:var(--amber)'>No document found</span></td></tr>
-    <tr><td><strong>Risk score</strong></td><td>Model output, risk low</td><td><span style='color:var(--amber)'>Missing an input</span></td></tr>
-    <tr><td><strong>Open account</strong></td><td>The decision</td><td>Depends on the missing step</td></tr>
-  </tbody>
-</table>
-
 </div></section>
 
 <section class="band"><div class="wrap">
