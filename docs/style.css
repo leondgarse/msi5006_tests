@@ -367,3 +367,6 @@ h2.center + .cards{margin-top:22px}
 .signup-form.is-done input,.signup-form.is-done .btn{opacity:.55;pointer-events:none}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
   clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.signup-sub{margin:8px 0 0;color:var(--text-3);font-size:14px}
+.signup-download{grid-column:1/-1;display:inline-block;margin-top:4px;
+  color:var(--teal);font-weight:500;font-size:14.5px}

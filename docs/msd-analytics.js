@@ -8,16 +8,26 @@
  * site is destined for someone else's domain and no analytics account or
  * consent decision exists yet.
  *
- * So this defines the events and records them locally. It loads no third-party
- * script, sets no cookie, and makes no network request, which also means it
- * needs no consent banner as it stands. To start collecting, set SINK below —
- * one line, and every event name is already defined and stable.
+ * Events are defined here and recorded in the page. They are forwarded to a
+ * destination only if one is configured; with none, this makes no network
+ * request at all and the data never leaves the visitor's tab.
  *
- *   window.MSD_ANALYTICS_SINK = function (event) { mixpanel.track(event.name, event); };
+ * Configured destination: Umami (umami.is). Chosen over Mixpanel, which the
+ * sponsor suggested, and over GA, for one reason that outweighs the others:
+ * Umami sets no cookies and collects no personal data, so the page needs no
+ * consent banner. This site is destined for someone else's domain, and a
+ * banner — or an un-consented tracker — is not ours to impose on them.
+ * It is also MIT-licensed and self-hostable, so the sponsor can take it off a
+ * third party later without the event names changing.
  *
- * Mixpanel was the sponsor's recommendation (2026-10-16); Google Analytics was
- * named as an alternative. Either fits the same hook. Whoever wires one up
- * should check the consent position for the hosting domain first.
+ * To start collecting:
+ *   1. Create a website at cloud.umami.is (free, 1M events/month) and copy its
+ *      website id.
+ *   2. Put the id in UMAMI_WEBSITE_ID below. That is the only edit needed —
+ *      the script tag is injected and the events already map to umami.track().
+ *
+ * Any other destination still works through window.MSD_ANALYTICS_SINK, e.g.
+ *   window.MSD_ANALYTICS_SINK = function (e) { mixpanel.track(e.name, e); };
  */
 (function () {
   'use strict';
@@ -27,6 +37,11 @@
   // currently owns this project, and an address on their domain would be a
   // commitment we are not in a position to make.
   var SIGNUP_MAILBOX = 'leondgarse@gmail.com';
+
+  // Umami website id. Empty means "record locally, send nothing" — which is a
+  // working state, not a broken one: the instrument runs either way.
+  var UMAMI_WEBSITE_ID = '';
+  var UMAMI_SRC = 'https://cloud.umami.is/script.js';
 
   var SESSION_KEY = 'msd.session';
   var BUFFER_KEY = 'msd.events';
@@ -66,7 +81,60 @@
     });
 
     if (typeof window.MSD_ANALYTICS_SINK === 'function') safe(function () { window.MSD_ANALYTICS_SINK(event); });
+    forward(event);
     return event;
+  }
+
+  // Umami caps event names at 50 characters and string values at 500, and takes
+  // a flat data object — so the event goes over as name plus its own fields.
+  function forward(event) {
+    if (!UMAMI_WEBSITE_ID || typeof window.umami === 'undefined') return;
+    safe(function () {
+      var data = {};
+      for (var k in event) {
+        if (k === 'name' || !Object.prototype.hasOwnProperty.call(event, k)) continue;
+        var v = event[k];
+        data[k] = typeof v === 'string' ? v.slice(0, 500) : v;
+      }
+      window.umami.track(event.name.slice(0, 50), data);
+    });
+  }
+
+  // The overview offered in exchange for an address. Gating a useful document
+  // behind an email is the pattern that actually captures interest — but the
+  // current PDF says MSD was developed at Staple AI, and the site deliberately
+  // says nothing of the kind. Publishing the contradiction as the first thing a
+  // stranger reads is worse than offering nothing, so this stays empty until
+  // the team settles that line. Set it and the link appears on submit.
+  var OVERVIEW_URL = '';
+
+  function revealDownload() {
+    if (!OVERVIEW_URL) return;
+    var host = document.getElementById('signupNote');
+    if (!host || document.getElementById('signupDownload')) return;
+    var a = document.createElement('a');
+    a.id = 'signupDownload';
+    a.className = 'signup-download';
+    a.href = OVERVIEW_URL;
+    a.setAttribute('download', '');
+    a.textContent = 'Download the one-page overview';
+    a.addEventListener('click', function () { record('overview_download', {}); });
+    host.parentNode.insertBefore(a, host);
+  }
+
+  // Injected rather than written into every page, so there is one place to
+  // change if the destination changes, and none at all while the id is empty.
+  function loadUmami() {
+    if (!UMAMI_WEBSITE_ID) return;
+    var tag = document.createElement('script');
+    tag.async = true;
+    tag.defer = true;
+    tag.src = UMAMI_SRC;
+    tag.setAttribute('data-website-id', UMAMI_WEBSITE_ID);
+    // Our own page_view carries the zone and referrer detail we actually want,
+    // so Umami's automatic one would double-count every visit.
+    tag.setAttribute('data-auto-track', 'false');
+    document.head.appendChild(tag);
   }
 
   // Which link was it, in words a reader of the report would recognise.
@@ -117,6 +185,9 @@
   window.addEventListener('scroll', onScroll, { passive: true });
 
   function start() {
+    loadUmami();
+    // The offer is only made if it can be kept.
+    if (OVERVIEW_URL) { var sub = document.getElementById('signupSub'); if (sub) sub.hidden = false; }
     record('page_view', { referrer: document.referrer || null, title: document.title });
     onScroll();
 
@@ -144,6 +215,7 @@
       // form once there is somewhere for it to go.
       var address = input.value;
       form.classList.add('is-done');
+      revealDownload();
       if (typeof window.MSD_SIGNUP_ENDPOINT === 'string') {
         safe(function () {
           fetch(window.MSD_SIGNUP_ENDPOINT, {
