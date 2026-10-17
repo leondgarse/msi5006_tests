@@ -392,12 +392,3 @@ h2.center + .cards{margin-top:22px}
   .stage svg{width:860px;max-width:none}
 }
 
-/* Permanent, ungated copy of the overview. The gated one on the landing page
-   is the measurement; this one is the courtesy — somebody who has read the
-   whole business page should not have to trade an address for a summary of
-   what they just read. Tracked separately so the two routes can be compared. */
-.takeaway{display:flex;gap:30px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-.takeaway-copy{flex:1 1 440px}
-.takeaway-copy h2{margin:0 0 7px}
-.takeaway-copy p{margin:0;color:var(--text-2);max-width:62ch}
-.takeaway .dl{white-space:nowrap;flex:0 0 auto}

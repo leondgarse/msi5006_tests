@@ -70,7 +70,7 @@
   function record(name, detail) {
     var event = {
       name: name,
-      page: location.pathname.replace(/^.*\/docs\//, '/'),
+      page: canonicalPath(),
       session: sessionId(),
       at: new Date().toISOString()
     };
@@ -98,8 +98,33 @@
         var v = event[k];
         data[k] = typeof v === 'string' ? v.slice(0, 500) : v;
       }
-      window.umami.track(event.name.slice(0, 50), data);
+      // Umami otherwise takes the URL from the browser, which splits one page
+      // into three: "/", "/index.html" and "/index.html#keep-me-posted" all
+      // being the landing page. Any "which page wins" reading is then wrong by
+      // construction, so the canonical path is supplied explicitly.
+      window.umami.track(function (props) {
+        return {
+          website: props.website,
+          hostname: props.hostname,
+          screen: props.screen,
+          language: props.language,
+          title: props.title,
+          referrer: props.referrer,
+          url: canonicalPath(),
+          name: event.name.slice(0, 50),
+          data: data
+        };
+      });
     });
+  }
+
+  // One page, one path. Strips the repo prefix so a move off GitHub Pages does
+  // not reset the history, drops "index.html", and drops the hash — a reader
+  // scrolling to #keep-me-posted has not visited a second page.
+  function canonicalPath() {
+    var p = location.pathname.replace(/\/index\.html$/, '/');
+    if (p === '' ) p = '/';
+    return p;
   }
 
   // The tracker loads async, and page_view fires the moment this script runs —
@@ -120,7 +145,7 @@
   // The overview offered in exchange for an address.
   //
   // ⚠️ PLACEHOLDER. This is not the MSD overview — it is a C2PA-signed PDF from
-  // the public test fixtures, standing in so the gated-download flow can be
+  // the public test fixtures, standing in so the download flow can be
   // demonstrated end to end. The real one-pager is not wired yet because it
   // still says MSD was developed at Staple AI while this site deliberately says
   // nothing of the kind; publishing that contradiction as the first thing a
@@ -136,7 +161,7 @@
 
   function deliverOverview() {
     if (!OVERVIEW_URL) return false;
-    record('overview_download', { gated: true });
+    record('overview_download', {});
     // A hidden anchor rather than location.href, so the download starts without
     // navigating the page away from the acknowledgement the visitor just got.
     safe(function () {
@@ -235,13 +260,6 @@
     }
     record('page_view', { referrer: document.referrer || null, title: document.title });
     onScroll();
-
-    // The ungated copy on the business page. Recorded under its own name so the
-    // two routes can be compared: how many take the document when it is free
-    // against how many trade an address for it. That ratio is the measurement
-    // the gate exists to produce, and it needs both halves to mean anything.
-    var direct = document.getElementById('overviewDirect');
-    if (direct) direct.addEventListener('click', function () { record('overview_download', { gated: false }); });
 
     var form = document.getElementById('signupForm');
     if (!form) return;
