@@ -13,7 +13,7 @@
   <a class="brand" href="./">MSD<span>.</span></a>
   <div class="nav-links">
     <a href="business.html">For business</a>
-    <a href="cases.html">Use cases</a>
+    <a href="#uses">Use cases</a>
     <a href="community.html">Community</a>
     <a class="hide-sm" href="https://network.msd-protocol.org/">Network</a>
     <a class="hide-sm" href="https://key-tools.msd-protocol.org/">Key tools</a>
@@ -27,7 +27,7 @@
     <p class="lede">MSD helps teams show where a figure came from, what happened to it along the way, and what is missing — so the evidence arrives with the number instead of being reconstructed months later.</p>
 
     <div class="cta-row">
-      <a class="btn btn-primary" href="cases.html">See how it works</a>
+      <a class="btn btn-primary" href="#uses">See how it works</a>
       <a class="btn" href="business.html">What it is worth</a>
     </div>
     <p class="note">Free and open. Nothing to request, no account needed.</p>
@@ -48,50 +48,35 @@
   <p>MSD is a <strong>chain of custody for data</strong>. It records what each value was made from, by whom, and in what way — so the evidence travels with the number instead of living in a separate system.</p>
 </div></section>
 
-<section class="band plain"><div class="wrap">
+<section class="band plain" id="uses"><div class="wrap">
   <h2 class="routes-h">Where teams are using it</h2>
   <p class="section-lede">Each one is a worked example: what the evidence looks like when it holds, and what it looks like when a step is missing.</p>
   <div class="routes">
     <a class="route" href="cases/accounting.html">
-      <span class="route-k">MSD for accounting</span>
-      <span class="route-w">For the person who has to close the books and show why the figure is right.</span>
-      <span class="route-go">An invoice, a PO, and a missing approval &rsaquo;</span>
+      <img src="media/msd-accounting.jpg" alt="Provenance graph for an accounts-payable pipeline, with the approval step flagged as missing" loading="lazy" width="1600" height="842">
+      <span class="route-body">
+        <span class="route-k">MSD for accounting</span>
+        <span class="route-w">For the person who has to close the books and show why the figure is right.</span>
+        <span class="route-go">An invoice, a PO, and a missing approval &rsaquo;</span>
+      </span>
     </a>
     <a class="route" href="cases/kyc.html">
-      <span class="route-k">MSD for compliance</span>
-      <span class="route-w">For the person who has to prove an onboarding decision was properly supported.</span>
-      <span class="route-go">Three vendor checks, one document never filed &rsaquo;</span>
+      <img src="media/msd-kyc.jpg" alt="Provenance graph for a KYC onboarding pipeline, with a document that was never filed" loading="lazy" width="1600" height="842">
+      <span class="route-body">
+        <span class="route-k">MSD for compliance</span>
+        <span class="route-w">For the person who has to prove an onboarding decision was properly supported.</span>
+        <span class="route-go">Three vendor checks, one document never filed &rsaquo;</span>
+      </span>
     </a>
     <a class="route" href="cases/ai-agent.html">
-      <span class="route-k">MSD for AI</span>
-      <span class="route-w">For the person answering what an agent based its recommendation on.</span>
-      <span class="route-go">A citation nobody can produce &rsaquo;</span>
+      <img src="media/msd-ai_agent.jpg" alt="Provenance graph for an AI agent pipeline, with a cited price feed that cannot be found" loading="lazy" width="1600" height="842">
+      <span class="route-body">
+        <span class="route-k">MSD for AI</span>
+        <span class="route-w">For the person answering what an agent based its recommendation on.</span>
+        <span class="route-go">A citation nobody can produce &rsaquo;</span>
+      </span>
     </a>
   </div>
-</div></section>
-
-<section class="band"><div class="wrap">
-  <div class="features">
-    <div class="feature">
-      <div class="mark"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg></div>
-      <h3>Open protocol</h3>
-      <p>A metadata standard you can implement anywhere data changes hands.</p>
-      <a href="business.html">What this is worth &rsaquo;</a>
-    </div>
-    <div class="feature">
-      <div class="mark"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
-      <h3>Check it yourself</h3>
-      <p>Where a step can be recomputed, anyone holding the inputs can confirm it — no signature, and nobody to take on trust.</p>
-      <a href="business.html">How checking works &rsaquo;</a>
-    </div>
-    <div class="feature">
-      <div class="mark"><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg></div>
-      <h3>Gaps show up</h3>
-      <p>A step with nothing behind it is visible straight away, instead of surfacing in an audit months later.</p>
-      <a href="cases/accounting.html">See a gap in context &rsaquo;</a>
-    </div>
-  </div>
-
   <p class="features-more">Already have a file to check? <a href="https://network.msd-protocol.org/">Look it up on the MSD Network</a>. Building with it? The <a href="https://key-tools.msd-protocol.org/">tools and SDK</a> are public, and <a href="community.html">the protocol is open to contributions</a>.</p>
 </div></section>
 
@@ -105,7 +90,7 @@
       <label class="sr-only" for="signupEmail">Email address</label>
       <input id="signupEmail" name="email" type="email" required placeholder="you@company.com" autocomplete="email">
       <button class="btn btn-primary" type="submit">Keep me posted</button>
-      <p class="signup-note" id="signupNote">No newsletter, no sharing. One message when there is news.</p>
+      <p class="signup-note" id="signupNote">No newsletter, no sharing. One message when there is something worth trying.</p>
     </form>
   </div>
 </div></section>

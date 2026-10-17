@@ -22,6 +22,12 @@
 (function () {
   'use strict';
 
+  // Holding address while the protocol has no owned destination. Deliberately a
+  // maintainer's own public address, not a staple.io one: nobody at the sponsor
+  // currently owns this project, and an address on their domain would be a
+  // commitment we are not in a position to make.
+  var SIGNUP_MAILBOX = 'leondgarse@gmail.com';
+
   var SESSION_KEY = 'msd.session';
   var BUFFER_KEY = 'msd.events';
   var MAX_EVENTS = 200;
@@ -127,12 +133,32 @@
         input.focus();
         return;
       }
-      // Deliberately records that someone asked, never the address itself:
-      // the destination is the sponsor's to choose, and until it exists we
-      // should not be holding anyone's contact details.
+      // The event records that someone asked and the domain they came from,
+      // never the address: analytics should not carry contact details.
       record('signup_submit', { domain: input.value.split('@').pop().toLowerCase() });
+
+      // Delivery, until the protocol has an owned destination. mailto keeps the
+      // address in the visitor's own mail client and routes it through no third
+      // party, which is the only honest option while this is a holding address
+      // rather than a managed list. Swap MSD_SIGNUP_ENDPOINT in for a posted
+      // form once there is somewhere for it to go.
+      var address = input.value;
       form.classList.add('is-done');
-      note.textContent = 'Thank you — the list is not live yet, so nothing was sent. The interest is recorded.';
+      if (typeof window.MSD_SIGNUP_ENDPOINT === 'string') {
+        safe(function () {
+          fetch(window.MSD_SIGNUP_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: address, page: location.pathname })
+          });
+        });
+        note.textContent = 'Thank you — we will be in touch when there is something worth trying.';
+      } else {
+        location.href = 'mailto:' + SIGNUP_MAILBOX +
+          '?subject=' + encodeURIComponent('MSD — keep me posted') +
+          '&body=' + encodeURIComponent('Please add ' + address + ' to the MSD updates list.');
+        note.textContent = 'Thank you — your mail client should open with a short message ready to send.';
+      }
       note.className = 'signup-note is-ok';
       input.value = '';
     });
