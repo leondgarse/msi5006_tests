@@ -370,3 +370,24 @@ h2.center + .cards{margin-top:22px}
 .signup-sub{margin:8px 0 0;color:var(--text-3);font-size:14px}
 .signup-download{grid-column:1/-1;display:inline-block;margin-top:4px;
   color:var(--teal);font-weight:500;font-size:14.5px}
+
+/* The journey figure on the business page: one line of handovers, so the loss
+   of evidence reads as a sequence rather than a claim. */
+.journey{margin:0;padding:0}
+.journey svg{display:block;width:100%;height:auto;background:var(--bg-card);
+  border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 12px}
+.journey figcaption{margin-top:13px;color:var(--text-2);font-size:14.5px;max-width:760px}
+@media(max-width:820px){
+  .journey{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .journey svg{width:820px;max-width:none}
+}
+
+/* Maturity timeline on the community page: one line, solid where things work
+   and dashed where they do not, so "early" is a position rather than a hedge. */
+.stage{margin:0 0 30px;padding:0}
+.stage svg{display:block;width:100%;height:auto;background:var(--bg-card);
+  border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 12px}
+@media(max-width:820px){
+  .stage{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .stage svg{width:860px;max-width:none}
+}

@@ -21,10 +21,58 @@
 </div></nav>
 
 <header class="hero hero-center"><div class="wrap">
-  <div class="eyebrow">For finance, audit and operations</div>
+  <div class="eyebrow">For auditors, controllers and compliance teams</div>
   <h1>The data arrives.<br>The evidence does not.</h1>
-  <p class="lede">A figure reaches a report having crossed four systems, two vendors and a spreadsheet. Reconstructing how it got there is an email search, months later, under time pressure.</p>
+  <p class="lede">Can you tell where your data came from, how it changed, or what is missing when you receive a file? Knowing a file is intact is not enough — you need its history.</p>
 </div></header>
+
+<section class="band plain"><div class="wrap">
+  <figure class="journey">
+    <svg viewBox="0 0 960 230" role="img"
+         aria-label="One figure crossing four systems: it is signed when the supplier issues it, re-checkable after extraction, still sound after the match, and arrives in the report with its evidence no longer attached.">
+      <defs>
+        <marker id="bz-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0 L10 5 L0 10 z" fill="var(--text-3)"/>
+        </marker>
+        <marker id="bz-ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0 L10 5 L0 10 z" fill="var(--amber)"/>
+        </marker>
+      </defs>
+
+      <line x1="190" y1="74" x2="248" y2="74" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#bz-ar)"/>
+      <line x1="414" y1="74" x2="472" y2="74" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#bz-ar)"/>
+      <line x1="638" y1="74" x2="696" y2="74" stroke="var(--amber)" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#bz-ar-a)"/>
+
+      <g>
+        <rect x="34" y="48" width="156" height="52" rx="7" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+        <text x="50" y="68" font-family="var(--sans)" font-size="12.5" font-weight="600" fill="var(--text-1)">Supplier issues it</text>
+        <text x="50" y="85" font-family="var(--sans)" font-size="11" fill="var(--teal)">signed at source</text>
+
+        <rect x="258" y="48" width="156" height="52" rx="7" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+        <text x="274" y="68" font-family="var(--sans)" font-size="12.5" font-weight="600" fill="var(--text-1)">Your system reads it</text>
+        <text x="274" y="85" font-family="var(--sans)" font-size="11" fill="var(--teal)">signed by the operator</text>
+
+        <rect x="482" y="48" width="156" height="52" rx="7" fill="var(--teal-bg)" stroke="var(--teal)" stroke-width="2"/>
+        <text x="498" y="68" font-family="var(--sans)" font-size="12.5" font-weight="600" fill="var(--text-1)">A check runs</text>
+        <text x="498" y="85" font-family="var(--sans)" font-size="11" fill="var(--teal)">re-run it yourself</text>
+
+        <rect x="706" y="48" width="220" height="52" rx="7" fill="var(--amber-bg)" stroke="var(--amber)" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <text x="722" y="68" font-family="var(--sans)" font-size="12.5" font-weight="600" fill="var(--amber)">It reaches the report</text>
+        <text x="722" y="85" font-family="var(--sans)" font-size="11" fill="var(--amber)">evidence no longer attached</text>
+      </g>
+
+      <text x="112" y="139" font-family="var(--sans)" font-size="11.5" fill="var(--text-2)" text-anchor="middle">Two companies</text>
+      <text x="336" y="139" font-family="var(--sans)" font-size="11.5" fill="var(--text-2)" text-anchor="middle">Three systems</text>
+      <text x="560" y="139" font-family="var(--sans)" font-size="11.5" fill="var(--text-2)" text-anchor="middle">One spreadsheet</text>
+      <text x="816" y="139" font-family="var(--sans)" font-size="11.5" fill="var(--amber)" text-anchor="middle">Nobody owns the trail</text>
+
+      <line x1="34" y1="166" x2="926" y2="166" stroke="var(--border-strong)" stroke-width="1"/>
+      <text x="34" y="192" font-family="var(--sans)" font-size="12" fill="var(--text-2)">Today the trail is reassembled from inboxes, months later, under time pressure.</text>
+      <text x="34" y="212" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">With MSD it travels with the figure, and the gap is visible the moment it appears.</text>
+    </svg>
+    <figcaption>Each handover is a point where the evidence can be left behind. The protocol's job is to make that loss visible rather than silent.</figcaption>
+  </figure>
+</div></section>
 
 <section class="band"><div class="wrap">
   <h2>What that costs</h2>
@@ -101,43 +149,6 @@
   </div>
 </div></section>
 
-<section class="band"><div class="wrap">
-  <h2>Where this is today</h2>
-  <p class="section-lede">MSD is a new and open protocol, and it is early. We would rather state that plainly than imply an adoption story that does not exist yet.</p>
-  <div class="stats">
-    <div class="stat">
-      <span class="ico" style="color:var(--teal)">Available</span>
-      <h4>Signing and verifying</h4>
-      <p>Structured data, content-addressed references between records, and embedding into documents you already send.</p>
-    </div>
-    <div class="stat">
-      <span class="ico" style="color:var(--teal)">Available</span>
-      <h4>SDK and key tooling</h4>
-      <p>Public, open source, and usable today without waiting for anything else.</p>
-    </div>
-    <div class="stat">
-      <span class="ico">In progress</span>
-      <h4>Visual graph tooling</h4>
-      <p>Assembling a provenance graph automatically from dropped files is still being built.</p>
-    </div>
-  </div>
-</div></section>
-
-<section class="band plain"><div class="wrap">
-  <h2>See it in context</h2>
-  <p class="section-lede">Same mechanism, three fields. Thirty seconds each.</p>
-  <div class="cards">
-    <a class="card" href="cases/accounting.html">
-      <span class="tag">Accounts payable</span><h3>Close the books with evidence</h3>
-      <p>An invoice, a purchase order, a clean match — and an approval nobody can produce.</p></a>
-    <a class="card" href="cases/kyc.html">
-      <span class="tag">KYC onboarding</span><h3>Not until every check is in</h3>
-      <p>Passport verified, sanctions clear, risk scored — on a document never filed.</p></a>
-    <a class="card" href="cases/ai-agent.html">
-      <span class="tag">AI agents</span><h3>Trace a decision to its sources</h3>
-      <p>An agent picks a supplier, citing a price feed that cannot be found.</p></a>
-  </div>
-</div></section>
 
 <div class="wrap"><footer>
   <p><strong>Draft.</strong> Promotional material for the MSD protocol. Scenarios use synthetic data.</p>

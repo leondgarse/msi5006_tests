@@ -27,8 +27,62 @@
 </div></header>
 
 <section class="band"><div class="wrap">
-  <h2>Try it</h2>
-  <p class="section-lede">Everything here works today. Nothing depends on a roadmap.</p>
+  <h2>Where it is honest to say we are</h2>
+  <p class="section-lede">A new protocol is evaluated differently from an established one, and pretending otherwise helps nobody. Here is the line between what runs today and what does not, drawn precisely rather than generously.</p>
+
+  <figure class="stage">
+    <svg viewBox="0 0 960 272" role="img"
+         aria-label="Timeline of the protocol's maturity: the specification, SDK, signing and verifying, and embedding into documents all work today and are linked; visual graph tooling is being built; a broad adopter list does not exist yet.">
+      <defs>
+        <marker id="st-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0 L10 5 L0 10 z" fill="var(--text-3)"/>
+        </marker>
+      </defs>
+
+      <line x1="40" y1="96" x2="604" y2="96" stroke="var(--teal)" stroke-width="2.5"/>
+      <line x1="604" y1="96" x2="920" y2="96" stroke="var(--text-3)" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#st-ar)"/>
+
+      <g font-family="var(--sans)">
+        <text x="40" y="44" font-size="11.5" font-weight="600" fill="var(--teal)" letter-spacing=".04em">WORKS TODAY — NOTHING TO WAIT FOR</text>
+        <text x="624" y="44" font-size="11.5" font-weight="600" fill="var(--text-2)" letter-spacing=".04em">NOT YET</text>
+      </g>
+
+      <g>
+        <circle cx="86" cy="96" r="8" fill="var(--teal)"/>
+        <circle cx="236" cy="96" r="8" fill="var(--teal)"/>
+        <circle cx="386" cy="96" r="8" fill="var(--teal)"/>
+        <circle cx="536" cy="96" r="8" fill="var(--teal)"/>
+        <circle cx="700" cy="96" r="8" fill="var(--bg-card)" stroke="var(--text-3)" stroke-width="2"/>
+        <circle cx="868" cy="96" r="8" fill="var(--bg-card)" stroke="var(--text-3)" stroke-width="2"/>
+      </g>
+
+      <g font-family="var(--sans)" text-anchor="middle">
+        <text x="86" y="136" font-size="12.5" font-weight="600" fill="var(--text-1)">Open spec</text>
+        <text x="86" y="153" font-size="11" fill="var(--text-2)">Free to implement</text>
+
+        <text x="236" y="136" font-size="12.5" font-weight="600" fill="var(--text-1)">Python SDK</text>
+        <text x="236" y="153" font-size="11" fill="var(--text-2)">On PyPI, open source</text>
+
+        <text x="386" y="136" font-size="12.5" font-weight="600" fill="var(--text-1)">Sign &amp; verify</text>
+        <text x="386" y="153" font-size="11" fill="var(--text-2)">Key tools, in the browser</text>
+
+        <text x="536" y="136" font-size="12.5" font-weight="600" fill="var(--text-1)">Check a signer</text>
+        <text x="536" y="153" font-size="11" fill="var(--text-2)">MSD Network</text>
+
+        <text x="700" y="136" font-size="12.5" font-weight="600" fill="var(--text-2)">Visual graph tooling</text>
+        <text x="700" y="153" font-size="11" fill="var(--text-3)">Being built</text>
+
+        <text x="868" y="136" font-size="12.5" font-weight="600" fill="var(--text-2)">A long adopter list</text>
+        <text x="868" y="153" font-size="11" fill="var(--text-3)">Does not exist yet</text>
+      </g>
+
+      <line x1="40" y1="190" x2="920" y2="190" stroke="var(--border-strong)" stroke-width="1"/>
+      <text x="40" y="216" font-family="var(--sans)" font-size="12" fill="var(--text-2)">What MSD does have is a working implementation and a model that answers a question most provenance tooling leaves open:</text>
+      <text x="40" y="236" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">which parts of a data trail you can check for yourself, and which parts rest on somebody's signature.</text>
+      <text x="40" y="258" font-family="var(--sans)" font-size="11.5" fill="var(--text-3)">Evaluating it for production? That distinction is probably the thing worth testing first.</text>
+    </svg>
+  </figure>
+
   <div class="cards">
     <a class="card" href="https://key-tools.msd-protocol.org/">
       <span class="tag">Tools</span><h3>Key tools</h3>
@@ -39,29 +93,6 @@
     <a class="card" href="https://pypi.org/project/msd-sdk/">
       <span class="tag">Build</span><h3>Python SDK</h3>
       <p>Sign structured data, embed into documents, and verify from your own code.</p></a>
-  </div>
-</div></section>
-
-<section class="band plain"><div class="wrap">
-  <h2>Where it is honest to say we are</h2>
-  <div class="duo">
-    <div>
-      <p>A new protocol is evaluated differently from an established one, and pretending otherwise helps nobody. MSD does not have a long adopter list, and the places using it today are few.</p>
-      <p>What it does have is a working implementation, a public SDK, and a model that answers a question most provenance tooling leaves open: which parts of a data trail can you check for yourself, and which parts rest on somebody's signature.</p>
-      <p class="note">If you are evaluating it for production use, that distinction is probably the thing worth testing first.</p>
-    </div>
-    <div class="stats" style="grid-template-columns:1fr">
-      <div class="stat">
-        <span class="ico" style="color:var(--teal)">Works today</span>
-        <h4>Signing, verifying, embedding</h4>
-        <p>Structured data, content-addressed references, and embedding into documents you already send.</p>
-      </div>
-      <div class="stat">
-        <span class="ico">Being built</span>
-        <h4>Visual graph tooling</h4>
-        <p>Assembling a provenance graph automatically from dropped files.</p>
-      </div>
-    </div>
   </div>
 </div></section>
 
