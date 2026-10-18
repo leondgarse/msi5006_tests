@@ -291,7 +291,18 @@
         return;
       }
 
-      if (address) {
+      var keep = document.getElementById('signupKeep');
+      var wantsList = address && (!keep || keep.checked);
+
+      if (address && !wantsList) {
+        // An address typed with the box unticked is not a sign-up. Nothing is
+        // recorded about it and nothing is sent anywhere.
+        note.textContent = 'Downloading. Nothing was sent — the box above is unticked.';
+        note.className = 'signup-note is-ok';
+        return;
+      }
+
+      if (wantsList) {
         record('signup_submit', { domain: address.split('@').pop().toLowerCase() });
         if (typeof window.MSD_SIGNUP_ENDPOINT === 'string') {
           safe(function () {

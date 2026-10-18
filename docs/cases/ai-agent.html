@@ -65,7 +65,7 @@
   </div>
 
   <div class="ev-scroll">
-  <svg viewBox="0 0 960 430" role="img"
+  <svg viewBox="0 0 960 300" role="img"
        aria-label="Evidence graph for an AI procurement agent: a signed contract and a signed policy feed a signed model call, which calls a price-comparison tool. The tool also cites a live price feed for which no record exists, so the comparison cannot be re-run and the recommendation that depends on it carries the gap forward.">
     <defs>
       <marker id="ai-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -76,64 +76,74 @@
       </marker>
     </defs>
 
-    <!-- documents -> model call -->
-    <path d="M216 62  C 270 62, 286 92, 320 108" fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#ai-ar)"/>
-    <path d="M216 166 C 270 166, 286 140, 320 124" fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#ai-ar)"/>
-    <!-- model call -> tool call -->
-    <path d="M516 116 C 566 116, 574 160, 604 184" fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#ai-ar)"/>
-    <!-- missing feed -> tool call -->
-    <path d="M216 288 C 430 292, 548 242, 604 212" fill="none" stroke="var(--amber)" stroke-width="1.4"
+    <!-- two signed documents collect onto one rail into the model call -->
+    <g fill="none" stroke="var(--text-3)" stroke-width="1.4">
+      <line x1="222" y1="40"  x2="266" y2="40"/>
+      <line x1="222" y1="110" x2="266" y2="110"/>
+      <line x1="266" y1="40"  x2="266" y2="110"/>
+    </g>
+    <line x1="266" y1="75" x2="320" y2="75" fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#ai-ar)"/>
+    <!-- model call -> tool call, straight across -->
+    <line x1="506" y1="75" x2="588" y2="75" fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#ai-ar)"/>
+    <!-- the missing feed arrives on its own lane from below -->
+    <g fill="none" stroke="var(--amber)" stroke-width="1.4" stroke-dasharray="5 4">
+      <line x1="222" y1="196" x2="548" y2="196"/>
+      <line x1="548" y1="196" x2="548" y2="88"/>
+    </g>
+    <line x1="548" y1="88" x2="588" y2="84" fill="none" stroke="var(--amber)" stroke-width="1.4"
           stroke-dasharray="5 4" marker-end="url(#ai-ar-a)"/>
     <!-- tool call -> recommendation -->
-    <path d="M700 224 C 700 282, 580 300, 500 330" fill="none" stroke="var(--amber)" stroke-width="1.4"
+    <g fill="none" stroke="var(--amber)" stroke-width="1.4" stroke-dasharray="5 4">
+      <line x1="680" y1="97" x2="680" y2="178"/>
+    </g>
+    <line x1="680" y1="178" x2="680" y2="192" fill="none" stroke="var(--amber)" stroke-width="1.4"
           stroke-dasharray="5 4" marker-end="url(#ai-ar-a)"/>
 
-    <g font-family="var(--sans)" font-size="11" fill="var(--text-2)" text-anchor="middle">
-      <text x="268" y="74">read by</text>
-      <text x="268" y="152">read by</text>
-      <text x="572" y="140">calls</text>
+    <g font-family="var(--sans)" font-size="10.5" fill="var(--text-2)" text-anchor="middle">
+      <text x="293" y="68">read by</text>
+      <text x="547" y="68">calls</text>
     </g>
-    <text x="392" y="252" font-family="var(--sans)" font-size="11" fill="var(--amber)" text-anchor="middle">cited by — no record exists</text>
-    <text x="596" y="296" font-family="var(--sans)" font-size="11" fill="var(--amber)" text-anchor="middle">recommends</text>
+    <text x="340" y="189" font-family="var(--sans)" font-size="10.5" fill="var(--amber)" text-anchor="middle">cited by — no record exists</text>
+    <text x="692" y="146" font-family="var(--sans)" font-size="10.5" fill="var(--amber)" text-anchor="start">recommends</text>
 
     <!-- signed documents -->
     <g>
-      <rect x="40" y="40" width="176" height="44" rx="7" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="56" y="59" font-family="var(--sans)" font-size="12.5" font-weight="600" fill="var(--text-1)">Contract · S$12/unit</text>
-      <text x="56" y="75" font-family="var(--sans)" font-size="11" fill="var(--text-2)">signed · document owner</text>
+      <rect x="40" y="22" width="182" height="36" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+      <text x="54" y="38" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Contract · S$12/unit</text>
+      <text x="54" y="51" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">signed · document owner</text>
 
-      <rect x="40" y="144" width="176" height="44" rx="7" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="56" y="163" font-family="var(--sans)" font-size="12.5" font-weight="600" fill="var(--text-1)">Policy · 2 quotes min.</text>
-      <text x="56" y="179" font-family="var(--sans)" font-size="11" fill="var(--text-2)">signed · procurement</text>
+      <rect x="40" y="92" width="182" height="36" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+      <text x="54" y="108" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Policy · 2 quotes min.</text>
+      <text x="54" y="121" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">signed · procurement</text>
     </g>
 
-    <!-- the model call: signed because it cannot be replayed -->
-    <rect x="320" y="92" width="196" height="52" rx="7" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-    <text x="336" y="112" font-family="var(--sans)" font-size="12.5" font-weight="600" fill="var(--text-1)">Model call · 3 sources</text>
-    <text x="336" y="128" font-family="var(--sans)" font-size="11" fill="var(--text-2)">signed · cannot be replayed</text>
+    <!-- model call: signed because it cannot be replayed -->
+    <rect x="320" y="55" width="186" height="40" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+    <text x="334" y="72" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Model call · 3 sources</text>
+    <text x="334" y="86" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">signed · cannot be replayed</text>
 
     <!-- the missing source -->
-    <rect x="40" y="262" width="176" height="44" rx="7" fill="var(--amber-bg)" stroke="var(--amber)"
+    <rect x="40" y="178" width="182" height="36" rx="6" fill="var(--amber-bg)" stroke="var(--amber)"
           stroke-width="1.5" stroke-dasharray="5 4"/>
-    <text x="56" y="281" font-family="var(--sans)" font-size="12.5" font-weight="600" fill="var(--amber)">Live price feed</text>
-    <text x="56" y="297" font-family="var(--sans)" font-size="11" fill="var(--amber)">cited source not found</text>
+    <text x="54" y="194" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--amber)">Live price feed</text>
+    <text x="54" y="207" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">cited source not found</text>
 
     <!-- the tool call: re-runnable in principle, not in fact -->
-    <rect x="604" y="172" width="196" height="52" rx="7" fill="var(--amber-bg)" stroke="var(--amber)" stroke-width="1.8"/>
-    <text x="620" y="192" font-family="var(--sans)" font-size="12.5" font-weight="600" fill="var(--text-1)">Price comparison</text>
-    <text x="620" y="208" font-family="var(--sans)" font-size="11" fill="var(--amber)">re-runnable — but not now</text>
+    <rect x="588" y="55" width="186" height="42" rx="6" fill="var(--amber-bg)" stroke="var(--amber)" stroke-width="1.8"/>
+    <text x="602" y="72" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Price comparison</text>
+    <text x="602" y="87" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">re-runnable — but not now</text>
 
     <!-- the output -->
-    <rect x="324" y="330" width="196" height="48" rx="7" fill="var(--bg-card)" stroke="var(--amber)" stroke-width="1.8"/>
-    <text x="340" y="350" font-family="var(--sans)" font-size="12.5" font-weight="600" fill="var(--text-1)">Recommend Supplier B</text>
-    <text x="340" y="366" font-family="var(--sans)" font-size="11" fill="var(--amber)">depends on the gap</text>
+    <rect x="588" y="192" width="186" height="36" rx="6" fill="var(--bg-card)" stroke="var(--amber)" stroke-width="1.8"/>
+    <text x="602" y="208" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Recommend Supplier B</text>
+    <text x="602" y="221" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">depends on the gap</text>
 
     <!-- legend -->
-    <g font-family="var(--sans)" font-size="11">
-      <rect x="604" y="330" width="11" height="11" rx="2.5" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="623" y="340" fill="var(--text-2)">Signed — trust the issuer</text>
-      <rect x="604" y="356" width="11" height="11" rx="2.5" fill="var(--amber-bg)" stroke="var(--amber)" stroke-width="1.5" stroke-dasharray="4 3"/>
-      <text x="623" y="366" fill="var(--text-2)">Absent, or resting on what is absent</text>
+    <g font-family="var(--sans)" font-size="10.5">
+      <rect x="40" y="266" width="10" height="10" rx="2" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+      <text x="57" y="275" fill="var(--text-2)">Signed — trust the issuer</text>
+      <rect x="216" y="266" width="10" height="10" rx="2" fill="var(--amber-bg)" stroke="var(--amber)" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text x="233" y="275" fill="var(--text-2)">Absent, or resting on what is absent</text>
     </g>
   </svg>
   </div>

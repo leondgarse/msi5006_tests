@@ -65,8 +65,8 @@
   </div>
 
   <div class="ev-scroll">
-  <svg viewBox="0 0 960 430" role="img"
-       aria-label="Evidence graph for accounts payable: a supplier-signed invoice is read by a signed extraction step, and a buyer-signed purchase order joins it at a match that can be re-run by anyone holding both documents. The payment approval that follows has no signed record, so the Q3 expense report that depends on it carries the gap forward.">
+  <svg viewBox="0 0 960 300" role="img"
+       aria-label="Evidence graph for accounts payable: a supplier-signed invoice is read by a signed extraction step, and a buyer-signed purchase order joins it at a match that anyone holding both documents can re-run. The payment approval that follows has no signed record, so the Q3 expense report that depends on it carries the gap forward.">
     <defs>
       <marker id="acc-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
         <path d="M0 0 L10 5 L0 10 z" fill="var(--text-3)"/>
@@ -76,65 +76,72 @@
       </marker>
     </defs>
 
-    <!-- supplier lane: invoice -> extraction -->
-    <line x1="196" y1="72" x2="300" y2="72" fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#acc-ar)"/>
-    <!-- extraction -> match, and PO -> match -->
-    <path d="M456 72  C 510 72, 520 126, 568 148" fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#acc-ar)"/>
-    <path d="M196 232 C 400 232, 500 206, 568 180" fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#acc-ar)"/>
-    <!-- match -> approval (the break) -->
-    <path d="M666 178 C 666 236, 430 240, 318 286" fill="none" stroke="var(--amber)" stroke-width="1.4"
+    <!-- invoice -> extraction, both on the top lane -->
+    <line x1="212" y1="46" x2="272" y2="46" fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#acc-ar)"/>
+    <!-- extraction and PO collect onto one rail into the match -->
+    <g fill="none" stroke="var(--text-3)" stroke-width="1.4">
+      <line x1="444" y1="46"  x2="496" y2="46"/>
+      <line x1="212" y1="130" x2="496" y2="130"/>
+      <line x1="496" y1="46"  x2="496" y2="130"/>
+    </g>
+    <line x1="496" y1="88" x2="568" y2="88" fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#acc-ar)"/>
+    <!-- match -> approval -> report, straight down then across -->
+    <g fill="none" stroke="var(--amber)" stroke-width="1.4" stroke-dasharray="5 4">
+      <line x1="660" y1="110" x2="660" y2="196"/>
+    </g>
+    <line x1="660" y1="196" x2="660" y2="210" fill="none" stroke="var(--amber)" stroke-width="1.4"
           stroke-dasharray="5 4" marker-end="url(#acc-ar-a)"/>
-    <!-- approval -> report -->
-    <path d="M474 310 C 600 310, 660 290, 724 254" fill="none" stroke="var(--amber)" stroke-width="1.4"
+    <line x1="752" y1="228" x2="812" y2="228" fill="none" stroke="var(--amber)" stroke-width="1.4"
+          stroke-dasharray="5 4" marker-end="url(#acc-ar-a)"/>
+    <line x1="886" y1="210" x2="886" y2="110" fill="none" stroke="var(--amber)" stroke-width="1.4"
           stroke-dasharray="5 4" marker-end="url(#acc-ar-a)"/>
 
-    <g font-family="var(--sans)" font-size="11" fill="var(--text-2)" text-anchor="middle">
-      <text x="248" y="64">read by</text>
-      <text x="530" y="100">compared in</text>
-      <text x="380" y="214">compared in</text>
+    <g font-family="var(--sans)" font-size="10.5" fill="var(--text-2)" text-anchor="middle">
+      <text x="242" y="39">read by</text>
+      <text x="532" y="78">compared in</text>
     </g>
-    <text x="556" y="222" font-family="var(--sans)" font-size="11" fill="var(--amber)" text-anchor="middle">authorised by</text>
-    <text x="600" y="294" font-family="var(--sans)" font-size="11" fill="var(--amber)" text-anchor="middle">published as</text>
+    <text x="672" y="160" font-family="var(--sans)" font-size="10.5" fill="var(--amber)" text-anchor="start">authorised by</text>
+    <text x="782" y="206" font-family="var(--sans)" font-size="10.5" fill="var(--amber)" text-anchor="middle">published</text>
 
     <!-- signed documents -->
     <g>
-      <rect x="40" y="50" width="156" height="44" rx="7" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="56" y="69" font-family="var(--sans)" font-size="12.5" font-weight="600" fill="var(--text-1)">Invoice INV-1042</text>
-      <text x="56" y="85" font-family="var(--sans)" font-size="11" fill="var(--text-2)">signed · the supplier</text>
+      <rect x="40" y="28" width="172" height="36" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+      <text x="54" y="44" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Invoice INV-1042</text>
+      <text x="54" y="57" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">signed · the supplier</text>
 
-      <rect x="300" y="50" width="156" height="44" rx="7" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="316" y="69" font-family="var(--sans)" font-size="12.5" font-weight="600" fill="var(--text-1)">OCR extract</text>
-      <text x="316" y="85" font-family="var(--sans)" font-size="11" fill="var(--text-2)">signed · the operator</text>
+      <rect x="272" y="28" width="172" height="36" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+      <text x="286" y="44" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">OCR extract</text>
+      <text x="286" y="57" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">signed · the operator</text>
 
-      <rect x="40" y="210" width="156" height="44" rx="7" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="56" y="229" font-family="var(--sans)" font-size="12.5" font-weight="600" fill="var(--text-1)">Purchase order</text>
-      <text x="56" y="245" font-family="var(--sans)" font-size="11" fill="var(--text-2)">signed · the buyer</text>
+      <rect x="40" y="112" width="172" height="36" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+      <text x="54" y="128" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Purchase order</text>
+      <text x="54" y="141" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">signed · the buyer</text>
     </g>
 
-    <!-- the re-runnable step: the one that needs no signature -->
-    <rect x="568" y="126" width="196" height="52" rx="7" fill="var(--teal-bg)" stroke="var(--teal)" stroke-width="2"/>
-    <text x="584" y="148" font-family="var(--sans)" font-size="12.5" font-weight="600" fill="var(--text-1)">Invoice vs PO match</text>
-    <text x="584" y="165" font-family="var(--sans)" font-size="11" fill="var(--teal)">re-run it · no signature needed</text>
+    <!-- the re-runnable step -->
+    <rect x="568" y="70" width="184" height="40" rx="6" fill="var(--teal-bg)" stroke="var(--teal)" stroke-width="2"/>
+    <text x="582" y="87" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Invoice vs PO match</text>
+    <text x="582" y="101" font-family="var(--sans)" font-size="10.5" fill="var(--teal)">re-run it · no signature needed</text>
 
     <!-- the break -->
-    <rect x="318" y="286" width="156" height="48" rx="7" fill="var(--amber-bg)" stroke="var(--amber)"
+    <rect x="568" y="210" width="184" height="36" rx="6" fill="var(--amber-bg)" stroke="var(--amber)"
           stroke-width="1.5" stroke-dasharray="5 4"/>
-    <text x="334" y="306" font-family="var(--sans)" font-size="12.5" font-weight="600" fill="var(--amber)">Payment approval</text>
-    <text x="334" y="322" font-family="var(--sans)" font-size="11" fill="var(--amber)">no signed record found</text>
+    <text x="582" y="226" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--amber)">Payment approval</text>
+    <text x="582" y="239" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">no signed record found</text>
 
     <!-- the published figure -->
-    <rect x="724" y="212" width="196" height="48" rx="7" fill="var(--bg-card)" stroke="var(--amber)" stroke-width="1.8"/>
-    <text x="740" y="232" font-family="var(--sans)" font-size="12.5" font-weight="600" fill="var(--text-1)">Q3 expense report</text>
-    <text x="740" y="248" font-family="var(--sans)" font-size="11" fill="var(--amber)">depends on the gap</text>
+    <rect x="812" y="210" width="148" height="36" rx="6" fill="var(--bg-card)" stroke="var(--amber)" stroke-width="1.8"/>
+    <text x="824" y="226" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Q3 expense report</text>
+    <text x="824" y="239" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">depends on the gap</text>
 
     <!-- legend -->
-    <g font-family="var(--sans)" font-size="11">
-      <rect x="40" y="392" width="11" height="11" rx="2.5" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="59" y="402" fill="var(--text-2)">Signed — trust the issuer</text>
-      <rect x="226" y="392" width="11" height="11" rx="2.5" fill="var(--teal-bg)" stroke="var(--teal)" stroke-width="2"/>
-      <text x="245" y="402" fill="var(--text-2)">Re-runnable — trust nobody, check it yourself</text>
-      <rect x="566" y="392" width="11" height="11" rx="2.5" fill="var(--amber-bg)" stroke="var(--amber)" stroke-width="1.5" stroke-dasharray="4 3"/>
-      <text x="585" y="402" fill="var(--text-2)">Unsupported, or resting on what is unsupported</text>
+    <g font-family="var(--sans)" font-size="10.5">
+      <rect x="40" y="266" width="10" height="10" rx="2" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+      <text x="57" y="275" fill="var(--text-2)">Signed — trust the issuer</text>
+      <rect x="216" y="266" width="10" height="10" rx="2" fill="var(--teal-bg)" stroke="var(--teal)" stroke-width="2"/>
+      <text x="233" y="275" fill="var(--text-2)">Re-runnable — trust nobody, check it yourself</text>
+      <rect x="520" y="266" width="10" height="10" rx="2" fill="var(--amber-bg)" stroke="var(--amber)" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text x="537" y="275" fill="var(--text-2)">Unsupported, or resting on what is unsupported</text>
     </g>
   </svg>
   </div>
