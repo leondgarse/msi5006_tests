@@ -207,11 +207,17 @@ footer p{max-width:none;text-wrap:pretty}
    blocks — cards, tables, .duo, media — still take the whole width. */
 .section-lede{font-size:17.5px;color:var(--text-2);margin:0 0 26px;text-wrap:pretty;
   max-width:min(78ch,100%)}
-/* Where the lede introduces a full-width figure it is reading matter for that
-   figure, so it runs the same width rather than sitting in a 78ch column beside
-   a graph spanning the whole wrap. */
+/* A lede that introduces a full-width block belongs to that block, so it runs
+   the block's width. Left on the 78ch prose cap it reads as a stranded column
+   above something two or three times wider — the defect the cap exists to
+   prevent, caused by it. Listed by block rather than applied to every lede,
+   because a lede above ordinary prose should still get a reading measure. */
 .wrap:has(> .evidence) > .section-lede,
-.wrap:has(> .journey) > .section-lede{max-width:100%}
+.wrap:has(> .journey) > .section-lede,
+.wrap:has(> .stage) > .section-lede,
+.wrap:has(> .stats) > .section-lede,
+.wrap:has(> .compare) > .section-lede,
+.wrap:has(> .cards) > .section-lede{max-width:100%}
 /* a heading centred over a full-width card row, where a left-aligned one
    would sit oddly against three evenly spaced cards */
 h2.center{text-align:center}
