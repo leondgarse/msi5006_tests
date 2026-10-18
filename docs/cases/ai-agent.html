@@ -54,19 +54,19 @@
 
 <section class="band plain"><div class="wrap">
 <h2>The evidence graph</h2>
-<p class="section-lede">Two retrieved documents, one model call, one tool call, one recommendation. The documents are signed by their owners and the model call by the operator that ran it — correct, since an LLM call cannot be replayed to the same answer. The tool call could have been re-run, and that is precisely what the missing feed takes away.</p>
+<p class="section-lede">The video follows the agent forward. This asks the auditor’s question instead: it cited three sources — can each one be produced on demand?</p>
 
 <figure class="evidence">
   <div class="ev-stats">
-    <span class="ev-stat"><b>3/4</b> sources produced</span>
-    <span class="ev-stat"><b>3</b> signed steps</span>
-    <span class="ev-stat warn"><b>1</b> cited but absent, 2 affected</span>
-    <span class="ev-stat"><b>7</b> relations</span>
+    <span class="ev-stat"><b>2 of 3</b> citations produced</span>
+    <span class="ev-stat"><b>1</b> could have been re-run</span>
+    <span class="ev-stat warn"><b>1</b> citation nobody can produce</span>
+    <span class="ev-stat">2 steps affected</span>
   </div>
 
   <div class="ev-scroll">
   <svg viewBox="0 0 960 300" role="img"
-       aria-label="Evidence graph for an AI procurement agent: a signed contract and a signed policy feed a signed model call, which calls a price-comparison tool. The tool also cites a live price feed for which no record exists, so the comparison cannot be re-run and the recommendation that depends on it carries the gap forward.">
+       aria-label="The agent cites three sources for its recommendation. Two can be produced on demand and one cannot, and the tool call that consumed all three is the step that should have been the easiest to check.">
     <defs>
       <marker id="ai-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
         <path d="M0 0 L10 5 L0 10 z" fill="var(--text-3)"/>
@@ -76,71 +76,51 @@
       </marker>
     </defs>
 
-    <!-- two signed documents ease into the model call -->
-    <g fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#ai-ar)">
-      <path d="M222 40  C 266 40, 280 66, 320 70"/>
-      <path d="M222 110 C 266 110, 280 84, 320 80"/>
-    </g>
-    <!-- model call -> tool call, straight across -->
-    <line x1="506" y1="75" x2="588" y2="75" fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#ai-ar)"/>
-    <!-- the missing feed arrives on its own lane from below -->
-    <path d="M222 196 C 430 196, 520 130, 588 86" fill="none" stroke="var(--amber)" stroke-width="1.4"
-          stroke-dasharray="5 4" marker-end="url(#ai-ar-a)"/>
-    <!-- tool call -> recommendation -->
-    <path d="M680 97 C 680 140, 680 160, 680 186" fill="none" stroke="var(--amber)" stroke-width="1.4"
-          stroke-dasharray="5 4" marker-end="url(#ai-ar-a)"/>
+    <text x="30" y="34" font-family="var(--sans)" font-size="11" font-weight="600" fill="var(--text-2)" letter-spacing=".04em">THE AGENT CITED THREE SOURCES. ASK FOR EACH ONE.</text>
 
-    <g font-family="var(--sans)" font-size="10.5" fill="var(--text-2)" text-anchor="middle">
-      <text x="293" y="68">read by</text>
-      <text x="547" y="68">calls</text>
-    </g>
-    <text x="330" y="176" font-family="var(--sans)" font-size="10.5" fill="var(--amber)" text-anchor="middle">cited by — no record exists</text>
-    <text x="692" y="146" font-family="var(--sans)" font-size="10.5" fill="var(--amber)" text-anchor="start">recommends</text>
-
-    <!-- signed documents -->
+    <!-- three citations, each with its own verdict -->
     <g>
-      <rect x="40" y="22" width="182" height="36" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="54" y="38" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Contract · S$12/unit</text>
-      <text x="54" y="51" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">signed · document owner</text>
+      <rect x="30" y="54" width="300" height="52" rx="7" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+      <text x="48" y="74" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Contract.pdf · S$12/unit</text>
+      <text x="48" y="92" font-family="var(--sans)" font-size="10.5" fill="var(--teal)">produced · signed by its owner</text>
+      <text x="306" y="85" font-family="var(--sans)" font-size="15" fill="var(--teal)" text-anchor="middle">✓</text>
 
-      <rect x="40" y="92" width="182" height="36" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="54" y="108" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Policy · 2 quotes min.</text>
-      <text x="54" y="121" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">signed · procurement</text>
+      <rect x="30" y="118" width="300" height="52" rx="7" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+      <text x="48" y="138" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Policy.docx · 2 quotes min.</text>
+      <text x="48" y="156" font-family="var(--sans)" font-size="10.5" fill="var(--teal)">produced · signed by procurement</text>
+      <text x="306" y="149" font-family="var(--sans)" font-size="15" fill="var(--teal)" text-anchor="middle">✓</text>
+
+      <rect x="30" y="182" width="300" height="52" rx="7" fill="var(--amber-bg)" stroke="var(--amber)"
+            stroke-width="1.8" stroke-dasharray="5 4"/>
+      <text x="48" y="202" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--amber)">Live price feed</text>
+      <text x="48" y="220" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">cited, but nobody can produce it</text>
+      <text x="306" y="213" font-family="var(--sans)" font-size="15" fill="var(--amber)" text-anchor="middle">✕</text>
     </g>
 
-    <!-- model call: signed because it cannot be replayed -->
-    <rect x="320" y="55" width="186" height="40" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-    <text x="334" y="72" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Model call · 3 sources</text>
-    <text x="334" y="86" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">signed · cannot be replayed</text>
-
-    <!-- the missing source -->
-    <rect x="40" y="178" width="182" height="36" rx="6" fill="var(--amber-bg)" stroke="var(--amber)"
-          stroke-width="1.5" stroke-dasharray="5 4"/>
-    <text x="54" y="194" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--amber)">Live price feed</text>
-    <text x="54" y="207" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">cited source not found</text>
-
-    <!-- the tool call: re-runnable in principle, not in fact -->
-    <rect x="588" y="55" width="186" height="42" rx="6" fill="var(--amber-bg)" stroke="var(--amber)" stroke-width="1.8"/>
-    <text x="602" y="72" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Price comparison</text>
-    <text x="602" y="87" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">re-runnable — but not now</text>
-
-    <!-- the output -->
-    <rect x="588" y="192" width="186" height="36" rx="6" fill="var(--bg-card)" stroke="var(--amber)" stroke-width="1.8"/>
-    <text x="602" y="208" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Recommend Supplier B</text>
-    <text x="602" y="221" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">depends on the gap</text>
-
-    <!-- legend -->
-    <g font-family="var(--sans)" font-size="10.5">
-      <rect x="40" y="266" width="10" height="10" rx="2" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="57" y="275" fill="var(--text-2)">Signed — trust the issuer</text>
-      <rect x="216" y="266" width="10" height="10" rx="2" fill="var(--amber-bg)" stroke="var(--amber)" stroke-width="1.5" stroke-dasharray="4 3"/>
-      <text x="233" y="275" fill="var(--text-2)">Absent, or resting on what is absent</text>
+    <!-- all three were consumed by one step -->
+    <g fill="none" stroke="var(--text-3)" stroke-width="1.4">
+      <path d="M330 80  C 390 80, 400 128, 452 142"/>
+      <path d="M330 144 C 390 144, 400 146, 452 148"/>
     </g>
+    <path d="M330 208 C 390 208, 400 168, 452 154" fill="none" stroke="var(--amber)" stroke-width="1.4" stroke-dasharray="5 4"/>
+
+    <rect x="452" y="124" width="222" height="48" rx="7" fill="var(--bg-card)" stroke="var(--amber)" stroke-width="1.8"/>
+    <text x="468" y="144" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Price comparison</text>
+    <text x="468" y="161" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">deterministic — and unrunnable</text>
+
+    <path d="M674 148 C 716 148, 724 148, 760 148" fill="none" stroke="var(--amber)" stroke-width="1.4"
+          stroke-dasharray="5 4" marker-end="url(#ai-ar-a)"/>
+    <rect x="766" y="124" width="164" height="48" rx="7" fill="var(--bg-card)" stroke="var(--amber)" stroke-width="1.8"/>
+    <text x="782" y="144" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Supplier B</text>
+    <text x="782" y="161" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">acted on anyway</text>
+
+    <text x="30" y="266" font-family="var(--sans)" font-size="11.5" fill="var(--text-2)">The model call is signed because an LLM cannot be replayed to the same answer — that is correct, not a shortcut.</text>
+    <text x="30" y="286" font-family="var(--sans)" font-size="11.5" font-weight="600" fill="var(--text-1)">The tool call beside it <tspan fill="var(--amber)">could</tspan> have been re-run by anyone. The missing feed is exactly what takes that away.</text>
   </svg>
   </div>
   <p class="ev-hint">Scroll the diagram sideways to see the whole chain.</p>
 
-  <figcaption>The price comparison is the kind of step you could check for yourself — a deterministic tool call over stated inputs. One of those inputs no longer exists, so the one step that needed nobody's word for it now cannot be checked at all.</figcaption>
+  <figcaption>Two citations hold up. The third was never recorded, and it fed the one step on the page that needed nobody’s word at all — so the easiest thing to check becomes the thing that cannot be.</figcaption>
 </figure>
 </div></section>
 

@@ -54,93 +54,82 @@
 
 <section class="band plain"><div class="wrap">
 <h2>The evidence graph</h2>
-<p class="section-lede">Two companies, three systems, one published figure. Most steps rest on the signature of whoever produced them — but the match in the middle rests on nothing at all, because anyone holding both documents can recompute it. The approval is the step with neither.</p>
+<p class="section-lede">The video follows the figure forward. This sorts the same steps by a different question — how would you check each one? — because that is what decides whether the trail is worth anything.</p>
 
 <figure class="evidence">
   <div class="ev-stats">
-    <span class="ev-stat"><b>4/5</b> steps evidenced</span>
-    <span class="ev-stat"><b>1</b> re-runnable</span>
-    <span class="ev-stat warn"><b>1</b> unsupported, 1 affected</span>
-    <span class="ev-stat"><b>7</b> relations</span>
+    <span class="ev-stat"><b>2</b> you can recompute</span>
+    <span class="ev-stat"><b>3</b> rest on a signature</span>
+    <span class="ev-stat warn"><b>1</b> with neither</span>
+    <span class="ev-stat">6 steps in all</span>
   </div>
 
   <div class="ev-scroll">
   <svg viewBox="0 0 960 300" role="img"
-       aria-label="Evidence graph for accounts payable: a supplier-signed invoice is read by a signed extraction step, and a buyer-signed purchase order joins it at a match that anyone holding both documents can re-run. The payment approval that follows has no signed record, so the Q3 expense report that depends on it carries the gap forward.">
+       aria-label="The same five steps sorted by how each one is checked: two can be recomputed by anyone holding the inputs, three rest on a signature from the party that issued them, and the payment approval has neither, so the published figure inherits that gap.">
     <defs>
       <marker id="acc-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
         <path d="M0 0 L10 5 L0 10 z" fill="var(--text-3)"/>
       </marker>
-      <marker id="acc-ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-        <path d="M0 0 L10 5 L0 10 z" fill="var(--amber)"/>
-      </marker>
     </defs>
 
-    <!-- invoice -> extraction, both on the top lane -->
-    <line x1="212" y1="46" x2="272" y2="46" fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#acc-ar)"/>
-    <!-- extraction and PO ease into the match, no doubling back -->
-    <g fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#acc-ar)">
-      <path d="M444 46 C 500 46, 512 78, 568 84"/>
-      <path d="M212 130 C 420 130, 500 100, 568 92"/>
-    </g>
-    <!-- match -> approval -> report, each step forward -->
-    <path d="M660 110 C 660 160, 660 180, 660 204" fill="none" stroke="var(--amber)" stroke-width="1.4"
-          stroke-dasharray="5 4" marker-end="url(#acc-ar-a)"/>
-    <path d="M752 228 C 780 228, 790 228, 806 228" fill="none" stroke="var(--amber)" stroke-width="1.4"
-          stroke-dasharray="5 4" marker-end="url(#acc-ar-a)"/>
+    <!-- three bands: strongest evidence at the top, none at the bottom -->
+    <rect x="30" y="26" width="900" height="74" rx="8" fill="var(--teal-bg)" opacity=".55"/>
+    <rect x="30" y="112" width="900" height="74" rx="8" fill="var(--bg-card)" stroke="var(--border)"/>
+    <rect x="30" y="198" width="900" height="74" rx="8" fill="var(--amber-bg)" opacity=".75"/>
 
-    <g font-family="var(--sans)" font-size="10.5" fill="var(--text-2)" text-anchor="middle">
-      <text x="242" y="39">read by</text>
-      <text x="520" y="76">compared in</text>
+    <g font-family="var(--sans)" text-anchor="start">
+      <text x="46" y="48" font-size="11" font-weight="600" fill="var(--teal)" letter-spacing=".04em">CHECK IT YOURSELF — NOBODY TO TRUST</text>
+      <text x="46" y="134" font-size="11" font-weight="600" fill="var(--text-2)" letter-spacing=".04em">TAKE SOMEONE'S WORD — A SIGNATURE SAYS WHO</text>
+      <text x="46" y="220" font-size="11" font-weight="600" fill="var(--amber)" letter-spacing=".04em">NOTHING TO CHECK</text>
     </g>
-    <text x="672" y="160" font-family="var(--sans)" font-size="10.5" fill="var(--amber)" text-anchor="start">authorised by</text>
-    <text x="782" y="206" font-family="var(--sans)" font-size="10.5" fill="var(--amber)" text-anchor="middle">published</text>
 
-    <!-- signed documents -->
+    <!-- re-runnable band -->
     <g>
-      <rect x="40" y="28" width="172" height="36" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="54" y="44" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Invoice INV-1042</text>
-      <text x="54" y="57" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">signed · the supplier</text>
+      <rect x="320" y="58" width="196" height="30" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="2"/>
+      <text x="334" y="77" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Invoice vs PO match</text>
 
-      <rect x="272" y="28" width="172" height="36" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="286" y="44" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">OCR extract</text>
-      <text x="286" y="57" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">signed · the operator</text>
-
-      <rect x="40" y="112" width="172" height="36" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="54" y="128" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Purchase order</text>
-      <text x="54" y="141" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">signed · the buyer</text>
+      <rect x="536" y="58" width="196" height="30" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="2"/>
+      <text x="550" y="77" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Totals on the report</text>
     </g>
+    <text x="748" y="77" font-family="var(--sans)" font-size="10.5" fill="var(--teal)">recompute it</text>
 
-    <!-- the re-runnable step -->
-    <rect x="568" y="70" width="184" height="40" rx="6" fill="var(--teal-bg)" stroke="var(--teal)" stroke-width="2"/>
-    <text x="582" y="87" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Invoice vs PO match</text>
-    <text x="582" y="101" font-family="var(--sans)" font-size="10.5" fill="var(--teal)">re-run it · no signature needed</text>
+    <!-- attested band -->
+    <g>
+      <rect x="320" y="144" width="128" height="30" rx="6" fill="var(--bg-card)" stroke="var(--text-3)" stroke-width="1.5"/>
+      <text x="334" y="163" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Invoice</text>
+      <text x="400" y="163" font-family="var(--sans)" font-size="10" fill="var(--text-2)">supplier</text>
 
-    <!-- the break -->
-    <rect x="568" y="210" width="184" height="36" rx="6" fill="var(--amber-bg)" stroke="var(--amber)"
-          stroke-width="1.5" stroke-dasharray="5 4"/>
-    <text x="582" y="226" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--amber)">Payment approval</text>
-    <text x="582" y="239" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">no signed record found</text>
+      <rect x="460" y="144" width="128" height="30" rx="6" fill="var(--bg-card)" stroke="var(--text-3)" stroke-width="1.5"/>
+      <text x="474" y="163" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">PO</text>
+      <text x="520" y="163" font-family="var(--sans)" font-size="10" fill="var(--text-2)">buyer</text>
 
-    <!-- the published figure -->
-    <rect x="812" y="210" width="148" height="36" rx="6" fill="var(--bg-card)" stroke="var(--amber)" stroke-width="1.8"/>
-    <text x="824" y="226" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Q3 expense report</text>
-    <text x="824" y="239" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">depends on the gap</text>
-
-    <!-- legend -->
-    <g font-family="var(--sans)" font-size="10.5">
-      <rect x="40" y="266" width="10" height="10" rx="2" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="57" y="275" fill="var(--text-2)">Signed — trust the issuer</text>
-      <rect x="216" y="266" width="10" height="10" rx="2" fill="var(--teal-bg)" stroke="var(--teal)" stroke-width="2"/>
-      <text x="233" y="275" fill="var(--text-2)">Re-runnable — trust nobody, check it yourself</text>
-      <rect x="520" y="266" width="10" height="10" rx="2" fill="var(--amber-bg)" stroke="var(--amber)" stroke-width="1.5" stroke-dasharray="4 3"/>
-      <text x="537" y="275" fill="var(--text-2)">Unsupported, or resting on what is unsupported</text>
+      <rect x="600" y="144" width="132" height="30" rx="6" fill="var(--bg-card)" stroke="var(--text-3)" stroke-width="1.5"/>
+      <text x="614" y="163" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Extraction</text>
+      <text x="690" y="163" font-family="var(--sans)" font-size="10" fill="var(--text-2)">operator</text>
     </g>
+    <text x="748" y="163" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">three different parties</text>
+
+    <!-- the gap -->
+    <rect x="320" y="230" width="196" height="30" rx="6" fill="var(--bg-card)" stroke="var(--amber)"
+          stroke-width="1.8" stroke-dasharray="5 4"/>
+    <line x1="738" y1="245" x2="836" y2="238" stroke="var(--amber)" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="334" y="249" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--amber)">Payment approval</text>
+    <text x="534" y="249" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">a human decision, unrecorded</text>
+
+    <!-- what the gap reaches -->
+    <line x1="516" y1="245" x2="700" y2="245" fill="none" stroke="var(--amber)" stroke-width="1.4"
+          stroke-dasharray="5 4" marker-end="url(#acc-ar)" opacity="0"/>
+    <path d="M836 236 C 884 236, 892 160, 884 96" fill="none" stroke="var(--amber)" stroke-width="1.4"
+          stroke-dasharray="5 4"/>
+    <circle cx="884" cy="92" r="3.5" fill="var(--amber)"/>
+
+    <text x="30" y="292" font-family="var(--sans)" font-size="11.5" fill="var(--text-2)">The report's arithmetic re-runs perfectly — and still inherits the one step nobody can show. <tspan font-weight="600" fill="var(--text-1)">A trail is only as checkable as its weakest link.</tspan></text>
   </svg>
   </div>
   <p class="ev-hint">Scroll the diagram sideways to see the whole chain.</p>
 
-  <figcaption>The match in the middle is the strongest step on the page and the only one nobody has to vouch for — hold both documents and you can recompute it. The approval beside it is the weakest, and the published figure rests on that one.</figcaption>
+  <figcaption>Two steps need nobody’s word: hold the inputs and you get the same answer. Three need exactly one party’s word, and name which. One has neither — and it is the one the published figure depends on.</figcaption>
 </figure>
 </div></section>
 
