@@ -76,27 +76,18 @@
       </marker>
     </defs>
 
-    <!-- two signed documents collect onto one rail into the model call -->
-    <g fill="none" stroke="var(--text-3)" stroke-width="1.4">
-      <line x1="222" y1="40"  x2="266" y2="40"/>
-      <line x1="222" y1="110" x2="266" y2="110"/>
-      <line x1="266" y1="40"  x2="266" y2="110"/>
+    <!-- two signed documents ease into the model call -->
+    <g fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#ai-ar)">
+      <path d="M222 40  C 266 40, 280 66, 320 70"/>
+      <path d="M222 110 C 266 110, 280 84, 320 80"/>
     </g>
-    <line x1="266" y1="75" x2="320" y2="75" fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#ai-ar)"/>
     <!-- model call -> tool call, straight across -->
     <line x1="506" y1="75" x2="588" y2="75" fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#ai-ar)"/>
     <!-- the missing feed arrives on its own lane from below -->
-    <g fill="none" stroke="var(--amber)" stroke-width="1.4" stroke-dasharray="5 4">
-      <line x1="222" y1="196" x2="548" y2="196"/>
-      <line x1="548" y1="196" x2="548" y2="88"/>
-    </g>
-    <line x1="548" y1="88" x2="588" y2="84" fill="none" stroke="var(--amber)" stroke-width="1.4"
+    <path d="M222 196 C 430 196, 520 130, 588 86" fill="none" stroke="var(--amber)" stroke-width="1.4"
           stroke-dasharray="5 4" marker-end="url(#ai-ar-a)"/>
     <!-- tool call -> recommendation -->
-    <g fill="none" stroke="var(--amber)" stroke-width="1.4" stroke-dasharray="5 4">
-      <line x1="680" y1="97" x2="680" y2="178"/>
-    </g>
-    <line x1="680" y1="178" x2="680" y2="192" fill="none" stroke="var(--amber)" stroke-width="1.4"
+    <path d="M680 97 C 680 140, 680 160, 680 186" fill="none" stroke="var(--amber)" stroke-width="1.4"
           stroke-dasharray="5 4" marker-end="url(#ai-ar-a)"/>
 
     <g font-family="var(--sans)" font-size="10.5" fill="var(--text-2)" text-anchor="middle">

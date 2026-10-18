@@ -85,21 +85,14 @@
     <line x1="212" y1="214" x2="286" y2="214" fill="none" stroke="var(--amber)" stroke-width="1.4"
           stroke-dasharray="5 4" marker-end="url(#kyc-ar-a)"/>
 
-    <!-- the three sound checks collect onto a teal rail and feed the score -->
-    <g fill="none" stroke="var(--text-3)" stroke-width="1.4">
-      <line x1="514" y1="40"  x2="566" y2="40"/>
-      <line x1="514" y1="98"  x2="566" y2="98"/>
-      <line x1="514" y1="156" x2="566" y2="156"/>
-      <line x1="566" y1="40"  x2="566" y2="156"/>
+    <!-- the three sound checks ease into the score -->
+    <g fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#kyc-ar)">
+      <path d="M514 40  C 574 40, 598 82, 652 90"/>
+      <path d="M514 98  C 574 98, 598 96, 652 96"/>
+      <path d="M514 156 C 574 156, 598 110, 652 102"/>
     </g>
-    <line x1="566" y1="98" x2="652" y2="98" fill="none" stroke="var(--text-3)" stroke-width="1.4"
-          marker-end="url(#kyc-ar)"/>
-    <!-- the failed one travels on its own lane, so nothing sound appears to feed it -->
-    <g fill="none" stroke="var(--amber)" stroke-width="1.4" stroke-dasharray="5 4">
-      <line x1="514" y1="214" x2="604" y2="214"/>
-      <line x1="604" y1="214" x2="604" y2="118"/>
-    </g>
-    <line x1="604" y1="118" x2="652" y2="110" fill="none" stroke="var(--amber)" stroke-width="1.4"
+    <!-- the failed one on its own lane, so nothing sound appears to feed it -->
+    <path d="M514 214 C 574 214, 598 130, 652 112" fill="none" stroke="var(--amber)" stroke-width="1.4"
           stroke-dasharray="5 4" marker-end="url(#kyc-ar-a)"/>
     <line x1="810" y1="98" x2="810" y2="186" fill="none" stroke="var(--amber)" stroke-width="1.4"
           stroke-dasharray="5 4" marker-end="url(#kyc-ar-a)"/>
