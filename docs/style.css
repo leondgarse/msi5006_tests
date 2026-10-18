@@ -207,6 +207,12 @@ footer p{max-width:none;text-wrap:pretty}
    blocks — cards, tables, .duo, media — still take the whole width. */
 .section-lede{font-size:17.5px;color:var(--text-2);margin:0 0 26px;text-wrap:pretty;
   max-width:min(78ch,100%)}
+/* Where the lede introduces a full-width figure it is reading matter for that
+   figure, so it widens with it rather than sitting in a 78ch column beside a
+   graph that runs the whole wrap. */
+.band plain:has(> .wrap > .evidence) .section-lede,
+.wrap:has(> .evidence) > .section-lede,
+.wrap:has(> .journey) > .section-lede{max-width:min(96ch,100%)}
 /* a heading centred over a full-width card row, where a left-aligned one
    would sit oddly against three evenly spaced cards */
 h2.center{text-align:center}
@@ -313,7 +319,12 @@ h2.center + .cards{margin-top:22px}
 .ev-stat.warn b{color:var(--amber)}
 .evidence svg{display:block;width:100%;height:auto;background:var(--bg-card);
   border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 10px}
-.evidence figcaption{margin-top:13px;color:var(--text-2);font-size:14.5px;max-width:760px}
+/* A figure's caption belongs to the figure: capped at 760px it read as a
+   stranded column beside a graph two to three times its width, which is the
+   same defect the prose rules were written to avoid. It now takes the figure's
+   measure, with a reading cap only where the figure is genuinely wide. */
+.evidence figcaption{margin-top:13px;color:var(--text-2);font-size:14.5px;
+  max-width:min(104ch,100%)}
 /* Below ~820px the graph's labels shrink past legibility if the SVG is scaled to
    fit. Scrolling the figure sideways keeps the type at a readable size, which is
    the right trade for a diagram whose whole point is the words on the nodes. */
@@ -376,7 +387,8 @@ h2.center + .cards{margin-top:22px}
 .journey{margin:0;padding:0}
 .journey svg{display:block;width:100%;height:auto;background:var(--bg-card);
   border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 12px}
-.journey figcaption{margin-top:13px;color:var(--text-2);font-size:14.5px;max-width:760px}
+.journey figcaption{margin-top:13px;color:var(--text-2);font-size:14.5px;
+  max-width:min(104ch,100%)}
 @media(max-width:820px){
   .journey{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .journey svg{width:820px;max-width:none}
