@@ -54,19 +54,19 @@
 
 <section class="band plain"><div class="wrap">
 <h2>The evidence graph</h2>
-<p class="section-lede">Four inputs, four checks, one decision. Nothing here can be re-run, so each step rests on the signature of whoever produced it — except the one that was never filed. The risk score was computed anyway, and the approval rests on that.</p>
+<p class="section-lede">The video follows the client forward, through each check to the decision. An auditor arrives the other way round — at an account already opened — and has to work backwards.</p>
 
 <figure class="evidence">
   <div class="ev-stats">
-    <span class="ev-stat"><b>3/4</b> documents found</span>
-    <span class="ev-stat"><b>4</b> checks</span>
-    <span class="ev-stat warn"><b>1</b> missing, 1 affected</span>
-    <span class="ev-stat"><b>9</b> relations</span>
+    <span class="ev-stat"><b>2</b> hops back to the gap</span>
+    <span class="ev-stat"><b>3</b> signed by independent parties</span>
+    <span class="ev-stat warn"><b>0</b> can be recomputed</span>
+    <span class="ev-stat">1 input never filed</span>
   </div>
 
   <div class="ev-scroll">
   <svg viewBox="0 0 960 300" role="img"
-       aria-label="Evidence graph for a KYC onboarding: passport scan, selfie match and sanctions check are each signed and feed a risk score; the required proof of address is missing, so the risk score and the account approval that depends on it both rest on an input that was never filed.">
+       aria-label="Working backwards from an approved account: the approval rests on a risk score, the score rests on four inputs, and three of those carry a signature from an independent party while the fourth was never filed. Nothing in this chain can be recomputed, so a signature is the only evidence available.">
     <defs>
       <marker id="kyc-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
         <path d="M0 0 L10 5 L0 10 z" fill="var(--text-3)"/>
@@ -76,99 +76,64 @@
       </marker>
     </defs>
 
-    <!-- lane connectors: documents -> checks, all straight -->
+    <text x="30" y="30" font-family="var(--sans)" font-size="11" font-weight="600" fill="var(--text-2)" letter-spacing=".04em">START FROM THE DECISION AND ASK WHAT IT RESTS ON</text>
+
+    <!-- step 1: the decision -->
+    <rect x="30" y="48" width="196" height="50" rx="7" fill="var(--bg-card)" stroke="var(--amber)" stroke-width="1.8"/>
+    <text x="46" y="68" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Account opened</text>
+    <text x="46" y="85" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">the thing being audited</text>
+
+    <path d="M226 73 C 262 73, 268 73, 296 73" fill="none" stroke="var(--amber)" stroke-width="1.4"
+          stroke-dasharray="5 4" marker-end="url(#kyc-ar-a)"/>
+    <text x="261" y="64" font-family="var(--sans)" font-size="10" fill="var(--amber)" text-anchor="middle">rests on</text>
+
+    <!-- step 2: the score -->
+    <rect x="302" y="48" width="196" height="50" rx="7" fill="var(--bg-card)" stroke="var(--amber)" stroke-width="1.8"/>
+    <text x="318" y="68" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Risk score · low</text>
+    <text x="318" y="85" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">computed from four inputs</text>
+
+    <!-- step 3: the four inputs, fanning down -->
     <g fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#kyc-ar)">
-      <line x1="212" y1="40"  x2="286" y2="40"/>
-      <line x1="212" y1="98"  x2="286" y2="98"/>
-      <line x1="212" y1="156" x2="286" y2="156"/>
+      <path d="M498 66 C 548 66, 556 130, 596 136"/>
+      <path d="M498 72 C 548 72, 556 166, 596 172"/>
+      <path d="M498 78 C 548 78, 556 202, 596 208"/>
     </g>
-    <line x1="212" y1="214" x2="286" y2="214" fill="none" stroke="var(--amber)" stroke-width="1.4"
+    <path d="M498 84 C 548 84, 556 238, 596 244" fill="none" stroke="var(--amber)" stroke-width="1.4"
           stroke-dasharray="5 4" marker-end="url(#kyc-ar-a)"/>
+    <text x="512" y="42" font-family="var(--sans)" font-size="10" fill="var(--text-2)" text-anchor="start">computed from</text>
 
-    <!-- the three sound checks ease into the score -->
-    <g fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#kyc-ar)">
-      <path d="M514 40  C 574 40, 598 82, 652 90"/>
-      <path d="M514 98  C 574 98, 598 96, 652 96"/>
-      <path d="M514 156 C 574 156, 598 110, 652 102"/>
-    </g>
-    <!-- the failed one on its own lane, so nothing sound appears to feed it -->
-    <path d="M514 214 C 574 214, 598 130, 652 112" fill="none" stroke="var(--amber)" stroke-width="1.4"
-          stroke-dasharray="5 4" marker-end="url(#kyc-ar-a)"/>
-    <line x1="810" y1="98" x2="810" y2="186" fill="none" stroke="var(--amber)" stroke-width="1.4"
-          stroke-dasharray="5 4" marker-end="url(#kyc-ar-a)"/>
-
-    <g font-family="var(--sans)" font-size="10.5" fill="var(--text-2)" text-anchor="middle">
-      <text x="249" y="33">verified by</text>
-      <text x="249" y="91">verified by</text>
-      <text x="249" y="149">screened by</text>
-      <text x="609" y="84">input to</text>
-    </g>
-    <text x="249" y="207" font-family="var(--sans)" font-size="10.5" fill="var(--amber)" text-anchor="middle">never filed</text>
-    <text x="822" y="146" font-family="var(--sans)" font-size="10.5" fill="var(--amber)" text-anchor="start">rests on</text>
-
-    <!-- documents -->
     <g>
-      <rect x="40" y="22" width="172" height="36" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="54" y="38" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Passport scan</text>
-      <text x="54" y="51" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">signed · ID provider</text>
+      <rect x="596" y="120" width="334" height="32" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+      <text x="612" y="140" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Passport scan</text>
+      <text x="760" y="140" font-family="var(--sans)" font-size="10.5" fill="var(--teal)">signed · the ID provider</text>
 
-      <rect x="40" y="80" width="172" height="36" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="54" y="96" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Selfie match</text>
-      <text x="54" y="109" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">signed · liveness vendor</text>
+      <rect x="596" y="156" width="334" height="32" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+      <text x="612" y="176" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Selfie match · 0.97</text>
+      <text x="760" y="176" font-family="var(--sans)" font-size="10.5" fill="var(--teal)">signed · the liveness vendor</text>
 
-      <rect x="40" y="138" width="172" height="36" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="54" y="154" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Sanctions list</text>
-      <text x="54" y="167" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">signed · screening service</text>
+      <rect x="596" y="192" width="334" height="32" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+      <text x="612" y="212" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Sanctions · 0 hits</text>
+      <text x="760" y="212" font-family="var(--sans)" font-size="10.5" fill="var(--teal)">signed · the screening service</text>
 
-      <rect x="40" y="196" width="172" height="36" rx="6" fill="var(--amber-bg)" stroke="var(--amber)"
-            stroke-width="1.5" stroke-dasharray="5 4"/>
-      <text x="54" y="212" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--amber)">Proof of address</text>
-      <text x="54" y="225" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">no document found</text>
+      <rect x="596" y="228" width="334" height="32" rx="6" fill="var(--amber-bg)" stroke="var(--amber)"
+            stroke-width="1.8" stroke-dasharray="5 4"/>
+      <text x="612" y="248" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--amber)">Proof of address</text>
+      <text x="760" y="248" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">referenced · never filed</text>
     </g>
 
-    <!-- checks -->
-    <g>
-      <rect x="286" y="22" width="228" height="36" rx="6" fill="var(--teal-bg)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="300" y="38" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Document check</text>
-      <text x="300" y="51" font-family="var(--sans)" font-size="10.5" fill="var(--teal)">Reconciled</text>
-
-      <rect x="286" y="80" width="228" height="36" rx="6" fill="var(--teal-bg)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="300" y="96" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Liveness check · 0.97</text>
-      <text x="300" y="109" font-family="var(--sans)" font-size="10.5" fill="var(--teal)">Reconciled</text>
-
-      <rect x="286" y="138" width="228" height="36" rx="6" fill="var(--teal-bg)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="300" y="154" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Sanctions check · 0 hits</text>
-      <text x="300" y="167" font-family="var(--sans)" font-size="10.5" fill="var(--teal)">Reconciled</text>
-
-      <rect x="286" y="196" width="228" height="36" rx="6" fill="var(--amber-bg)" stroke="var(--amber)"
-            stroke-width="1.5" stroke-dasharray="5 4"/>
-      <text x="300" y="212" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--amber)">Address check</text>
-      <text x="300" y="225" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">Not reconciled · open</text>
-    </g>
-
-    <!-- risk score, then decision -->
-    <rect x="652" y="80" width="186" height="36" rx="6" fill="var(--bg-card)" stroke="var(--amber)" stroke-width="1.8"/>
-    <text x="666" y="96" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Risk score · low</text>
-    <text x="666" y="109" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">missing an input</text>
-
-    <rect x="652" y="186" width="186" height="36" rx="6" fill="var(--bg-card)" stroke="var(--amber)" stroke-width="1.8"/>
-    <text x="666" y="202" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Account opened</text>
-    <text x="666" y="215" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">depends on the gap</text>
-
-    <!-- legend -->
-    <g font-family="var(--sans)" font-size="10.5">
-      <rect x="40" y="266" width="10" height="10" rx="2" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="57" y="275" fill="var(--text-2)">Signed document</text>
-      <rect x="176" y="266" width="10" height="10" rx="2" fill="var(--teal-bg)" stroke="var(--teal)" stroke-width="1.5"/>
-      <text x="193" y="275" fill="var(--text-2)">Check that reconciled</text>
-      <rect x="344" y="266" width="10" height="10" rx="2" fill="var(--amber-bg)" stroke="var(--amber)" stroke-width="1.5" stroke-dasharray="4 3"/>
-      <text x="361" y="275" fill="var(--text-2)">Missing, or resting on what is missing</text>
-    </g>
+    <text x="30" y="150" font-family="var(--sans)" font-size="11.5" font-weight="600" fill="var(--text-1)">Three parties, three keys.</text>
+    <text x="30" y="170" font-family="var(--sans)" font-size="11" fill="var(--text-2)">Not one of these can be</text>
+    <text x="30" y="186" font-family="var(--sans)" font-size="11" fill="var(--text-2)">recomputed — a signature</text>
+    <text x="30" y="202" font-family="var(--sans)" font-size="11" fill="var(--text-2)">is the only evidence there</text>
+    <text x="30" y="218" font-family="var(--sans)" font-size="11" fill="var(--text-2)">is, and that is the correct</text>
+    <text x="30" y="234" font-family="var(--sans)" font-size="11" fill="var(--text-2)">design.</text>
+    <text x="30" y="258" font-family="var(--sans)" font-size="11" font-weight="600" fill="var(--amber)">The fourth has no party</text>
+    <text x="30" y="274" font-family="var(--sans)" font-size="11" font-weight="600" fill="var(--amber)">and no document.</text>
   </svg>
   </div>
   <p class="ev-hint">Scroll the diagram sideways to see the whole chain.</p>
 
-  <figcaption>Three vendors signed their own results and all three reconcile. The fourth input was never filed, so the risk score — and the approval that rests on it — carry the gap forward instead of hiding it.</figcaption>
+  <figcaption>Two hops from the decision to the gap. Three of the four inputs name the party that stands behind them; the fourth names nobody, because nobody ever filed it — and the approval was made anyway.</figcaption>
 </figure>
 </div></section>
 
