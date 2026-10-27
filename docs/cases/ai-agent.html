@@ -10,7 +10,7 @@
 <body>
 
 <nav><div class="wrap">
-  <a class="brand" href="../">MSD<span>.</span></a>
+  <a class="brand" href="../">MSD</a>
   <div class="nav-links">
     <a href="../business.html">For business</a>
     <a href="../index.html#see-it">Use cases</a>
@@ -30,7 +30,7 @@
 
   <div class="hero-media">
     <div class="video-wrap">
-    <video controls preload="none" poster="../media/msd-ai_agent.jpg" playsinline>
+    <video controls preload="none" poster="../media/msd-ai_agent-cover.jpg" playsinline>
       <source src="../media/msd-ai_agent.mp4" type="video/mp4">
       Your browser cannot play this video.
     </video>
@@ -69,7 +69,7 @@
        aria-label="The agent cites three sources for its recommendation. Two can be produced on demand and one cannot, and the tool call that consumed all three is the step that should have been the easiest to check.">
     <defs>
       <marker id="ai-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-        <path d="M0 0 L10 5 L0 10 z" fill="var(--text-3)"/>
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--text-1)"/>
       </marker>
       <marker id="ai-ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
         <path d="M0 0 L10 5 L0 10 z" fill="var(--amber)"/>
@@ -80,14 +80,14 @@
 
     <!-- three citations, each with its own verdict -->
     <g>
-      <rect x="30" y="54" width="300" height="52" rx="7" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+      <rect x="30" y="54" width="300" height="52" rx="7" fill="var(--bg-card)" stroke="var(--text-1)" stroke-width="1.5"/>
       <text x="48" y="74" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Contract.pdf · S$12/unit</text>
-      <text x="48" y="92" font-family="var(--sans)" font-size="10.5" fill="var(--teal)">produced · signed by its owner</text>
+      <text x="48" y="92" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">produced · signed by its owner</text>
       <text x="306" y="85" font-family="var(--sans)" font-size="15" fill="var(--teal)" text-anchor="middle">✓</text>
 
-      <rect x="30" y="118" width="300" height="52" rx="7" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+      <rect x="30" y="118" width="300" height="52" rx="7" fill="var(--bg-card)" stroke="var(--text-1)" stroke-width="1.5"/>
       <text x="48" y="138" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Policy.docx · 2 quotes min.</text>
-      <text x="48" y="156" font-family="var(--sans)" font-size="10.5" fill="var(--teal)">produced · signed by procurement</text>
+      <text x="48" y="156" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">produced · signed by procurement</text>
       <text x="306" y="149" font-family="var(--sans)" font-size="15" fill="var(--teal)" text-anchor="middle">✓</text>
 
       <rect x="30" y="182" width="300" height="52" rx="7" fill="var(--amber-bg)" stroke="var(--amber)"
@@ -98,7 +98,7 @@
     </g>
 
     <!-- all three were consumed by one step -->
-    <g fill="none" stroke="var(--text-3)" stroke-width="1.4">
+    <g fill="none" stroke="var(--text-1)" stroke-width="1.4">
       <path d="M330 80  C 390 80, 400 128, 452 142"/>
       <path d="M330 144 C 390 144, 400 146, 452 148"/>
     </g>
@@ -147,9 +147,28 @@
   </div>
 </div></section>
 
+<section class="band signup-band signup-foot"><div class="wrap">
+  <div class="signup">
+    <div class="signup-copy">
+      <h2>Keep up with MSD</h2>
+      <p>Join the mailing list, take the ten-slide pitch deck, or both. The deck needs no address.</p>
+    </div>
+    <form class="signup-form" data-placement="foot" novalidate>
+      <label class="sr-only" for="signupEmail-foot">Email address (optional)</label>
+      <input id="signupEmail-foot" name="email" type="email" placeholder="you@company.com (optional)" autocomplete="email">
+      <button class="btn btn-primary" type="submit">Download the deck (PDF)</button>
+      <label class="signup-opt" for="signupKeep-foot">
+        <input type="checkbox" id="signupKeep-foot" checked>
+        <span>Join the mailing list — one message when there is something worth trying</span>
+      </label>
+      <p class="signup-note">No newsletter and no sharing. Untick the box to just download.</p>
+    </form>
+  </div>
+</div></section>
+
 <div class="wrap"><footer>
   <p><strong>Draft.</strong> Promotional material for the MSD protocol. Scenarios use synthetic data.</p>
-  <p>msd-protocol.org</p>
+  <p>MSD · <a href="https://metastructured.ai">metastructured.ai</a></p>
 </footer></div>
 
 <script src="../msd-analytics.js" defer></script>

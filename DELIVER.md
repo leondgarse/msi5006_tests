@@ -10,28 +10,29 @@ existing site's tokens so it should look close without being adjusted.
 
 ---
 
-## 1. Five things to change before this is yours
+## 1. Things to change before this is yours (two of five now done)
 
-In order of how much they matter. The first three are ours appearing on your site.
+In order of how much they matter. §1.1 (mailbox) and §1.3 (PDF) were settled on 2026-10-27; §1.2 (the analytics account) is the one left that is ours on your site.
 
-### 1.1 🔴 The sign-up mailbox — `docs/msd-analytics.js`
+### 1.1 ✅ The sign-up mailbox — `docs/msd-analytics.js`
 
 ```js
-var SIGNUP_MAILBOX = 'leondgarse@gmail.com';
+var SIGNUP_MAILBOX = 'hello@metastructured.ai';
 ```
 
-A student's personal address, used as a holding destination so the form would work
-end to end for a demo. **Anyone who fills in the form today emails a student.**
+**Settled 2026-10-27.** This is the address the pitch deck's closing slide and
+metastructured.ai's own contact form already give. A sign-up opens a short pre-written
+message to it in the visitor's mail client.
 
-Replace it with an address you own. Or, better, set a real endpoint and the `mailto:` is
-never used:
+If you would rather collect sign-ups without a mail client in the way, set an endpoint
+and the `mailto:` is never used:
 
 ```js
 window.MSD_SIGNUP_ENDPOINT = 'https://your-form-endpoint.example/subscribe';
 ```
 
-With that set, the form POSTs `{email, page}` as JSON and shows a confirmation instead of
-opening a mail client.
+With that set, the form POSTs `{email, page, placement}` as JSON and shows a confirmation.
+metastructured.ai is on Netlify, so a Netlify Form is the shortest route to one.
 
 ### 1.2 🔴 The analytics account — `docs/msd-analytics.js`
 
@@ -52,31 +53,39 @@ Why Umami rather than Mixpanel, which was suggested on the 2026-10-16 call: Mixp
 Google Analytics both set cookies, which on your domain means either a consent banner or
 a tracker without one. That is your decision, not ours to pre-empt. Umami sets no cookies
 and collects no personal data, and is MIT-licensed, so you can self-host it later without
-any of the event names changing. If you would rather use something else, one line does it:
+any of the event names changing.
 
-```js
-window.MSD_ANALYTICS_SINK = function (e) { mixpanel.track(e.name, e); };
+**Mixpanel is supported, off by default.** Since you already use it, put your project
+token in the page before the script and every event goes to Mixpanel as well, under the
+same names:
+
+```html
+<script>window.MSD_MIXPANEL_TOKEN = 'your-project-token';</script>
+<script src="msd-analytics.js" defer></script>
 ```
 
-### 1.3 🔴 The downloadable PDF — `docs/files/` and `msd-analytics.js`
+The library is pinned (`mixpanel-browser@2.55.1`) and stores its id in `localStorage`.
+That still needs consent on your domain, which is why it is not switched on here. Any
+other destination still works through one line:
 
 ```js
-var OVERVIEW_URL = 'files/msd-overview-placeholder.pdf';
-var OVERVIEW_LABEL = 'Download the sample document (placeholder)';
+window.MSD_ANALYTICS_SINK = function (e) { gtag('event', e.name, e); };
 ```
 
-**That file is not an MSD overview.** It is a C2PA-signed PDF from the public test
-fixtures, standing in so the download flow could be demonstrated. The link says
-"(placeholder)" so nobody is misled.
+### 1.3 ✅ The downloadable PDF — `docs/files/` and `msd-analytics.js`
 
-Point `OVERVIEW_URL` at the real one-pager and change `OVERVIEW_LABEL` to match, or set
-`OVERVIEW_URL = ''` and the form quietly becomes a plain mailing-list sign-up — the
-button relabels itself and the email field becomes required.
+```js
+var OVERVIEW_URL = 'files/msd-pitch-deck.pdf';
+```
 
-⚠️ The one-page pitch PDF **is not ready to publish as-is**: it closes with *"MSD was
-developed through work at Staple AI"*, and this site deliberately mentions Staple nowhere,
-following the instruction that one customer who also built the protocol is not a
-compelling adoption story. Those two cannot both be public. **That is yours to settle.**
+**Settled 2026-10-27.** The download is now the final MSD pitch deck (ten slides). It no
+longer carries the *"developed through work at Staple AI"* line that kept the earlier
+one-pager off this site, so the site and the PDF now agree. The placeholder test fixture
+has been removed.
+
+To swap in a newer deck, replace `docs/files/msd-pitch-deck.pdf` under the same name. Set
+`OVERVIEW_URL = ''` and the form quietly becomes a plain mailing-list sign-up — the button
+relabels itself and the email field becomes required.
 
 ### 1.4 The "Draft" footer — all six pages
 
@@ -116,10 +125,14 @@ All of it is in `docs/msd-analytics.js` — 345 lines, with the reasoning in com
 | Event | Fires when | Carries |
 |---|---|---|
 | `page_view` | each page load | path, referrer, title, a per-tab session id |
-| `link_click` | any link | href, link text, and **which zone** — `hero-cta`, `use-case-route`, `nav`, `feature`, `footer` |
+| `link_click` | any link | href, link text, and **which zone** — `hero-cta`, `use-case-route`, `nav`, `feature`, `signup`, `footer` |
 | `scroll_depth` | 25 / 50 / 75 / 100% | how far down the page someone got |
-| `signup_submit` | an address is given **and** the box is ticked | **the email domain only, never the address** |
-| `overview_download` | the PDF is taken | — |
+| `signup_submit` | an address is given **and** the box is ticked | **the email domain only, never the address**, and `placement` |
+| `overview_download` | the pitch deck is taken | `placement` |
+
+**The sign-up appears twice**, as asked on the 10-21 review: high on the landing page
+(`placement: "top"`) and at the foot of all six pages (`placement: "foot"`). Comparing
+the two placements is how you find out whether moving it up was worth doing.
 
 **The `zone` on `link_click` is the one worth knowing about.** A page-views list cannot
 tell you which audience you are serving; the zone can, because it separates a click on
@@ -167,12 +180,34 @@ repeats the video earns nothing.
 
 ### The videos
 
-`docs/media/` holds four MP4s and their poster frames, about 9 MB. **They were produced by
+`docs/media/` holds four MP4s, their frames, and four `*-cover.jpg` posters, about 17 MB. **They were produced by
 a team member, not by Staple**, and they are the single largest asset here. Confirm you
 are happy to publish them at these URLs, and keep the source files if you want to edit
 them later — only the exports are in this repo.
 
 ---
+
+## 3a. Merging into metastructured.ai
+
+Checked 2026-10-27: metastructured.ai is **one static HTML page served by Netlify**, with
+`#usecases` and `#cta` sections and a briefing form. This site is also plain static HTML
+with no framework and no build step, so the merge is a file copy rather than a port.
+There are three ways to do it, from least work to most:
+
+| Route | What you do | Trade-off |
+|---|---|---|
+| **A. Subfolder** (recommended) | Copy `docs/` into the Netlify deploy as e.g. `/learn/`. Link the existing `#usecases` cards to `/learn/cases/*.html`, and add a "For business" link to the nav. | About an hour. One domain, which is what the 10-21 call wanted for search. Pages keep the light style: the deck's style, beside the site's dark one. |
+| **B. Subfolder, dark tokens** | As A, then swap the `:root` block in `style.css` to the dark palette in the brand guide §2 (Void `#040710`, Panel `#0D1630`, Cyan `#22D4FF`, Frost `#E8EDF5`). | Half a day. Every colour is a token, so no markup changes, but the inline SVG graphs and the four cover images were drawn for a light ground and should be checked or redrawn. |
+| **C. Content only** | Lift the text, the three evidence graphs and the videos into new sections of the one-pager. | The most work, and the case pages lose their own URLs, which are what backlinks would point at. |
+
+Whichever route you take:
+
+- Sign-ups already go to `hello@metastructured.ai`. A Netlify Form endpoint in
+  `MSD_SIGNUP_ENDPOINT` would remove the mail-client step (§1.1).
+- Replace the Umami id with your own, or set `MSD_MIXPANEL_TOKEN` (§1.2).
+- Paths are relative, and the deck download is resolved from the script's own location,
+  so the folder works at any depth without edits.
+- Remove the "Draft" line from the footers once you have reviewed the content (§1.4).
 
 ## 4. If you change the HTML
 
@@ -199,8 +234,6 @@ graphs scroll sideways rather than shrinking their labels into illegibility.
 
 | Open | Why it is yours |
 |---|---|
-| **The Staple line in the pitch PDF** | The site says nothing about Staple, the PDF says it was developed there. Both are defensible; they cannot both be public. Blocks §1.3. |
-| **Where sign-ups go** | Needs an address or endpoint you own. Blocks §1.1. |
 | **Whether to keep the gate off** | The download asks for nothing. A gate captures more addresses and fewer readers. We took it off; the numbers will tell you if that was wrong. |
 | **Consent and cookies** | Only you know what your domain already does. Umami needs no banner; Mixpanel or GA would. |
 | **Whether "Draft" comes off** | Only you can review your own material. |

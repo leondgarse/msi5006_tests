@@ -26,17 +26,21 @@
  *   2. Put the id in UMAMI_WEBSITE_ID below. That is the only edit needed —
  *      the script tag is injected and the events already map to umami.track().
  *
+ * Mixpanel, which the sponsor uses, is supported but off by default: set
+ *   window.MSD_MIXPANEL_TOKEN = '<project token>';
+ * in the page before this script and every event is sent to Mixpanel as well.
+ * Mixpanel stores an id in the browser, so turning it on is a consent decision
+ * for whoever owns the domain — which is why it is not on here.
+ *
  * Any other destination still works through window.MSD_ANALYTICS_SINK, e.g.
- *   window.MSD_ANALYTICS_SINK = function (e) { mixpanel.track(e.name, e); };
+ *   window.MSD_ANALYTICS_SINK = function (e) { gtag('event', e.name, e); };
  */
 (function () {
   'use strict';
 
-  // Holding address while the protocol has no owned destination. Deliberately a
-  // maintainer's own public address, not a staple.io one: nobody at the sponsor
-  // currently owns this project, and an address on their domain would be a
-  // commitment we are not in a position to make.
-  var SIGNUP_MAILBOX = 'leondgarse@gmail.com';
+  // The protocol's public address: the one metastructured.ai and the pitch
+  // deck already give. Used only when no MSD_SIGNUP_ENDPOINT is configured.
+  var SIGNUP_MAILBOX = 'hello@metastructured.ai';
 
   // Umami website id. Empty means "record locally, send nothing" — which is a
   // working state, not a broken one: the instrument runs either way.
@@ -45,6 +49,13 @@
   // uses Umami, and it grants no access to the dashboard.
   var UMAMI_WEBSITE_ID = '4cb907b0-a4ec-4c89-bfc9-680d0b41a116';
   var UMAMI_SRC = 'https://cloud.umami.is/script.js';
+
+  // Pinned, not "latest": a tracker that changes under us changes the data.
+  var MIXPANEL_SRC = 'https://cdn.jsdelivr.net/npm/mixpanel-browser@2.55.1/dist/mixpanel.umd.js';
+
+  // Site root, from this script's own address, so pages one folder down
+  // (cases/) resolve files/ to the same place the landing page does.
+  var SITE_ROOT = (document.currentScript && document.currentScript.src) || location.href;
 
   var SESSION_KEY = 'msd.session';
   var BUFFER_KEY = 'msd.events';
@@ -85,6 +96,7 @@
 
     if (typeof window.MSD_ANALYTICS_SINK === 'function') safe(function () { window.MSD_ANALYTICS_SINK(event); });
     forward(event);
+    forwardMixpanel(event);
     return event;
   }
 
@@ -142,31 +154,54 @@
     return true;
   }
 
-  // The overview offered in exchange for an address.
-  //
-  // ⚠️ PLACEHOLDER. This is not the MSD overview — it is a C2PA-signed PDF from
-  // the public test fixtures, standing in so the download flow can be
-  // demonstrated end to end. The real one-pager is not wired yet because it
-  // still says MSD was developed at Staple AI while this site deliberately says
-  // nothing of the kind; publishing that contradiction as the first thing a
-  // stranger reads is worse than offering nothing.
-  //
-  // Before this site goes anywhere public: either point this at the settled
-  // overview, or set it back to '' so no download is offered.
-  var OVERVIEW_URL = 'files/msd-overview-placeholder.pdf';
-  // Say what the file actually is. While it is the placeholder, promising "the
-  // one-page overview" and handing over a test fixture would be the one kind of
-  // dishonesty this whole project is arguing against.
-  var OVERVIEW_LABEL = 'Download the sample document (placeholder)';
+  // Mixpanel, only when a token is configured. Events wait for the library the
+  // same way they wait for Umami.
+  var mpPending = [], mpReady = false;
+  function mixpanelToken() {
+    return typeof window.MSD_MIXPANEL_TOKEN === 'string' ? window.MSD_MIXPANEL_TOKEN : '';
+  }
+  function forwardMixpanel(event) {
+    if (!mixpanelToken()) return;
+    if (mpReady) safe(function () { window.mixpanel.track(event.name, event); });
+    else mpPending.push(event);
+  }
+  function loadMixpanel() {
+    if (!mixpanelToken()) return;
+    var tag = document.createElement('script');
+    tag.async = true;
+    tag.src = MIXPANEL_SRC;
+    tag.addEventListener('load', function () {
+      safe(function () {
+        // Our page_view replaces Mixpanel's own, as with Umami.
+        window.mixpanel.init(mixpanelToken(), { track_pageview: false, persistence: 'localStorage' });
+        mpReady = true;
+        while (mpPending.length) { var e = mpPending.shift(); window.mixpanel.track(e.name, e); }
+      });
+    });
+    tag.addEventListener('error', function () { mpPending.length = 0; });
+    document.head.appendChild(tag);
+  }
 
-  function deliverOverview() {
+  // The document offered beside the sign-up: the final MSD pitch deck (ten
+  // slides, synthetic examples, no Staple attribution — the line that kept the
+  // earlier one-pager off this site is gone from it). It replaced a placeholder
+  // test fixture on 2026-10-27.
+  //
+  // Set this to '' and the form becomes a plain mailing-list sign-up.
+  var OVERVIEW_URL = 'files/msd-pitch-deck.pdf';
+
+  function overviewHref() {
+    return safe(function () { return new URL(OVERVIEW_URL, SITE_ROOT).href; }, OVERVIEW_URL);
+  }
+
+  function deliverOverview(placement) {
     if (!OVERVIEW_URL) return false;
-    record('overview_download', {});
+    record('overview_download', { placement: placement });
     // A hidden anchor rather than location.href, so the download starts without
     // navigating the page away from the acknowledgement the visitor just got.
     safe(function () {
       var a = document.createElement('a');
-      a.href = OVERVIEW_URL;
+      a.href = overviewHref();
       a.setAttribute('download', '');
       a.style.display = 'none';
       document.body.appendChild(a);
@@ -212,6 +247,7 @@
     else if (a.closest('.features')) where = 'feature';
     else if (a.closest('.features-more')) where = 'feature-footnote';
     else if (a.closest('.cards')) where = 'card';
+    else if (a.closest('.signup-band')) where = 'signup';
     else if (a.closest('footer')) where = 'footer';
     return {
       href: href,
@@ -248,25 +284,26 @@
   }
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  function start() {
-    loadUmami();
+  // One sign-up can appear more than once on a page (high on the landing page,
+  // and at the foot of every page), so each form is wired on its own and every
+  // event says which one it came from: data-placement="top" or "foot". That is
+  // the only way to tell afterwards whether moving it up was worth doing.
+  function wireForm(form) {
+    var placement = form.getAttribute('data-placement') || 'unknown';
+    var input = form.querySelector('input[type=email]');
+    var note = form.querySelector('.signup-note');
+    var keep = form.querySelector('input[type=checkbox]');
+    var go = form.querySelector('button[type=submit]');
+
     // The offer is only made if it can be kept: with no document configured,
     // the form falls back to being a plain mailing-list sign-up.
     if (!OVERVIEW_URL) {
-      var go = document.getElementById('signupGo');
       if (go) go.textContent = 'Keep me posted';
-      var em = document.getElementById('signupEmail');
-      if (em) { em.required = true; em.placeholder = 'you@company.com'; }
+      if (input) { input.required = true; input.placeholder = 'you@company.com'; }
     }
-    record('page_view', { referrer: document.referrer || null, title: document.title });
-    onScroll();
 
-    var form = document.getElementById('signupForm');
-    if (!form) return;
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      var input = document.getElementById('signupEmail');
-      var note = document.getElementById('signupNote');
       var address = (input.value || '').trim();
 
       // An address is optional. The document is the thing the visitor came for,
@@ -274,24 +311,23 @@
       // navigated to a mail client, which destroyed the download link before
       // anyone could use it.
       if (address && !input.checkValidity()) {
-        record('signup_invalid', {});
+        record('signup_invalid', { placement: placement });
         note.textContent = 'That does not look like an email address. Clear it to download without one.';
         note.className = 'signup-note is-warn';
         input.focus();
         return;
       }
 
-      var got = deliverOverview();
+      var got = deliverOverview(placement);
 
       if (!got && !address) {
-        record('signup_invalid', {});
+        record('signup_invalid', { placement: placement });
         note.textContent = 'Please add an email address.';
         note.className = 'signup-note is-warn';
         input.focus();
         return;
       }
 
-      var keep = document.getElementById('signupKeep');
       var wantsList = address && (!keep || keep.checked);
 
       if (address && !wantsList) {
@@ -303,16 +339,17 @@
       }
 
       if (wantsList) {
-        record('signup_submit', { domain: address.split('@').pop().toLowerCase() });
+        record('signup_submit', { placement: placement, domain: address.split('@').pop().toLowerCase() });
         if (typeof window.MSD_SIGNUP_ENDPOINT === 'string') {
           safe(function () {
             fetch(window.MSD_SIGNUP_ENDPOINT, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ email: address, page: location.pathname })
+              body: JSON.stringify({ email: address, page: location.pathname, placement: placement })
             });
           });
-          note.textContent = 'Downloading. We will be in touch when there is something worth trying.';
+          note.textContent = got ? 'Downloading. We will be in touch when there is something worth trying.'
+                                 : 'Thanks. We will be in touch when there is something worth trying.';
         } else {
           // Opened in a new tab, not by navigating this one: a mailto on
           // location.href takes the page away and the download with it.
@@ -321,7 +358,7 @@
               '?subject=' + encodeURIComponent('MSD — keep me posted') +
               '&body=' + encodeURIComponent('Please add ' + address + ' to the MSD updates list.'), '_blank');
           });
-          note.textContent = 'Downloading. A short message to send is open in your mail client.';
+          note.textContent = (got ? 'Downloading. ' : '') + 'A short message to send is open in your mail client.';
         }
         input.value = '';
       } else {
@@ -329,6 +366,15 @@
       }
       note.className = 'signup-note is-ok';
     });
+  }
+
+  function start() {
+    loadUmami();
+    loadMixpanel();
+    record('page_view', { referrer: document.referrer || null, title: document.title });
+    onScroll();
+    var forms = document.querySelectorAll('.signup-form');
+    for (var i = 0; i < forms.length; i++) wireForm(forms[i]);
   }
 
   // This script is deferred, so DOMContentLoaded may already have fired by the

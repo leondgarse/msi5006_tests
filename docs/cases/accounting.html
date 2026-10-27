@@ -10,7 +10,7 @@
 <body>
 
 <nav><div class="wrap">
-  <a class="brand" href="../">MSD<span>.</span></a>
+  <a class="brand" href="../">MSD</a>
   <div class="nav-links">
     <a href="../business.html">For business</a>
     <a href="../index.html#see-it">Use cases</a>
@@ -30,7 +30,7 @@
 
   <div class="hero-media">
     <div class="video-wrap">
-    <video controls preload="none" poster="../media/msd-accounting.jpg" playsinline>
+    <video controls preload="none" poster="../media/msd-accounting-cover.jpg" playsinline>
       <source src="../media/msd-accounting.mp4" type="video/mp4">
       Your browser cannot play this video.
     </video>
@@ -69,12 +69,12 @@
        aria-label="The same five steps sorted by how each one is checked: two can be recomputed by anyone holding the inputs, three rest on a signature from the party that issued them, and the payment approval has neither, so the published figure inherits that gap.">
     <defs>
       <marker id="acc-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-        <path d="M0 0 L10 5 L0 10 z" fill="var(--text-3)"/>
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--text-1)"/>
       </marker>
     </defs>
 
     <!-- three bands: strongest evidence at the top, none at the bottom -->
-    <rect x="30" y="26" width="900" height="74" rx="8" fill="var(--teal-bg)" opacity=".55"/>
+    <rect x="30" y="26" width="900" height="74" rx="8" fill="var(--teal-bg)" opacity=".35"/>
     <rect x="30" y="112" width="900" height="74" rx="8" fill="var(--bg-card)" stroke="var(--border)"/>
     <rect x="30" y="198" width="900" height="74" rx="8" fill="var(--amber-bg)" opacity=".75"/>
 
@@ -86,25 +86,25 @@
 
     <!-- re-runnable band -->
     <g>
-      <rect x="320" y="58" width="196" height="30" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="2"/>
+      <rect x="320" y="58" width="196" height="30" rx="6" fill="var(--teal-bg)" stroke="var(--teal)" stroke-width="2"/>
       <text x="334" y="77" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Invoice vs PO match</text>
 
-      <rect x="536" y="58" width="196" height="30" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="2"/>
+      <rect x="536" y="58" width="196" height="30" rx="6" fill="var(--teal-bg)" stroke="var(--teal)" stroke-width="2"/>
       <text x="550" y="77" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Totals on the report</text>
     </g>
     <text x="748" y="77" font-family="var(--sans)" font-size="10.5" fill="var(--teal)">recompute it</text>
 
     <!-- attested band -->
     <g>
-      <rect x="320" y="144" width="128" height="30" rx="6" fill="var(--bg-card)" stroke="var(--text-3)" stroke-width="1.5"/>
+      <rect x="320" y="144" width="128" height="30" rx="6" fill="var(--bg-card)" stroke="var(--text-1)" stroke-width="1.5"/>
       <text x="334" y="163" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Invoice</text>
       <text x="400" y="163" font-family="var(--sans)" font-size="10" fill="var(--text-2)">supplier</text>
 
-      <rect x="460" y="144" width="128" height="30" rx="6" fill="var(--bg-card)" stroke="var(--text-3)" stroke-width="1.5"/>
+      <rect x="460" y="144" width="128" height="30" rx="6" fill="var(--bg-card)" stroke="var(--text-1)" stroke-width="1.5"/>
       <text x="474" y="163" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">PO</text>
       <text x="520" y="163" font-family="var(--sans)" font-size="10" fill="var(--text-2)">buyer</text>
 
-      <rect x="600" y="144" width="132" height="30" rx="6" fill="var(--bg-card)" stroke="var(--text-3)" stroke-width="1.5"/>
+      <rect x="600" y="144" width="132" height="30" rx="6" fill="var(--bg-card)" stroke="var(--text-1)" stroke-width="1.5"/>
       <text x="614" y="163" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Extraction</text>
       <text x="690" y="163" font-family="var(--sans)" font-size="10" fill="var(--text-2)">operator</text>
     </g>
@@ -156,9 +156,28 @@
   </div>
 </div></section>
 
+<section class="band signup-band signup-foot"><div class="wrap">
+  <div class="signup">
+    <div class="signup-copy">
+      <h2>Keep up with MSD</h2>
+      <p>Join the mailing list, take the ten-slide pitch deck, or both. The deck needs no address.</p>
+    </div>
+    <form class="signup-form" data-placement="foot" novalidate>
+      <label class="sr-only" for="signupEmail-foot">Email address (optional)</label>
+      <input id="signupEmail-foot" name="email" type="email" placeholder="you@company.com (optional)" autocomplete="email">
+      <button class="btn btn-primary" type="submit">Download the deck (PDF)</button>
+      <label class="signup-opt" for="signupKeep-foot">
+        <input type="checkbox" id="signupKeep-foot" checked>
+        <span>Join the mailing list — one message when there is something worth trying</span>
+      </label>
+      <p class="signup-note">No newsletter and no sharing. Untick the box to just download.</p>
+    </form>
+  </div>
+</div></section>
+
 <div class="wrap"><footer>
   <p><strong>Draft.</strong> Promotional material for the MSD protocol. Scenarios use synthetic data.</p>
-  <p>msd-protocol.org</p>
+  <p>MSD · <a href="https://metastructured.ai">metastructured.ai</a></p>
 </footer></div>
 
 <script src="../msd-analytics.js" defer></script>

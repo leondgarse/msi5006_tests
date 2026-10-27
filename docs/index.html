@@ -10,7 +10,7 @@
 <body>
 
 <nav><div class="wrap">
-  <a class="brand" href="./">MSD<span>.</span></a>
+  <a class="brand" href="./">MSD</a>
   <div class="nav-links">
     <a href="business.html">For business</a>
     <a href="#see-it">Use cases</a>
@@ -22,8 +22,8 @@
 
 <header class="hero hero-split"><div class="wrap">
   <div class="hero-copy">
-    <div class="eyebrow">Meta Structured Data</div>
-    <h1>Every number came from somewhere.</h1>
+    <div class="eyebrow">Metastructured® Data</div>
+    <h1>Every value came from somewhere.</h1>
     <p class="lede">MSD helps teams show where a figure came from, what happened to it along the way, and what is missing — so the evidence arrives with the number instead of being reconstructed months later.</p>
 
     <div class="cta-row">
@@ -35,7 +35,7 @@
 
   <div class="hero-media">
     <div class="video-wrap">
-      <video controls preload="none" poster="media/msd-general.jpg" playsinline>
+      <video controls preload="none" poster="media/msd-general-cover.jpg" playsinline>
         <source src="media/msd-general.mp4" type="video/mp4">
         Your browser cannot play this video.
       </video>
@@ -48,12 +48,32 @@
   <p>MSD is a <strong>chain of custody for data</strong>. It records what each value was made from, by whom, and in what way — so the evidence travels with the number instead of living in a separate system.</p>
 </div></section>
 
+<section class="band signup-band signup-top" id="keep-me-posted"><div class="wrap">
+  <div class="signup">
+    <div class="signup-copy">
+      <h2>Take the pitch deck</h2>
+      <p>Ten slides on what MSD is, the two kinds of step, how an auditor uses it, and what it does not solve yet. <strong>The download needs nothing from you.</strong></p>
+      <p class="signup-sub">Leave an address only if you want to hear when something changes — a release, a tool, a worked example. No newsletter, no sharing.</p>
+    </div>
+    <form class="signup-form" data-placement="top" novalidate>
+      <label class="sr-only" for="signupEmail-top">Email address (optional)</label>
+      <input id="signupEmail-top" name="email" type="email" placeholder="you@company.com (optional)" autocomplete="email">
+      <button class="btn btn-primary" type="submit">Download the deck (PDF)</button>
+      <label class="signup-opt" for="signupKeep-top">
+        <input type="checkbox" id="signupKeep-top" checked>
+        <span>Join the mailing list — one message when there is something worth trying</span>
+      </label>
+      <p class="signup-note">The download needs no address. Add one and we will keep you posted as well.</p>
+    </form>
+  </div>
+</div></section>
+
 <section class="band plain" id="see-it"><div class="wrap">
   <h2 class="routes-h">See it in action</h2>
   <p class="section-lede">Three worked examples. Each follows one figure across several systems and shows what the evidence looks like when it holds — and what it looks like when a step is missing.</p>
   <div class="routes">
     <a class="route" href="cases/accounting.html">
-      <img src="media/msd-accounting.jpg" alt="Provenance graph for an accounts-payable pipeline, with the approval step flagged as missing" loading="lazy" width="1600" height="842">
+      <img src="media/msd-accounting-cover.jpg" alt="MSD for accounting: close the books with evidence. Glass invoice and purchase order joined by an evidence chain, one step marked missing." loading="lazy" width="1920" height="1080">
       <span class="route-body">
         <span class="route-k">MSD for accounting</span>
         <span class="route-w">For the person who has to close the books and show why the figure is right.</span>
@@ -61,7 +81,7 @@
       </span>
     </a>
     <a class="route" href="cases/kyc.html">
-      <img src="media/msd-kyc.jpg" alt="Provenance graph for a KYC onboarding pipeline, with a document that was never filed" loading="lazy" width="1600" height="842">
+      <img src="media/msd-kyc-cover.jpg" alt="MSD for compliance: not until every check is in. Three checks pass; one document slot is empty." loading="lazy" width="1920" height="1080">
       <span class="route-body">
         <span class="route-k">MSD for compliance</span>
         <span class="route-w">For the person who has to prove an onboarding decision was properly supported.</span>
@@ -69,7 +89,7 @@
       </span>
     </a>
     <a class="route" href="cases/ai-agent.html">
-      <img src="media/msd-ai_agent.jpg" alt="Provenance graph for an AI agent pipeline, with a cited price feed that cannot be found" loading="lazy" width="1600" height="842">
+      <img src="media/msd-ai_agent-cover.jpg" alt="MSD for AI: trace a decision to its sources. Two cited sources are found; the third is missing." loading="lazy" width="1920" height="1080">
       <span class="route-body">
         <span class="route-k">MSD for AI</span>
         <span class="route-w">For the person answering what an agent based its recommendation on.</span>
@@ -80,33 +100,32 @@
   <p class="features-more">Already have a file to check? <a href="https://network.msd-protocol.org/">Look it up on the MSD Network</a>. Building with it? The <a href="https://key-tools.msd-protocol.org/">tools and SDK</a> are public, and <a href="community.html">the protocol is open to contributions</a>.</p>
 </div></section>
 
-<section class="band plain signup-band" id="keep-me-posted"><div class="wrap">
-  <div class="signup">
-    <div class="signup-copy">
-      <h2>Take the overview</h2>
-      <p>One page on what MSD is, what it costs to try, and where it does not help yet. <strong>The download needs nothing from you.</strong></p>
-      <p class="signup-sub">Leave an address only if you want to hear when something changes — a release, a tool, a worked example. No newsletter, no sharing.</p>
-    </div>
-    <form class="signup-form" id="signupForm" novalidate>
-      <label class="sr-only" for="signupEmail">Email address (optional)</label>
-      <input id="signupEmail" name="email" type="email" placeholder="you@company.com (optional)" autocomplete="email">
-      <button class="btn btn-primary" id="signupGo" type="submit">Download the overview</button>
-      <label class="signup-opt" for="signupKeep">
-        <input type="checkbox" id="signupKeep" checked>
-        <span>Keep me posted too — one message when there is something worth trying</span>
-      </label>
-      <p class="signup-note" id="signupNote">The download needs no address. Add one and we will keep you posted as well.</p>
-    </form>
-  </div>
-</div></section>
-
 <section class="band-teal"><div class="wrap">
   <p>MSD is an open protocol that anyone can use, implement and improve. It is early, and that is the point — <a href="community.html">there is room to shape it</a>.</p>
 </div></section>
 
+<section class="band signup-band signup-foot"><div class="wrap">
+  <div class="signup">
+    <div class="signup-copy">
+      <h2>Keep up with MSD</h2>
+      <p>Join the mailing list, take the ten-slide pitch deck, or both. The deck needs no address.</p>
+    </div>
+    <form class="signup-form" data-placement="foot" novalidate>
+      <label class="sr-only" for="signupEmail-foot">Email address (optional)</label>
+      <input id="signupEmail-foot" name="email" type="email" placeholder="you@company.com (optional)" autocomplete="email">
+      <button class="btn btn-primary" type="submit">Download the deck (PDF)</button>
+      <label class="signup-opt" for="signupKeep-foot">
+        <input type="checkbox" id="signupKeep-foot" checked>
+        <span>Join the mailing list — one message when there is something worth trying</span>
+      </label>
+      <p class="signup-note">No newsletter and no sharing. Untick the box to just download.</p>
+    </form>
+  </div>
+</div></section>
+
 <div class="wrap"><footer>
   <p><strong>Draft.</strong> Promotional material for the MSD protocol. Scenarios use synthetic data.</p>
-  <p>msd-protocol.org</p>
+  <p>MSD · <a href="https://metastructured.ai">metastructured.ai</a></p>
 </footer></div>
 
 <script src="msd-analytics.js" defer></script>

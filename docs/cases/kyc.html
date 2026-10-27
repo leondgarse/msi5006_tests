@@ -10,7 +10,7 @@
 <body>
 
 <nav><div class="wrap">
-  <a class="brand" href="../">MSD<span>.</span></a>
+  <a class="brand" href="../">MSD</a>
   <div class="nav-links">
     <a href="../business.html">For business</a>
     <a href="../index.html#see-it">Use cases</a>
@@ -30,7 +30,7 @@
 
   <div class="hero-media">
     <div class="video-wrap">
-    <video controls preload="none" poster="../media/msd-kyc.jpg" playsinline>
+    <video controls preload="none" poster="../media/msd-kyc-cover.jpg" playsinline>
       <source src="../media/msd-kyc.mp4" type="video/mp4">
       Your browser cannot play this video.
     </video>
@@ -69,7 +69,7 @@
        aria-label="Working backwards from an approved account: the approval rests on a risk score, the score rests on four inputs, and three of those carry a signature from an independent party while the fourth was never filed. Nothing in this chain can be recomputed, so a signature is the only evidence available.">
     <defs>
       <marker id="kyc-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-        <path d="M0 0 L10 5 L0 10 z" fill="var(--text-3)"/>
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--text-1)"/>
       </marker>
       <marker id="kyc-ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
         <path d="M0 0 L10 5 L0 10 z" fill="var(--amber)"/>
@@ -93,7 +93,7 @@
     <text x="318" y="85" font-family="var(--sans)" font-size="10.5" fill="var(--amber)">computed from four inputs</text>
 
     <!-- step 3: the four inputs, fanning down -->
-    <g fill="none" stroke="var(--text-3)" stroke-width="1.4" marker-end="url(#kyc-ar)">
+    <g fill="none" stroke="var(--text-1)" stroke-width="1.4" marker-end="url(#kyc-ar)">
       <path d="M498 66 C 548 66, 556 130, 596 136"/>
       <path d="M498 72 C 548 72, 556 166, 596 172"/>
       <path d="M498 78 C 548 78, 556 202, 596 208"/>
@@ -103,17 +103,17 @@
     <text x="512" y="42" font-family="var(--sans)" font-size="10" fill="var(--text-2)" text-anchor="start">computed from</text>
 
     <g>
-      <rect x="596" y="120" width="334" height="32" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+      <rect x="596" y="120" width="334" height="32" rx="6" fill="var(--bg-card)" stroke="var(--text-1)" stroke-width="1.5"/>
       <text x="612" y="140" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Passport scan</text>
-      <text x="760" y="140" font-family="var(--sans)" font-size="10.5" fill="var(--teal)">signed · the ID provider</text>
+      <text x="760" y="140" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">signed · the ID provider</text>
 
-      <rect x="596" y="156" width="334" height="32" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+      <rect x="596" y="156" width="334" height="32" rx="6" fill="var(--bg-card)" stroke="var(--text-1)" stroke-width="1.5"/>
       <text x="612" y="176" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Selfie match · 0.97</text>
-      <text x="760" y="176" font-family="var(--sans)" font-size="10.5" fill="var(--teal)">signed · the liveness vendor</text>
+      <text x="760" y="176" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">signed · the liveness vendor</text>
 
-      <rect x="596" y="192" width="334" height="32" rx="6" fill="var(--bg-card)" stroke="var(--teal)" stroke-width="1.5"/>
+      <rect x="596" y="192" width="334" height="32" rx="6" fill="var(--bg-card)" stroke="var(--text-1)" stroke-width="1.5"/>
       <text x="612" y="212" font-family="var(--sans)" font-size="12" font-weight="600" fill="var(--text-1)">Sanctions · 0 hits</text>
-      <text x="760" y="212" font-family="var(--sans)" font-size="10.5" fill="var(--teal)">signed · the screening service</text>
+      <text x="760" y="212" font-family="var(--sans)" font-size="10.5" fill="var(--text-2)">signed · the screening service</text>
 
       <rect x="596" y="228" width="334" height="32" rx="6" fill="var(--amber-bg)" stroke="var(--amber)"
             stroke-width="1.8" stroke-dasharray="5 4"/>
@@ -159,9 +159,28 @@
   </div>
 </div></section>
 
+<section class="band signup-band signup-foot"><div class="wrap">
+  <div class="signup">
+    <div class="signup-copy">
+      <h2>Keep up with MSD</h2>
+      <p>Join the mailing list, take the ten-slide pitch deck, or both. The deck needs no address.</p>
+    </div>
+    <form class="signup-form" data-placement="foot" novalidate>
+      <label class="sr-only" for="signupEmail-foot">Email address (optional)</label>
+      <input id="signupEmail-foot" name="email" type="email" placeholder="you@company.com (optional)" autocomplete="email">
+      <button class="btn btn-primary" type="submit">Download the deck (PDF)</button>
+      <label class="signup-opt" for="signupKeep-foot">
+        <input type="checkbox" id="signupKeep-foot" checked>
+        <span>Join the mailing list — one message when there is something worth trying</span>
+      </label>
+      <p class="signup-note">No newsletter and no sharing. Untick the box to just download.</p>
+    </form>
+  </div>
+</div></section>
+
 <div class="wrap"><footer>
   <p><strong>Draft.</strong> Promotional material for the MSD protocol. Scenarios use synthetic data.</p>
-  <p>msd-protocol.org</p>
+  <p>MSD · <a href="https://metastructured.ai">metastructured.ai</a></p>
 </footer></div>
 
 <script src="../msd-analytics.js" defer></script>

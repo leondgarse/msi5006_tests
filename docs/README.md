@@ -10,7 +10,8 @@ cases/accounting.html   accounts payable
 cases/kyc.html          KYC onboarding
 cases/ai-agent.html     AI agent decisions
 style.css               shared styles
-media/                  videos + poster frames
+media/                  videos, video frames, and *-cover.jpg posters (1920x1080)
+files/                  msd-pitch-deck.pdf, the sign-up download
 ```
 
 **View it:** open `index.html`, or publish with GitHub Pages
@@ -34,9 +35,13 @@ communicate it clearly and concisely."*
 ## Porting to msd-protocol.org
 
 This is a staging surface for writing and review; the content is the deliverable, not the
-shell. `style.css` mirrors the live site's design tokens (`--bg`, `--text-1`, `--primary`,
-`--teal`, the radius and shadow scale, Inter / Manrope / JetBrains Mono), so re-expressing
-these as Svelte components should be close to mechanical.
+shell. Since 2026-10-27 `style.css` follows the **MSD Brand Guidelines v1.0, light (pitch
+deck) style**: paper `#F6F4EE`, ink `#14181F`, brand teal `#0F7B6C`, amber `#B8500C` for
+missing steps only; Georgia regular for headlines, Helvetica/Arial for body and labels;
+16px cards with a teal top edge, fully rounded buttons. The three step states are the same
+everywhere: verifiable = mint fill + teal border, attested = white + ink border, missing =
+amber tint + dashed amber border. All tokens sit in `:root`, so moving to the dark
+metastructured.ai style is a token swap and needs no markup changes.
 
 ## Borrowed from in-toto.io
 
@@ -60,3 +65,13 @@ a publishing cadence.
 - Every page ends with what MSD cannot tell you. That is deliberate: an audit audience
   distrusts tools claiming to settle everything.
 - Case pages share one skeleton, so a fourth is cheap to add.
+
+## Cover images
+
+The video posters and the use-case cards use `media/msd-*-cover.jpg`, not frames from the
+videos: at card size a frame of a provenance graph is unreadable (asked on the 10-21
+review). The background art was generated with Gemini (`gemini-3-pro-image`) using the
+imagery brief in the brand guidelines §7. That means a teal-to-mint gradient, glass
+documents, white node chains, and amber only for the missing piece, with no text, people
+or padlocks. The label, Georgia headline and footer were then set over it in HTML, so the
+type is exact and stays on brand. The headlines are the pitch deck's own slide titles.
