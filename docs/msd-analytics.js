@@ -247,7 +247,7 @@
     else if (a.closest('.features')) where = 'feature';
     else if (a.closest('.features-more')) where = 'feature-footnote';
     else if (a.closest('.cards')) where = 'card';
-    else if (a.closest('.signup-band')) where = 'signup';
+    else if ((a.closest('.signup-band') || a.closest('.signup-hero'))) where = 'signup';
     else if (a.closest('footer')) where = 'footer';
     return {
       href: href,

@@ -130,7 +130,7 @@ All of it is in `docs/msd-analytics.js` — 345 lines, with the reasoning in com
 | `signup_submit` | an address is given **and** the box is ticked | **the email domain only, never the address**, and `placement` |
 | `overview_download` | the pitch deck is taken | `placement` |
 
-**The sign-up appears twice**, as asked on the 10-21 review: high on the landing page
+**The sign-up appears twice**, as asked on the 10-21 review: under the video on the landing page
 (`placement: "top"`) and at the foot of all six pages (`placement: "foot"`). Comparing
 the two placements is how you find out whether moving it up was worth doing.
 
