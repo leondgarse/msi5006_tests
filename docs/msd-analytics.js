@@ -371,7 +371,11 @@
   function start() {
     loadUmami();
     loadMixpanel();
-    record('page_view', { referrer: document.referrer || null, title: document.title });
+    // canonicalPath() drops the query string, so a campaign tag (?ref=linkedin) is
+    // carried as its own property. In-app browsers often strip the referrer.
+    var ref = (location.search.match(/[?&]ref=([^&#]*)/) || [])[1];
+    record('page_view', { referrer: document.referrer || null, title: document.title,
+                          ref: ref ? decodeURIComponent(ref) : null });
     onScroll();
     var forms = document.querySelectorAll('.signup-form');
     for (var i = 0; i < forms.length; i++) wireForm(forms[i]);

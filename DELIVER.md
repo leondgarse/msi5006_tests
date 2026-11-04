@@ -124,7 +124,7 @@ All of it is in `docs/msd-analytics.js` — 345 lines, with the reasoning in com
 
 | Event | Fires when | Carries |
 |---|---|---|
-| `page_view` | each page load | path, referrer, title, a per-tab session id |
+| `page_view` | each page load | path, referrer, title, a per-tab session id, and `ref` when the link carried `?ref=…` (tag links in posts, e.g. `?ref=linkedin`; the path alone drops it) |
 | `link_click` | any link | href, link text, and **which zone** — `hero-cta`, `use-case-route`, `nav`, `feature`, `signup`, `footer` |
 | `scroll_depth` | 25 / 50 / 75 / 100% | how far down the page someone got |
 | `signup_submit` | an address is given **and** the box is ticked | **the email domain only, never the address**, and `placement` |
